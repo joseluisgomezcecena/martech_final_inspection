@@ -23,11 +23,48 @@ class Entries extends CI_Controller{
 			$this->EntryModel->create_entry();
 
 			//session message
-			$this->session->set_flashdata('entrada', 'Se ha guardado la entrada.');
+			$this->session->set_flashdata('created', 'Se ha guardado la orden y enviada a inspeccion.');
 
 			redirect(base_url() . 'entries/create');
 		}
 	}
+
+
+
+
+
+
+
+	public function assign($id = NULL)
+	{
+		$data['entry'] = $this->EntryModel->get_single_entry($id);
+		$data['locations'] = $this->EntryModel->get_locations();
+		$data['users'] = $this->UserModel->get_users_quality();
+
+
+		$this->form_validation->set_rules('id', 'ID o Folio', 'required');
+		$this->form_validation->set_rules('asignada', 'Usuario', 'required');
+
+
+		if($this->form_validation->run() === FALSE)
+		{
+
+			$this->load->view('templates/header');
+			$this->load->view('entries/asign', $data);
+			$this->load->view('templates/footer');
+		}
+		else
+		{
+
+			$this->EntryModel->assign_entry();
+
+			//session message
+			$this->session->set_flashdata('entrada_asignado', 'Se ha asignado la orden.');
+
+			redirect(base_url() . 'entries/assign/' . $id );
+		}
+	}
+
 
 
 

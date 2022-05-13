@@ -80,9 +80,27 @@
 							<th>Cantidad</th>
 							<th>Planta</th>
 							<th>Progreso</th>
+							<th>Accion</th>
 						</thead>
 						<tbody>
-						<?php foreach ($entries as $entry): ?>
+						<?php
+						foreach ($entries as $entry):
+						if($entry['progress'] == 0)
+						{
+							$btn_title = "Asignar";
+							$link = "entries/assign/{$entry['id']}";
+						}
+						elseif($entry['progress'] == 1)
+						{
+							$btn_title = "Liberar";
+							$link = "entries/release/{$entry['id']}";
+						}
+						elseif($entry['progress'] == 2)
+						{
+							$btn_title = "Cerrar";
+							$link = "entries/close/{$entry['id']}";
+						}
+						?>
 							<tr>
 								<td><?php echo $entry['id'] ?></td>
 								<td><?php echo $entry['part_no'] ?></td>
@@ -90,6 +108,9 @@
 								<td><?php echo $entry['qty'] ?></td>
 								<td><?php echo $entry['plant'] ?></td>
 								<td><?php echo $entry['progress'] ?></td>
+								<td>
+									<a class="btn btn-primary" href="<?php echo base_url() ?>$link"><?php echo $btn_title ?></a>
+								</td>
 							</tr>
 						<?php endforeach; ?>
 						</tbody>

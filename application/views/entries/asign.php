@@ -103,17 +103,20 @@
 
 
 
+
 						<input type="hidden" name="id" value="<?php echo $entry['id'] ?>"/>
 
 						<div class="row">
-							<div class=" col-lg-3">
-								<label for="browser">Resultado de la inspeccion:</label>
-								<select name="status" id="status" class="form-control">
-									<option value="">Seleccione Resultado</option>
-									<option value="3">En espera</option>
-									<option value="0">Rechazado</option>
-									<option value="1">Aceptado</option>
-								</select>
+							<div class=" col-lg-12">
+								<label for="">Asignar orden</label>
+								<input class="form-control" list="part" name="asignada" id="part_no">
+
+								<datalist id="part">
+									<?php foreach ($users as $user): ?>
+									<option value="<?php echo $user['user_name'] ?>">
+										<?php endforeach; ?>
+								</datalist>
+								<small>El usuario asignado sera responsable de liberar la orden.</small>
 							</div>
 						</div>
 
@@ -121,7 +124,7 @@
 
 
 						<div class="form-group mt-5">
-							<input style="width: 100%" type="submit" name="save_release" class="btn btn-primary text-white btn-lg" value="Liberar Entrada">
+							<input style="width: 100%" type="submit" name="save_release" class="btn btn-primary text-white btn-lg" value="Asignar Orden">
 						</div>
 						<?php echo form_close() ?>
 					</div>

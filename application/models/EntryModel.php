@@ -72,6 +72,22 @@ class EntryModel extends CI_Model{
 
 
 
+	public function assign_entry()
+	{
+
+		$id = $this->input->post('id');
+		$status = 1;
+		$assign_date = date("Y-m-d H:i:s");
+
+		$data = array(
+			'status'=>$status,
+			'asignada'=>$this->input->post('asignada'),
+			'asignada_date'=>$assign_date,
+		);
+
+		return $this->db->update('entry', $data, array("id"=>$id));
+	}
+
 
 
 

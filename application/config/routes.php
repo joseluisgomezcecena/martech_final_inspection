@@ -19,7 +19,7 @@ $route['entries/create'] = 'entries/create';
 //calidad
 $route['entries/release/(:any)'] = 'entries/release/$1';
 $route['entries/close/(:any)'] = 'entries/close/$1';
-$route['entries/asign/(:any)'] = 'entries/asign/$1';
+$route['entries/assign/(:any)'] = 'entries/assign/$1';
 
 //forms
 $route['forms/create'] = 'forms/create';

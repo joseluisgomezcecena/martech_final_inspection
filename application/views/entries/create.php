@@ -24,33 +24,13 @@
 	<div class="row justify-content-center">
 		<div class="col-lg-12 col-md-12">
 
-			<?php if($this->session->flashdata('tiempo')): ?>
+			<?php if($this->session->flashdata('created')): ?>
 
-				<div class="alert alert-warning alert-dismissible fade show" role="alert">
-					<strong class="uppercase"><bdi>Success</bdi></strong>
-					Se ha registrado el tiempo extra
+				<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong class="uppercase"><bdi>Enviado a Inspeccion</bdi></strong>
+					Se ha guardado la orden y ha sido enviada a inspeccion.
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
-				</div>
-
-			<?php endif; ?>
-
-			<?php if($this->session->flashdata('asistencia')): ?>
-
-				<div class="alert alert-warning alert-dismissible fade show" role="alert">
-					<strong class="uppercase"><bdi>Success</bdi></strong>
-					Se ha registrado la asistencia
-					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-				</div>
-
-			<?php endif; ?>
-
-			<?php if($this->session->flashdata('movimiento')): ?>
-
-				<div class="alert alert-warning alert-dismissible fade show" role="alert">
-					<strong class="uppercase"><bdi>Success</bdi></strong>
-					Se ha registrado el movimiento
-					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 				</div>
 
 			<?php endif; ?>

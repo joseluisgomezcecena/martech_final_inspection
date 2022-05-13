@@ -13,6 +13,8 @@ class Pages extends CI_Controller
 
 		$data['entries'] = $this->EntryModel->get_pending();
 
+
+
 		//load header, page & footer
 		$this->load->view('templates/header');
 		$this->load->view('pages/' . $page, $data); //loading page and data
