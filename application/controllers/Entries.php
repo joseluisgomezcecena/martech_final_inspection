@@ -78,6 +78,7 @@ class Entries extends CI_Controller{
 	{
 		$data['entry'] = $this->EntryModel->get_single_entry($id);
 		$data['locations'] = $this->EntryModel->get_locations();
+		$data['users'] = $this->UserModel->get_users_quality();
 
 
 		$this->form_validation->set_rules('id', 'ID o Folio', 'required');

@@ -42,6 +42,7 @@
 							</div>
 
 
+
 							<div class=" col-lg-12">
 								<label for="">Cantidad enviada</label>
 								<input type="number" class="form-control" value="<?php echo $entry['qty'] ?>"  disabled>
@@ -129,7 +130,13 @@
 
 							<div class=" col-lg-3">
 								<label for="">Cerrada por</label>
-								<input type="text" class="form-control" name="cerrada_por"  required>
+								<input class="form-control" list="part" name="cerrada_por" id="part_no">
+
+								<datalist id="part">
+									<?php foreach ($users as $user): ?>
+										<option value="<?php echo $user['user_name'] ?>">
+									<?php endforeach; ?>
+								</datalist>
 							</div>
 
 

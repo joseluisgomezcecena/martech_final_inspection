@@ -115,4 +115,14 @@ class UserModel extends CI_Model{
 		return $query->row_array();
 	}
 
+
+	public function get_users_quality()
+	{
+		//otra db
+		$authdb = $this->load->database('authdb', TRUE);
+
+		$query = $authdb->get_where('users', array('user_department_id'=>3));
+		return $query->result_array();
+	}
+
 }
