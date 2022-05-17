@@ -76,11 +76,11 @@ class EntryModel extends CI_Model{
 	{
 
 		$id = $this->input->post('id');
-		$status = 1;
+		$progress = 1;
 		$assign_date = date("Y-m-d H:i:s");
 
 		$data = array(
-			'status'=>$status,
+			'progress'=>$progress,
 			'asignada'=>$this->input->post('asignada'),
 			'asignada_date'=>$assign_date,
 		);
@@ -95,9 +95,11 @@ class EntryModel extends CI_Model{
 	{
 
 		$id = $this->input->post('id');
+		$progress = 2;
 
 		$data = array(
-			'status'=>$this->input->post('part_no'),
+			'progress'=>$progress,
+			'status'=>$this->input->post('status'),
 			'final_qty'=>$this->input->post('final_qty'),
 			'location'=>$this->input->post('location'),
 			'wo_escaneadas'=>$this->input->post('wo_escaneadas'),

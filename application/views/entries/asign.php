@@ -22,6 +22,21 @@
 	<!-- Contenido -->
 	<!-- ============================================================== -->
 	<div class="row justify-content-center">
+
+		<div class="col-lg-12">
+			<?php if($this->session->flashdata('assigned')): ?>
+
+				<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong class="uppercase"><bdi>Asignada</bdi></strong>
+					La orden ha sigo asignada y sera insepccionada.
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+				</div>
+
+			<?php endif; ?>
+
+		</div>
+
 		<div class="col-lg-4 col-md-4">
 
 			<div class="white-box analytics-info">
@@ -91,7 +106,7 @@
 
 				<div class="row">
 					<div class="col-lg-12">
-						<?php echo form_open('entries/release/' .  $entry['id'], $_GET) ?>
+						<?php echo form_open('entries/assign/' .  $entry['id'], $_GET) ?>
 						<h3 class="box-title mb-2 text-primary">Asignar Orden</h3>
 
 						<div class="mt-5 mb-5">
@@ -109,7 +124,7 @@
 						<div class="row">
 							<div class=" col-lg-12">
 								<label for="">Asignar orden</label>
-								<input class="form-control" list="part" name="asignada" id="part_no">
+								<input class="form-control" list="part" name="asignada" value="<?php if(isset($entry['asignada'])){echo $entry['asignada'];}else{echo "";} ?>" id="part_no">
 
 								<datalist id="part">
 									<?php foreach ($users as $user): ?>

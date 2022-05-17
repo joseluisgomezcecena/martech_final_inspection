@@ -17,6 +17,8 @@
 	<link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
 	<!-- Custom CSS -->
 	<link href="<?php echo base_url() ?>assets/css/style.min.css" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.12.0/css/dataTables.bootstrap4.min.css">
 	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>

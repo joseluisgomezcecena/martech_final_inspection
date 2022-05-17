@@ -32,9 +32,6 @@ class Entries extends CI_Controller{
 
 
 
-
-
-
 	public function assign($id = NULL)
 	{
 		$data['entry'] = $this->EntryModel->get_single_entry($id);
@@ -57,10 +54,8 @@ class Entries extends CI_Controller{
 		{
 
 			$this->EntryModel->assign_entry();
-
 			//session message
-			$this->session->set_flashdata('entrada_asignado', 'Se ha asignado la orden.');
-
+			$this->session->set_flashdata('assigned', 'Se ha asignado la orden.');
 			redirect(base_url() . 'entries/assign/' . $id );
 		}
 	}
