@@ -28,7 +28,8 @@
 
 				<div class="alert alert-success alert-dismissible fade show" role="alert">
 					<strong class="uppercase"><bdi>Asignada</bdi></strong>
-					La orden ha sigo asignada y sera insepccionada.
+					La orden ha sigo asignada y sera insepccionada. <a href="<?php base_url() ?>">Click Aqui para regresar</a> o cierre esta
+					alerta para agregar otra orden.
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
 				</div>

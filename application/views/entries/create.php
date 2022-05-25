@@ -1,12 +1,12 @@
 <div class="page-breadcrumb bg-white">
 	<div class="row align-items-center">
 		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-			<h4 class="page-title">Captura de orden</h4>
+			<h4 class="page-title">Captura de ordenes</h4>
 		</div>
 		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 			<div class="d-md-flex">
 				<ol class="breadcrumb ms-auto">
-					<li><a href="#" class="fw-normal">Captura de orden</a></li>
+					<li><a href="#" class="fw-normal">Captura de ordenes</a></li>
 				</ol>
 			</div>
 		</div>
@@ -28,7 +28,8 @@
 
 				<div class="alert alert-success alert-dismissible fade show" role="alert">
 					<strong class="uppercase"><bdi>Enviado a Inspeccion</bdi></strong>
-					Se ha guardado la orden y ha sido enviada a inspeccion.
+					Se ha guardado la orden y ha sido enviada a inspeccion. Haz click <a href="<?php echo  base_url() ?>">Aqui</a> para regresar
+					o cierra este mensaje para agregar otra orden.
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
 				</div>
@@ -37,12 +38,12 @@
 
 
 			<div class="white-box analytics-info">
-				<h3 class="box-title">Forma de captura</h3>
+				<h3 class="box-title">Captura de ordenes</h3>
 
 				<div class="row">
 					<div class="col-lg-12">
 						<?php echo form_open('entries/create') ?>
-						<h3 class="box-title mb-2 text-primary">Registrar una entrada</h3>
+						<h3 class="box-title mb-2 text-primary">Registra una orden para enviar a inspección</h3>
 
 
 						<div class="mt-5 mb-5">
@@ -83,7 +84,6 @@
 								<label for="">Planta</label>
 								<select class="form-control" name="plant" id="plant_id" required>
 									<option value="">Seleccione una planta</option>
-									<option value="1">Planta 1</option>
 									<?php
 									foreach ($plantas as $planta):
 										?>

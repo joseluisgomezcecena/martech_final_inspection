@@ -21,11 +21,7 @@ class EntryModel extends CI_Model{
 	}
 
 
-	public function get_locations()
-	{
-		$query = $this->db->get('locations');
-		return $query->result_array();
-	}
+
 
 
 	public function get_pending()
@@ -132,14 +128,14 @@ class EntryModel extends CI_Model{
 
 		$id = $this->input->post('id');
 		$progress = 3;
-		$release_date = date("Y-m-d H:i:s");
+		$cerrada_date = date("Y-m-d H:i:s");
 
 		$data = array(
 			'progress'=>$progress,
 			'status'=>$this->input->post('status'),
 			'rev_mapics'=>$this->input->post('rev_mapics'),
 			'cerrada_por'=>$this->input->post('cerrada_por'),
-			'liberada_date'=>$release_date,
+			'cerrada_date'=>$cerrada_date,
 		);
 
 		return $this->db->update('entry', $data, array("id"=>$id));

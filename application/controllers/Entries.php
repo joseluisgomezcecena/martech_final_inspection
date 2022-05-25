@@ -5,10 +5,11 @@ class Entries extends CI_Controller{
 	public function create()
 	{
 		$data['parts'] = $this->EntryModel->get_parts();
+		$data['plantas'] = $this->LocationModel->get_plants();
 
 		$this->form_validation->set_rules('part_no', 'Numero de parte', 'required');
 		$this->form_validation->set_rules('lot_no', 'Numero de lote', 'required');
-		$this->form_validation->set_rules('qty', 'Cantidad', 'required');
+		$this->form_validation->set_rules('qty', 'Cantidad', 'required|callback_check_is_positive');
 		$this->form_validation->set_rules('plant', 'Planta', 'required');
 
 		if($this->form_validation->run() === FALSE)
@@ -23,7 +24,9 @@ class Entries extends CI_Controller{
 			$this->EntryModel->create_entry();
 
 			//session message
-			$this->session->set_flashdata('created', 'Se ha guardado la orden y enviada a inspeccion.');
+			$this->session->set_flashdata(
+				'created', 'Se ha guardado la orden y enviada a inspeccion.'
+			);
 
 			redirect(base_url() . 'entries/create');
 		}
@@ -67,7 +70,7 @@ class Entries extends CI_Controller{
 	public function release($id = NULL)
 	{
 		$data['entry'] = $this->EntryModel->get_single_entry($id);
-		$data['locations'] = $this->EntryModel->get_locations();
+		$data['locations'] = $this->LocationModel->get_locations();
 
 
 		$this->form_validation->set_rules('id', 'ID o Folio', 'required');
@@ -140,4 +143,21 @@ class Entries extends CI_Controller{
 
 
 
+
+
+	/**************  custom validation ***************/
+
+	function check_is_positive($qty)
+	{
+		$this->form_validation->set_message('check_is_positive','El campo de cantidad debe ser un numero mayor que 0.');
+
+		if($qty < 0)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 }
