@@ -94,7 +94,7 @@ class Entries extends CI_Controller{
 			$this->EntryModel->release_entry();
 
 			//session message
-			$this->session->set_flashdata('entrada_liberada', 'Se ha liberado la entrada.');
+			$this->session->set_flashdata('liberada', 'Se ha liberado la entrada.');
 
 			redirect(base_url() . 'entries/release/' . $id );
 		}
@@ -115,12 +115,8 @@ class Entries extends CI_Controller{
 
 		$this->form_validation->set_rules('id', 'ID o Folio', 'required');
 		$this->form_validation->set_rules('status', 'Status', 'required');
-		$this->form_validation->set_rules('final_qty', 'Cantidad final', 'required');
-		$this->form_validation->set_rules('wo_escaneadas', 'Work orders escaneadas', 'required');
-		$this->form_validation->set_rules('fecha_exp', 'Fecha de expiracion', 'required');
-		$this->form_validation->set_rules('rev_dibujo', 'Revision de dibujo', 'required');
-		$this->form_validation->set_rules('empaque', 'Empaque', 'required');
-		$this->form_validation->set_rules('documentos_rev', 'Documentos revisados', 'required');
+		$this->form_validation->set_rules('cerrada_por', 'Cerrada por', 'required');
+		$this->form_validation->set_rules('rev_mapics', 'Revision contra Mapics', 'required');
 
 
 		if($this->form_validation->run() === FALSE)
@@ -133,10 +129,10 @@ class Entries extends CI_Controller{
 		else
 		{
 
-			$this->EntryModel->release_entry();
+			$this->EntryModel->close_entry();
 
 			//session message
-			$this->session->set_flashdata('entrada_liberada', 'Se ha liberado la entrada.');
+			$this->session->set_flashdata('cerrada', 'Se ha cerrado la entrada.');
 
 			redirect(base_url() . 'entries/release/' . $id );
 		}

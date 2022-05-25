@@ -22,6 +22,24 @@
 	<!-- Contenido -->
 	<!-- ============================================================== -->
 	<div class="row justify-content-center">
+
+
+		<div class="col-lg-12">
+			<div class="col-lg-12">
+				<?php if($this->session->flashdata('cerrada')): ?>
+
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						<strong class="uppercase"><bdi>Cerrada</bdi></strong>
+						La orden ha sido cerrada.
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+					</div>
+
+				<?php endif; ?>
+			</div>
+		</div>
+
+
 		<div class="col-lg-4 col-md-4">
 
 			<div class="white-box analytics-info">
@@ -103,8 +121,8 @@
 
 				<div class="row">
 					<div class="col-lg-12">
-						<?php echo form_open('entries/release/' .  $entry['id'], $_GET) ?>
-						<h3 class="box-title mb-2 text-primary">Registrar una entrada</h3>
+						<?php echo form_open('entries/close/' .  $entry['id'], $_GET) ?>
+						<h3 class="box-title mb-2 text-primary">Cerrar orden</h3>
 
 						<div class="mt-5 mb-5">
 							<?php echo validation_errors(
@@ -124,6 +142,7 @@
 									<option value="">Seleccione Resultado</option>
 									<option value="0">No</option>
 									<option value="1">Si</option>
+									<option value="2">En espera por cambio de prioridad</option>
 								</select>
 							</div>
 
@@ -159,7 +178,7 @@
 
 
 						<div class="form-group mt-5">
-							<input style="width: 100%" type="submit" name="save_release" class="btn btn-primary text-white btn-lg" value="Cerrar Orden">
+							<input style="width: 100%" type="submit" name="save_close" class="btn btn-primary text-white btn-lg" value="Cerrar Orden">
 						</div>
 						<?php echo form_close() ?>
 					</div>

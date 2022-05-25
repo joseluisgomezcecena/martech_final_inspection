@@ -126,4 +126,24 @@ class EntryModel extends CI_Model{
 
 
 
+
+	public function close_entry()
+	{
+
+		$id = $this->input->post('id');
+		$progress = 3;
+		$release_date = date("Y-m-d H:i:s");
+
+		$data = array(
+			'progress'=>$progress,
+			'status'=>$this->input->post('status'),
+			'rev_mapics'=>$this->input->post('rev_mapics'),
+			'cerrada_por'=>$this->input->post('cerrada_por'),
+			'liberada_date'=>$release_date,
+		);
+
+		return $this->db->update('entry', $data, array("id"=>$id));
+	}
+
+
 }

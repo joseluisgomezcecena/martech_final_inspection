@@ -22,6 +22,20 @@
 	<!-- Contenido -->
 	<!-- ============================================================== -->
 	<div class="row justify-content-center">
+
+		<div class="col-lg-12">
+			<?php if($this->session->flashdata('liberada')): ?>
+
+				<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<strong class="uppercase"><bdi>Liberada</bdi></strong>
+					Se ha liberada la orden y esta esperando a ser cerrada.
+					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+				</div>
+
+			<?php endif; ?>
+		</div>
+
 		<div class="col-lg-4 col-md-4">
 
 			<div class="white-box analytics-info">

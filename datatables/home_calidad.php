@@ -65,6 +65,13 @@
 				$text =  "2/3 Liberado en espera a Cerrar";
 				$color =  "bg-primary";
 			}
+			elseif($row['progress'] == 3)
+			{
+				$btn_title = "Cerrar";
+				$link = "entries/close/{$row['id']}";
+				$text =  "3/3 Orden Cerrada";
+				$color =  "bg-success disabled";
+			}
 
 
 			$data[] = array(
@@ -72,7 +79,7 @@
 				"part_no"=>$row['part_no'],
 				"lot_no"=>$row['lot_no'],
 				"qty"=>$row['qty'],
-				"planta"=>$row['id'],
+				"planta"=>$row['plant'],
 				"progress"=> "<h4><span class='badge $color'>$text</span></h4>",
 				"btn_id"=>"<a href='index.php/$link' class='btn btn-primary'>$btn_title</a>"
 			);
