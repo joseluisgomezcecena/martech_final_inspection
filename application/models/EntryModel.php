@@ -36,6 +36,14 @@ class EntryModel extends CI_Model{
 
 
 
+	public function get_closed()
+	{
+		$query = $this->db->get_where('entry', "progress = 3 ");
+		return $query->result_array();
+	}
+
+
+
 	public function get_single_entry($id)
 	{
 		$query = $this->db->get_where('entry', array("id"=>$id));
@@ -96,6 +104,7 @@ class EntryModel extends CI_Model{
 
 		$id = $this->input->post('id');
 		$progress = 2;
+		$release_date = date("Y-m-d H:i:s");
 
 		$data = array(
 			'progress'=>$progress,
@@ -108,6 +117,7 @@ class EntryModel extends CI_Model{
 			'empaque'=>$this->input->post('empaque'),
 			'documentos_rev'=>$this->input->post('documentos_rev'),
 			'razon_rechazo'=>$this->input->post('razon_rechazo'),
+			'liberada_date'=>$release_date,
 		);
 
 		return $this->db->update('entry', $data, array("id"=>$id));

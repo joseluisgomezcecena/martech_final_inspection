@@ -15,4 +15,15 @@ class Reports extends CI_Controller{
 
 
 
+	//ordenes cerradas
+	public function reporte_calidad()
+	{
+
+		$data['orders'] = $this->EntryModel->get_closed();
+
+		$this->load->view('templates/header');
+		$this->load->view('reports/report_calidad', $data); //loading page and data
+		$this->load->view('templates/footer');
+	}
+
 }

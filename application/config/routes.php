@@ -12,6 +12,7 @@ $route['(:any)'] = 'pages/view/$1';
 
 //reports
 $route['reports/index'] = 'reports/index';
+$route['reports/calidad'] = 'reports/reporte_calidad';
 
 //produccion
 $route['entries/create'] = 'entries/create';
@@ -20,6 +21,7 @@ $route['entries/create'] = 'entries/create';
 $route['entries/release/(:any)'] = 'entries/release/$1';
 $route['entries/close/(:any)'] = 'entries/close/$1';
 $route['entries/assign/(:any)'] = 'entries/assign/$1';
+
 
 //forms
 $route['forms/create'] = 'forms/create';
