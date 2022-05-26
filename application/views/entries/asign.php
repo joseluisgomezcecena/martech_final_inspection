@@ -28,8 +28,8 @@
 
 				<div class="alert alert-success alert-dismissible fade show" role="alert">
 					<strong class="uppercase"><bdi>Asignada</bdi></strong>
-					La orden ha sigo asignada y sera insepccionada. <a href="<?php base_url() ?>">Click Aqui para regresar</a> o cierre esta
-					alerta para agregar otra orden.
+					La orden ha sigo asignada y sera insepccionada. Haga Click <a href="<?php echo base_url() ?>"> Aqui </a> para regresar o
+					cierre este mensaje para cambiar el inspector asignado.
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
 				</div>
@@ -103,17 +103,17 @@
 		<div class="col-lg-8 col-md-8">
 
 			<div class="white-box analytics-info">
-				<h3 class="box-title">Forma de captura</h3>
+				<h3 class="box-title">Asignar Orden</h3>
 
 				<div class="row">
 					<div class="col-lg-12">
 						<?php echo form_open('entries/assign/' .  $entry['id'], $_GET) ?>
-						<h3 class="box-title mb-2 text-primary">Asignar Orden</h3>
+						<h3 class="box-title mb-2 text-primary">Asigne una orden a un inspector</h3>
 
 						<div class="mt-5 mb-5">
 							<?php echo validation_errors(
 									'<div class="alert alert-danger alert-dismissible fade show" role="alert">',
-									'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+									'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
 							); ?>
 						</div>
 
@@ -125,7 +125,7 @@
 						<div class="row">
 							<div class=" col-lg-12">
 								<label for="">Asignar orden</label>
-								<input class="form-control" list="part" name="asignada" value="<?php if(isset($entry['asignada'])){echo $entry['asignada'];}else{echo "";} ?>" id="part_no">
+								<input class="form-control" list="part" name="asignada" value="<?php if(isset($entry['asignada'])){echo $entry['asignada'];}else{echo "";} ?>" id="part_no" required>
 
 								<datalist id="part">
 									<?php foreach ($users as $user): ?>

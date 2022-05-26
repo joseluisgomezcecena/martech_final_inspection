@@ -47,6 +47,7 @@ class EntryModel extends CI_Model{
 	}
 
 
+
 	public function create_entry()
 	{
 		$parcial = $this->input->post('parcial');
@@ -108,6 +109,7 @@ class EntryModel extends CI_Model{
 			'final_qty'=>$this->input->post('final_qty'),
 			'location'=>$this->input->post('location'),
 			'wo_escaneadas'=>$this->input->post('wo_escaneadas'),
+			'has_fecha_exp'=>$this->input->post('has_fecha_exp'),
 			'fecha_exp'=>$this->input->post('fecha_exp'),
 			'rev_dibujo'=>$this->input->post('rev_dibujo'),
 			'empaque'=>$this->input->post('empaque'),

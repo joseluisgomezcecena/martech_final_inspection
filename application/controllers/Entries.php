@@ -38,7 +38,7 @@ class Entries extends CI_Controller{
 	public function assign($id = NULL)
 	{
 		$data['entry'] = $this->EntryModel->get_single_entry($id);
-		$data['locations'] = $this->EntryModel->get_locations();
+		$data['locations'] = $this->LocationModel->get_locations();
 		$data['users'] = $this->UserModel->get_users_quality();
 
 
@@ -75,13 +75,25 @@ class Entries extends CI_Controller{
 
 		$this->form_validation->set_rules('id', 'ID o Folio', 'required');
 		$this->form_validation->set_rules('status', 'Status', 'required');
-		$this->form_validation->set_rules('final_qty', 'Cantidad final', 'required');
+		$this->form_validation->set_rules('final_qty', 'Cantidad final', 'required|callback_check_is_positive');
 		$this->form_validation->set_rules('wo_escaneadas', 'Work orders escaneadas', 'required');
 		$this->form_validation->set_rules('location', 'Locacion', 'required');
-		$this->form_validation->set_rules('fecha_exp', 'Fecha de expiracion', 'required');
 		$this->form_validation->set_rules('rev_dibujo', 'Revision de dibujo', 'required');
 		$this->form_validation->set_rules('empaque', 'Empaque', 'required');
 		$this->form_validation->set_rules('documentos_rev', 'Documentos revisados', 'required');
+		$this->form_validation->set_rules('has_fecha_exp', 'Fecha de expiracion si o no', 'required');
+
+
+
+		if($this->input->post('status') == 2)
+		{
+			$this->form_validation->set_rules('razon_rechazo', 'Razon del rechazo.', 'required');
+		}
+
+		if($this->input->post('has_fecha_exp') == 1)
+		{
+			$this->form_validation->set_rules('fecha_exp', 'Fecha de expiracion', 'required');
+		}
 
 
 		if($this->form_validation->run() === FALSE)
@@ -160,4 +172,12 @@ class Entries extends CI_Controller{
 			return true;
 		}
 	}
+
+
+
+
+
+
+
+
 }

@@ -28,7 +28,7 @@
 
 				<div class="alert alert-success alert-dismissible fade show" role="alert">
 					<strong class="uppercase"><bdi>Liberada</bdi></strong>
-					Se ha liberada la orden y esta esperando a ser cerrada.
+					Se ha liberadao la orden y esta esperando a ser cerrada.
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
 				</div>
@@ -111,7 +111,7 @@
 						<div class="mt-5 mb-5">
 							<?php echo validation_errors(
 									'<div class="alert alert-danger alert-dismissible fade show" role="alert">',
-									'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+									'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
 							); ?>
 						</div>
 
@@ -124,7 +124,7 @@
 								<label for="browser">Resultado de la inspeccion:</label>
 								<select name="status" id="status" class="form-control">
 									<option value="">Seleccione Resultado</option>
-									<option value="3">En espera</option>
+									<option value="2">En espera</option>
 									<option value="0">Rechazado</option>
 									<option value="1">Aceptado</option>
 								</select>
@@ -155,8 +155,17 @@
 
 
 							<div class=" col-lg-3">
+								<label for="">Tiene fecha de expiracion?</label>
+								<select  class="form-control" name="has_fecha_exp" id="has_exp_date"  required>
+									<option value="">Seleccione</option>
+									<option value="1">Si</option>
+									<option value="0">No</option>
+								</select>
+							</div>
+
+							<div class=" col-lg-3" id="fecha_exp">
 								<label for="">Fecha de expiracion</label>
-								<input type="date" class="form-control" name="fecha_exp"  required>
+								<input type="date" class="form-control" name="fecha_exp"  >
 							</div>
 
 
@@ -211,6 +220,7 @@
 	$(document).ready(function() {
 
 		$('#razon_rechazo').hide();
+		$('#fecha_exp').hide();
 
 		$('#status').change(function () {
 			var status = $('#status').val();
@@ -221,6 +231,21 @@
 				$('#razon_rechazo').hide();
 			}
 		});
+
+
+		$('#has_exp_date').change(function () {
+			var has = $('#has_exp_date').val();
+
+			if(has == 1){
+				$('#fecha_exp').show("300");
+			}else{
+				$('#fecha_exp').hide("300");
+			}
+		});
+
+
+
+
 	});
 
 </script>

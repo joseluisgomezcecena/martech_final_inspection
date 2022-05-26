@@ -49,7 +49,7 @@
 						<div class="mt-5 mb-5">
 							<?php echo validation_errors(
 									'<div class="alert alert-danger alert-dismissible fade show" role="alert">',
-									'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+									'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
 							); ?>
 						</div>
 
