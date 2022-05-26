@@ -1,7 +1,7 @@
 <?php
 	function viewentry()
 	{
-		$connection = mysqli_connect('localhost','root', '', 'martech_final_inspection');
+		$connection = mysqli_connect('localhost','root', '', 'martech_final_inspection.sql');
 
 		## Read value
 		$draw = $_POST['draw'];
