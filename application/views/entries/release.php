@@ -24,17 +24,20 @@
 	<div class="row justify-content-center">
 
 		<div class="col-lg-12">
-			<?php if($this->session->flashdata('liberada')): ?>
+			<?php if ($this->session->flashdata('liberada')) : ?>
 
 				<div class="alert alert-success alert-dismissible fade show" role="alert">
 					<strong class="uppercase"><bdi>Liberada</bdi></strong>
 					Se ha liberadao la orden y esta esperando a ser cerrada.
+					Haz click <a href="<?php echo  base_url() ?>">Aqui</a> para regresar
+					o cierra este mensaje para cambiar los datos de esta liberación.
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
 				</div>
 
 			<?php endif; ?>
 		</div>
+
 
 		<div class="col-lg-4 col-md-4">
 
@@ -52,13 +55,13 @@
 
 							<div class=" col-lg-12">
 								<label for="">Numero de lote</label>
-								<input type="text" class="form-control"  value="<?php echo $entry['lot_no'] ?>" disabled>
+								<input type="text" class="form-control" value="<?php echo $entry['lot_no'] ?>" disabled>
 							</div>
 
 
 							<div class=" col-lg-12">
 								<label for="">Cantidad enviada</label>
-								<input type="number" class="form-control" value="<?php echo $entry['qty'] ?>"  disabled>
+								<input type="number" class="form-control" value="<?php echo $entry['qty'] ?>" disabled>
 							</div>
 
 
@@ -66,12 +69,19 @@
 								<label for="">Planta</label>
 								<select class="form-control" name="plant" id="plant_id" disabled>
 									<option value="">Seleccione una planta</option>
-									<option value="1">Planta 1</option>
 									<?php
-									foreach ($plantas as $planta):
-										?>
-										<option value="<?php echo $planta['planta_id'] ?>"><?php echo $planta['planta_nombre'] ?></option>
-									<?php endforeach; ?>
+									foreach ($plants as $plant) {
+										echo '<option value="' . $plant['planta_id'] . '"';
+
+										if ($plant['planta_id'] == $entry['plant']) {
+											echo ' selected';
+										}
+
+										echo '>';
+										echo $plant['planta_nombre'];
+										echo '</option>';
+									}
+									?>
 								</select>
 							</div>
 
@@ -81,10 +91,26 @@
 							<div class="col-lg-12 mt-5 mb-5 text-primary">
 
 								<?php
-								if($entry['parcial'] == 1){ echo "Parcial<br>";} else {echo "";}
-								if($entry['reinspeccion'] == 1){ echo "Reinspeccion<br>";} else {echo "";}
-								if($entry['ficticio'] == 1){ echo "Ficticio<br>";} else {echo "";}
-								if($entry['discrepancia'] == 1){ echo "Discrepancia<br>";} else {echo "";}
+								if ($entry['parcial'] == 1) {
+									echo "Parcial<br>";
+								} else {
+									echo "";
+								}
+								if ($entry['reinspeccion'] == 1) {
+									echo "Reinspeccion<br>";
+								} else {
+									echo "";
+								}
+								if ($entry['ficticio'] == 1) {
+									echo "Ficticio<br>";
+								} else {
+									echo "";
+								}
+								if ($entry['discrepancia'] == 1) {
+									echo "Discrepancia<br>";
+								} else {
+									echo "";
+								}
 								?>
 
 							</div>
@@ -95,7 +121,8 @@
 					</div>
 				</div>
 			</div>
-		</div> <!--end col-4-->
+		</div>
+		<!--end col-4-->
 
 
 		<div class="col-lg-8 col-md-8">
@@ -110,30 +137,39 @@
 
 						<div class="mt-5 mb-5">
 							<?php echo validation_errors(
-									'<div class="alert alert-danger alert-dismissible fade show" role="alert">',
-									'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+								'<div class="alert alert-danger alert-dismissible fade show" role="alert">',
+								'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
 							); ?>
+
+							<?php
+							if (isset($error_message)) {
+								echo '<div class="alert alert-danger alert-dismissible fade show" role="alert"> ' . $error_message . '
+									<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+									</button>
+								</div>';
+							}
+							?>
 						</div>
 
 
 
-						<input type="hidden" name="id" value="<?php echo $entry['id'] ?>"/>
+						<input type="hidden" name="id" value="<?php echo $entry['id'] ?>" />
 
 						<div class="row">
 							<div class=" col-lg-3">
 								<label for="browser">Resultado de la inspeccion:</label>
 								<select name="status" id="status" class="form-control">
 									<option value="">Seleccione Resultado</option>
-									<option value="2">En espera</option>
-									<option value="0">Rechazado</option>
-									<option value="1">Aceptado</option>
+									<option value="3">En espera</option>
+									<option value="1">Rechazado</option>
+									<option value="2">Aceptado</option>
 								</select>
 							</div>
 
 
 							<div class=" col-lg-3">
 								<label for="">Cantidad Final</label>
-								<input type="number" class="form-control" name="final_qty"  required>
+								<input type="number" class="form-control" name="final_qty" required>
 							</div>
 
 
@@ -141,7 +177,7 @@
 								<label for="browser">Locacion:</label>
 								<select name="location" id="" class="form-control" required>
 									<option value="">Seleccione Locacion</option>
-									<?php foreach ($locations as $location): ?>
+									<?php foreach ($locations as $location) : ?>
 										<option value="<?php echo $location['location_id'] ?>"><?php echo $location['location_name'] ?></option>
 									<?php endforeach; ?>
 								</select>
@@ -150,13 +186,13 @@
 
 							<div class=" col-lg-3">
 								<label for="">Work orders escaneadas</label>
-								<input type="text" class="form-control" name="wo_escaneadas"  required>
+								<input type="text" class="form-control" name="wo_escaneadas" required>
 							</div>
 
 
 							<div class=" col-lg-3">
 								<label for="">Tiene fecha de expiracion?</label>
-								<select  class="form-control" name="has_fecha_exp" id="has_exp_date"  required>
+								<select class="form-control" name="has_fecha_exp" id="has_exp_date" required>
 									<option value="">Seleccione</option>
 									<option value="1">Si</option>
 									<option value="0">No</option>
@@ -165,26 +201,26 @@
 
 							<div class=" col-lg-3" id="fecha_exp">
 								<label for="">Fecha de expiracion</label>
-								<input type="date" class="form-control" name="fecha_exp"  >
+								<input type="date" class="form-control" name="fecha_exp">
 							</div>
 
 
 							<div class=" col-lg-3">
 								<label for="">Revision de dibujo</label>
-								<input type="text" class="form-control" name="rev_dibujo"  required>
+								<input type="text" class="form-control" name="rev_dibujo" required>
 							</div>
 
 
 
 							<div class=" col-lg-3">
 								<label for="">Empaque</label>
-								<input type="text" class="form-control" name="empaque"  required>
+								<input type="text" class="form-control" name="empaque" required>
 							</div>
 
 
 							<div class=" col-lg-3">
 								<label for="">Documentos revisados</label>
-								<input type="text" class="form-control" name="documentos_rev"  required>
+								<input type="text" class="form-control" name="documentos_rev" required>
 							</div>
 
 
@@ -194,9 +230,6 @@
 							</div>
 
 						</div>
-
-
-
 
 						<div class="form-group mt-5">
 							<input style="width: 100%" type="submit" name="save_release" class="btn btn-primary text-white btn-lg" value="Liberar Entrada">
@@ -216,29 +249,28 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
-
 	$(document).ready(function() {
 
 		$('#razon_rechazo').hide();
 		$('#fecha_exp').hide();
 
-		$('#status').change(function () {
+		$('#status').change(function() {
 			var status = $('#status').val();
 
-			if(status == 0){
+			if (status == 0) {
 				$('#razon_rechazo').show("300");
-			}else{
+			} else {
 				$('#razon_rechazo').hide();
 			}
 		});
 
 
-		$('#has_exp_date').change(function () {
+		$('#has_exp_date').change(function() {
 			var has = $('#has_exp_date').val();
 
-			if(has == 1){
+			if (has == 1) {
 				$('#fecha_exp').show("300");
-			}else{
+			} else {
 				$('#fecha_exp').hide("300");
 			}
 		});
@@ -247,5 +279,4 @@
 
 
 	});
-
 </script>

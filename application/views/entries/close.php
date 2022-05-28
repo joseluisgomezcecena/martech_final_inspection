@@ -26,7 +26,7 @@
 
 		<div class="col-lg-12">
 			<div class="col-lg-12">
-				<?php if($this->session->flashdata('cerrada')): ?>
+				<?php if ($this->session->flashdata('cerrada')) : ?>
 
 					<div class="alert alert-success alert-dismissible fade show" role="alert">
 						<strong class="uppercase"><bdi>Cerrada</bdi></strong>
@@ -56,14 +56,14 @@
 
 							<div class=" col-lg-12">
 								<label for="">Numero de lote</label>
-								<input type="text" class="form-control"  value="<?php echo $entry['lot_no'] ?>" disabled>
+								<input type="text" class="form-control" value="<?php echo $entry['lot_no'] ?>" disabled>
 							</div>
 
 
 
 							<div class=" col-lg-12">
 								<label for="">Cantidad enviada</label>
-								<input type="number" class="form-control" value="<?php echo $entry['qty'] ?>"  disabled>
+								<input type="number" class="form-control" value="<?php echo $entry['qty'] ?>" disabled>
 							</div>
 
 
@@ -71,25 +71,32 @@
 								<label for="">Planta</label>
 								<select class="form-control" name="plant" id="plant_id" disabled>
 									<option value="">Seleccione una planta</option>
-									<option value="1">Planta 1</option>
 									<?php
-									foreach ($plantas as $planta):
-										?>
-										<option value="<?php echo $planta['planta_id'] ?>"><?php echo $planta['planta_nombre'] ?></option>
-									<?php endforeach; ?>
+									foreach ($plants as $plant) {
+										echo '<option value="' . $plant['planta_id'] . '"';
+
+										if ($plant['planta_id'] == $entry['plant']) {
+											echo ' selected';
+										}
+
+										echo '>';
+										echo $plant['planta_nombre'];
+										echo '</option>';
+									}
+									?>
 								</select>
 							</div>
 
 							<div class=" col-lg-12">
 								<label for="">Cantidad final</label>
-								<input type="text" class="form-control"  value="<?php echo $entry['final_qty'] ?>" disabled>
+								<input type="text" class="form-control" value="<?php echo $entry['final_qty'] ?>" disabled>
 							</div>
 
 
 
 							<div class=" col-lg-12">
 								<label for="">Locacion</label>
-								<input type="text" class="form-control"  value="<?php echo $entry['final_qty'] ?>" disabled>
+								<input type="text" class="form-control" value="<?php echo $entry['final_qty'] ?>" disabled>
 							</div>
 
 
@@ -97,10 +104,26 @@
 							<div class="col-lg-12 mt-5 mb-5 text-primary">
 
 								<?php
-								if($entry['parcial'] == 1){ echo "Parcial<br>";} else {echo "";}
-								if($entry['reinspeccion'] == 1){ echo "Reinspeccion<br>";} else {echo "";}
-								if($entry['ficticio'] == 1){ echo "Ficticio<br>";} else {echo "";}
-								if($entry['discrepancia'] == 1){ echo "Discrepancia<br>";} else {echo "";}
+								if ($entry['parcial'] == 1) {
+									echo "Parcial<br>";
+								} else {
+									echo "";
+								}
+								if ($entry['reinspeccion'] == 1) {
+									echo "Reinspeccion<br>";
+								} else {
+									echo "";
+								}
+								if ($entry['ficticio'] == 1) {
+									echo "Ficticio<br>";
+								} else {
+									echo "";
+								}
+								if ($entry['discrepancia'] == 1) {
+									echo "Discrepancia<br>";
+								} else {
+									echo "";
+								}
 								?>
 
 							</div>
@@ -111,7 +134,8 @@
 					</div>
 				</div>
 			</div>
-		</div> <!--end col-4-->
+		</div>
+		<!--end col-4-->
 
 
 		<div class="col-lg-8 col-md-8">
@@ -126,14 +150,14 @@
 
 						<div class="mt-5 mb-5">
 							<?php echo validation_errors(
-									'<div class="alert alert-danger alert-dismissible fade show" role="alert">',
-									'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+								'<div class="alert alert-danger alert-dismissible fade show" role="alert">',
+								'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
 							); ?>
 						</div>
 
 
 
-						<input type="hidden" name="id" value="<?php echo $entry['id'] ?>"/>
+						<input type="hidden" name="id" value="<?php echo $entry['id'] ?>" />
 
 						<div class="row">
 							<div class=" col-lg-3">
@@ -152,9 +176,9 @@
 								<input class="form-control" list="part" name="cerrada_por" id="part_no">
 
 								<datalist id="part">
-									<?php foreach ($users as $user): ?>
+									<?php foreach ($users as $user) : ?>
 										<option value="<?php echo $user['user_name'] ?>">
-									<?php endforeach; ?>
+										<?php endforeach; ?>
 								</datalist>
 							</div>
 
@@ -163,7 +187,7 @@
 
 							<div class=" col-lg-3">
 								<label for="">Revision contra mapics</label>
-								<input type="text" class="form-control" name="rev_mapics"  required>
+								<input type="text" class="form-control" name="rev_mapics" required>
 							</div>
 
 
@@ -195,20 +219,18 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
-
 	$(document).ready(function() {
 
 		$('#razon_rechazo').hide();
 
-		$('#status').change(function () {
+		$('#status').change(function() {
 			var status = $('#status').val();
 
-			if(status == 0){
+			if (status == 0) {
 				$('#razon_rechazo').show("300");
-			}else{
+			} else {
 				$('#razon_rechazo').hide();
 			}
 		});
 	});
-
 </script>

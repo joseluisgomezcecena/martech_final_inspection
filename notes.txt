@@ -1,0 +1,15 @@
+dashboardar para produccion no lleva accion
+dashboard para calidad lleva accion
+
+0/3 espera  no se ha asignado inspector
+
+1/3 asginado en espera a liberar
+
+
+Cosas por hacer
+Validar que la cantidad final
+ en liberar orden no sea mayor que la cantidad ingresada
+
+Generar reportes de las que se cierran
+
+reporte por tiempos de todas las cerradas

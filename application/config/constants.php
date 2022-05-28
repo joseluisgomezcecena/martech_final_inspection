@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | of this setting
 |
 */
-defined('SHOW_DEBUG_BACKTRACE') OR define('SHOW_DEBUG_BACKTRACE', TRUE);
+defined('SHOW_DEBUG_BACKTRACE') or define('SHOW_DEBUG_BACKTRACE', TRUE);
 
 /*
 |--------------------------------------------------------------------------
@@ -26,10 +26,10 @@ defined('SHOW_DEBUG_BACKTRACE') OR define('SHOW_DEBUG_BACKTRACE', TRUE);
 | always be used to set the mode correctly.
 |
 */
-defined('FILE_READ_MODE')  OR define('FILE_READ_MODE', 0644);
-defined('FILE_WRITE_MODE') OR define('FILE_WRITE_MODE', 0666);
-defined('DIR_READ_MODE')   OR define('DIR_READ_MODE', 0755);
-defined('DIR_WRITE_MODE')  OR define('DIR_WRITE_MODE', 0755);
+defined('FILE_READ_MODE')  or define('FILE_READ_MODE', 0644);
+defined('FILE_WRITE_MODE') or define('FILE_WRITE_MODE', 0666);
+defined('DIR_READ_MODE')   or define('DIR_READ_MODE', 0755);
+defined('DIR_WRITE_MODE')  or define('DIR_WRITE_MODE', 0755);
 
 /*
 |--------------------------------------------------------------------------
@@ -39,14 +39,14 @@ defined('DIR_WRITE_MODE')  OR define('DIR_WRITE_MODE', 0755);
 | These modes are used when working with fopen()/popen()
 |
 */
-defined('FOPEN_READ')                           OR define('FOPEN_READ', 'rb');
-defined('FOPEN_READ_WRITE')                     OR define('FOPEN_READ_WRITE', 'r+b');
-defined('FOPEN_WRITE_CREATE_DESTRUCTIVE')       OR define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
-defined('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE')  OR define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE', 'w+b'); // truncates existing file data, use with care
-defined('FOPEN_WRITE_CREATE')                   OR define('FOPEN_WRITE_CREATE', 'ab');
-defined('FOPEN_READ_WRITE_CREATE')              OR define('FOPEN_READ_WRITE_CREATE', 'a+b');
-defined('FOPEN_WRITE_CREATE_STRICT')            OR define('FOPEN_WRITE_CREATE_STRICT', 'xb');
-defined('FOPEN_READ_WRITE_CREATE_STRICT')       OR define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
+defined('FOPEN_READ')                           or define('FOPEN_READ', 'rb');
+defined('FOPEN_READ_WRITE')                     or define('FOPEN_READ_WRITE', 'r+b');
+defined('FOPEN_WRITE_CREATE_DESTRUCTIVE')       or define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
+defined('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE')  or define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE', 'w+b'); // truncates existing file data, use with care
+defined('FOPEN_WRITE_CREATE')                   or define('FOPEN_WRITE_CREATE', 'ab');
+defined('FOPEN_READ_WRITE_CREATE')              or define('FOPEN_READ_WRITE_CREATE', 'a+b');
+defined('FOPEN_WRITE_CREATE_STRICT')            or define('FOPEN_WRITE_CREATE_STRICT', 'xb');
+defined('FOPEN_READ_WRITE_CREATE_STRICT')       or define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 
 /*
 |--------------------------------------------------------------------------
@@ -73,13 +73,46 @@ defined('FOPEN_READ_WRITE_CREATE_STRICT')       OR define('FOPEN_READ_WRITE_CREA
 |       http://tldp.org/LDP/abs/html/exitcodes.html
 |
 */
-defined('EXIT_SUCCESS')        OR define('EXIT_SUCCESS', 0); // no errors
-defined('EXIT_ERROR')          OR define('EXIT_ERROR', 1); // generic error
-defined('EXIT_CONFIG')         OR define('EXIT_CONFIG', 3); // configuration error
-defined('EXIT_UNKNOWN_FILE')   OR define('EXIT_UNKNOWN_FILE', 4); // file not found
-defined('EXIT_UNKNOWN_CLASS')  OR define('EXIT_UNKNOWN_CLASS', 5); // unknown class
-defined('EXIT_UNKNOWN_METHOD') OR define('EXIT_UNKNOWN_METHOD', 6); // unknown class member
-defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user input
-defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
-defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
-defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+defined('EXIT_SUCCESS')        or define('EXIT_SUCCESS', 0); // no errors
+defined('EXIT_ERROR')          or define('EXIT_ERROR', 1); // generic error
+defined('EXIT_CONFIG')         or define('EXIT_CONFIG', 3); // configuration error
+defined('EXIT_UNKNOWN_FILE')   or define('EXIT_UNKNOWN_FILE', 4); // file not found
+defined('EXIT_UNKNOWN_CLASS')  or define('EXIT_UNKNOWN_CLASS', 5); // unknown class
+defined('EXIT_UNKNOWN_METHOD') or define('EXIT_UNKNOWN_METHOD', 6); // unknown class member
+defined('EXIT_USER_INPUT')     or define('EXIT_USER_INPUT', 7); // invalid user input
+defined('EXIT_DATABASE')       or define('EXIT_DATABASE', 8); // database error
+defined('EXIT__AUTO_MIN')      or define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
+defined('EXIT__AUTO_MAX')      or define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+
+
+/*
+ * CONNFIGURE SERVER INSTALLATION...
+*/
+defined('SERVER_PATH_URL')      or define('SERVER_PATH_URL', 'http://localhost/');
+//defined('SERVER_PATH_URL')      or define('SERVER_PATH_URL', 'http://mxmtsvrandon1/');
+
+
+defined('LOGIN_URL')      or define('LOGIN_URL',  SERVER_PATH_URL . 'authentication/index.php/login?from=' . SERVER_PATH_URL . 'martech_final_inspection');
+
+defined('IS_LOGGED_IN')      or define('IS_LOGGED_IN', 'final_inspection_logged_in');
+
+defined('PRODUCTION_USER')       or define('PRODUCTION_USER', 1);
+defined('QUALITY_USER')       or define('QUALITY_USER', 2);
+defined('USER_TYPE')      or define('USER_TYPE', 'final_inspection_user_type'); //PRODUCTION OR QUALITY
+
+defined('NAME')      or define('NAME', 'final_inspection_name');
+defined('LASTNAME')      or define('LASTNAME', 'final_inspection_lastname');
+defined('EMAIL')      or define('EMAIL', 'final_inspection_email');
+defined('MARTECH_NUMBER')      or define('MARTECH_NUMBER', 'final_inspection_martech_number');
+defined('LEVEL_NAME')      or define('LEVEL_NAME', 'final_inspection_level_name');
+defined('LEVEL_VALUE')      or define('LEVEL_VALUE', 'final_inspection_level_value');
+defined('DEPARTMENT_NAME')      or define('DEPARTMENT_NAME', 'final_inspection_department_name');
+defined('DEPARTMENT_ID')      or define('DEPARTMENT_ID', 'final_inspection_department_id');
+
+
+
+defined('PROGRESS_NOT_ASSIGNED')      or define('PROGRESS_NOT_ASSIGNED', 0);
+defined('PROGRESS_ASSIGNED')      or define('PROGRESS_ASSIGNED', 1);
+defined('PROGRESS_RELEASED')      or define('PROGRESS_RELEASED', 2);
+defined('PROGRESS_CLOSED')      or define('PROGRESS_CLOSED', 3);

@@ -1,6 +1,7 @@
 <?php
 
-class Users extends CI_Controller{
+class Users extends CI_Controller
+{
 
 	public function register()
 	{
@@ -10,14 +11,11 @@ class Users extends CI_Controller{
 		$this->form_validation->set_rules('user_name', 'Usuario o firma martech', 'required|callback_check_username_exists');
 		$this->form_validation->set_rules('password', 'Password', 'required');
 
-		if($this->form_validation->run() === FALSE)
-		{
+		if ($this->form_validation->run() === FALSE) {
 			$this->load->view('templates/header');
 			$this->load->view('users/register', $data);
 			$this->load->view('templates/footer');
-		}
-		else
-		{
+		} else {
 			//Encrypt password
 			$encrypted_pwd = password_hash($this->input->post('password'), PASSWORD_DEFAULT);
 
@@ -32,7 +30,7 @@ class Users extends CI_Controller{
 
 			//user_level_id
 			$user_level_id = 0;
-			
+
 
 			$this->UserModel->register($encrypted_pwd, $mail, $user_department_id, $user_martech_number, $user_level_id);
 
@@ -42,7 +40,6 @@ class Users extends CI_Controller{
 
 			redirect(base_url() . 'users/register');
 		}
-
 	}
 
 
@@ -55,14 +52,11 @@ class Users extends CI_Controller{
 		$this->form_validation->set_rules('username', 'User Name', 'required');
 		$this->form_validation->set_rules('password', 'Password', 'required');
 
-		if($this->form_validation->run() === FALSE)
-		{
+		if ($this->form_validation->run() === FALSE) {
 			$this->load->view('templates/header');
 			$this->load->view('users/login', $data);
 			$this->load->view('templates/footer');
-		}
-		else
-		{
+		} else {
 			//Encrypt password
 			$username = $this->input->post('username');
 			$password = $this->input->post('password');
@@ -70,15 +64,14 @@ class Users extends CI_Controller{
 
 			$user_id = $this->UserModel->login($username, $password);
 
-			if($user_id)
-			{
+			if ($user_id) {
 				//die("Success!");
 
 				//create session
 				$user_data = array(
-					'user_id'=>$user_id,
-					'user_name'=>$username,
-					'logged_in'=>true,
+					'user_id' => $user_id,
+					'user_name' => $username,
+					'logged_in' => true,
 				);
 
 				$this->session->set_userdata($user_data);
@@ -87,18 +80,13 @@ class Users extends CI_Controller{
 				//session message
 				$this->session->set_flashdata('login_success', 'You are now logged in.');
 				redirect(base_url() . 'posts');
-			}
-			else
-			{
+			} else {
 				//session message
 				$this->session->set_flashdata('login_failed', 'Incorrect username or password.');
 				redirect(base_url() . 'users/login');
 			}
 		}
-
-
 	}
-
 
 
 	public function logout()
@@ -137,14 +125,11 @@ class Users extends CI_Controller{
 		$this->form_validation->set_rules('password2', 'Password Confirmation', 'matches[password]');
 
 
-		if($this->form_validation->run() === FALSE)
-		{
+		if ($this->form_validation->run() === FALSE) {
 			$this->load->view('templates/header');
 			$this->load->view('users/profile', $data);
 			$this->load->view('templates/footer');
-		}
-		else
-		{
+		} else {
 			//file uploads
 			$config['upload_path'] = './assets/uploads/users';
 			$config['allowed_types'] = 'jpg|jpeg|png|gif';
@@ -154,15 +139,12 @@ class Users extends CI_Controller{
 
 			$this->load->library('upload', $config);
 
-			if(!$this->upload->do_upload())
-			{
-				$errors = array('error'=>$this->upload->display_errors());
+			if (!$this->upload->do_upload()) {
+				$errors = array('error' => $this->upload->display_errors());
 				//$post_image = 'noimage.jpg';
 				$uploaded = 0;
-			}
-			else
-			{
-				$data = array('upload_data'=>$this->upload->data());
+			} else {
+				$data = array('upload_data' => $this->upload->data());
 				$post_image = $_FILES['userfile']['name'];
 				$uploaded = 1;
 			}
@@ -172,10 +154,7 @@ class Users extends CI_Controller{
 
 			$this->UserModel->edit_profile($post_image, $uploaded, $user_id, $encrypted_pwd);
 			redirect(base_url() . 'posts');
-
 		}
-
-
 	}
 
 
@@ -189,14 +168,11 @@ class Users extends CI_Controller{
 
 	function check_username_exists($username)
 	{
-		$this->form_validation->set_message('check_username_exists','That username is taken. Please choose a different one.');
+		$this->form_validation->set_message('check_username_exists', 'That username is taken. Please choose a different one.');
 
-		if($this->UserModel->check_username_exists($username))
-		{
+		if ($this->UserModel->check_username_exists($username)) {
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -205,14 +181,11 @@ class Users extends CI_Controller{
 
 	function check_email_exists($email)
 	{
-		$this->form_validation->set_message('check_email_exists','That email is taken. Please choose a different one.');
+		$this->form_validation->set_message('check_email_exists', 'That email is taken. Please choose a different one.');
 
-		if($this->UserModel->check_email_exists($email))
-		{
+		if ($this->UserModel->check_email_exists($email)) {
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -220,16 +193,12 @@ class Users extends CI_Controller{
 
 	function check_phone_exists($phone)
 	{
-		$this->form_validation->set_message('check_phone_exists','That phone number is taken. Please choose a different one.');
+		$this->form_validation->set_message('check_phone_exists', 'That phone number is taken. Please choose a different one.');
 
-		if($this->UserModel->check_phone_exists($phone))
-		{
+		if ($this->UserModel->check_phone_exists($phone)) {
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
-
 }

@@ -24,7 +24,7 @@
 	<div class="row justify-content-center">
 		<div class="col-lg-12 col-md-12">
 
-			<?php if($this->session->flashdata('created')): ?>
+			<?php if ($this->session->flashdata('created')) : ?>
 
 				<div class="alert alert-success alert-dismissible fade show" role="alert">
 					<strong class="uppercase"><bdi>Enviado a Inspeccion</bdi></strong>
@@ -48,8 +48,8 @@
 
 						<div class="mt-5 mb-5">
 							<?php echo validation_errors(
-									'<div class="alert alert-danger alert-dismissible fade show" role="alert">',
-									'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+								'<div class="alert alert-danger alert-dismissible fade show" role="alert">',
+								'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
 							); ?>
 						</div>
 
@@ -61,22 +61,22 @@
 								<input class="form-control" list="part" name="part_no" id="part_no">
 
 								<datalist id="part">
-									<?php foreach ($parts as $part): ?>
+									<?php foreach ($parts as $part) : ?>
 										<option value="<?php echo $part['COL 1'] ?>">
-									<?php endforeach; ?>
+										<?php endforeach; ?>
 								</datalist>
 							</div>
 
 
 							<div class=" col-lg-3">
 								<label for="">Numero de lote</label>
-								<input type="text" class="form-control" name="lot_no"  required>
+								<input type="text" class="form-control" name="lot_no" required>
 							</div>
 
 
 							<div class=" col-lg-3">
 								<label for="">Cantidad enviada</label>
-								<input type="number" class="form-control" name="qty"  required>
+								<input type="number" class="form-control" name="qty" required>
 							</div>
 
 
@@ -85,8 +85,8 @@
 								<select class="form-control" name="plant" id="plant_id" required>
 									<option value="">Seleccione una planta</option>
 									<?php
-									foreach ($plantas as $planta):
-										?>
+									foreach ($plantas as $planta) :
+									?>
 										<option value="<?php echo $planta['planta_id'] ?>"><?php echo $planta['planta_nombre'] ?></option>
 									<?php endforeach; ?>
 								</select>
@@ -120,7 +120,7 @@
 
 
 						<div class="form-group">
-							<input style="width: 100%" type="submit" name="save_asistencia" class="btn btn-primary text-white btn-lg" value="Enviar A Inspección">
+							<input style="width: 100%" type="submit" name="save_asistencia" class="btn btn-primary text-white btn-lg" value="Enviar a Inspección">
 						</div>
 						<?php echo form_close() ?>
 					</div>
@@ -135,12 +135,12 @@
 
 <script type='text/javascript'>
 	// baseURL variable
-	var baseURL= "<?php echo base_url();?>";
+	var baseURL = "<?php echo base_url(); ?>";
 
 	//Asistencia
 	$(document).ready(function() {
 		// Plant change
-		$('#plant_id').change(function () {
+		$('#plant_id').change(function() {
 
 			console.log("Cambio");
 
@@ -148,15 +148,17 @@
 
 			// Ajax request
 			$.ajax({
-				url: '<?=base_url()?>index.php/Forms/get_sites',
+				url: '<?= base_url() ?>index.php/Forms/get_sites',
 				method: 'post',
-				data: {plant_id: plant_id},
+				data: {
+					plant_id: plant_id
+				},
 				dataType: 'json',
-				success: function (response) {
+				success: function(response) {
 
 					$('#linea_id').find('option').remove();
 					// fill select
-					$.each(response, function (index, data) {
+					$.each(response, function(index, data) {
 						$('#linea_id').append('<option value="' + data['linea_id'] + '">' + data['linea_nombre'] + '</option>');
 					});
 				}
@@ -167,7 +169,7 @@
 		//Movimientos
 
 
-		$('#plant_id_one').change(function () {
+		$('#plant_id_one').change(function() {
 
 			console.log("Cambio");
 
@@ -175,15 +177,17 @@
 
 			// Ajax request
 			$.ajax({
-				url: '<?=base_url()?>index.php/Forms/get_sites',
+				url: '<?= base_url() ?>index.php/Forms/get_sites',
 				method: 'post',
-				data: {plant_id: plant_id_one},
+				data: {
+					plant_id: plant_id_one
+				},
 				dataType: 'json',
-				success: function (response) {
+				success: function(response) {
 
 					$('#line_id_one').find('option').remove();
 					// fill select
-					$.each(response, function (index, data) {
+					$.each(response, function(index, data) {
 						$('#line_id_one').append('<option value="' + data['linea_id'] + '">' + data['linea_nombre'] + '</option>');
 					});
 				}
@@ -192,7 +196,7 @@
 
 
 
-		$('#plant_id_two').change(function () {
+		$('#plant_id_two').change(function() {
 
 			console.log("Cambio");
 
@@ -200,15 +204,17 @@
 
 			// Ajax request
 			$.ajax({
-				url: '<?=base_url()?>index.php/Forms/get_sites',
+				url: '<?= base_url() ?>index.php/Forms/get_sites',
 				method: 'post',
-				data: {plant_id: plant_id_two},
+				data: {
+					plant_id: plant_id_two
+				},
 				dataType: 'json',
-				success: function (response) {
+				success: function(response) {
 
 					$('#line_id_two').find('option').remove();
 					// fill select
-					$.each(response, function (index, data) {
+					$.each(response, function(index, data) {
 						$('#line_id_two').append('<option value="' + data['linea_id'] + '">' + data['linea_nombre'] + '</option>');
 					});
 				}
@@ -221,7 +227,7 @@
 		//tiempo extra
 
 
-		$('#te_planta').change(function () {
+		$('#te_planta').change(function() {
 
 			console.log("Cambio");
 
@@ -229,22 +235,22 @@
 
 			// Ajax request
 			$.ajax({
-				url: '<?=base_url()?>index.php/Forms/get_sites',
+				url: '<?= base_url() ?>index.php/Forms/get_sites',
 				method: 'post',
-				data: {plant_id: plant_te},
+				data: {
+					plant_id: plant_te
+				},
 				dataType: 'json',
-				success: function (response) {
+				success: function(response) {
 
 					$('#te_linea').find('option').remove();
 					// fill select
-					$.each(response, function (index, data) {
+					$.each(response, function(index, data) {
 						$('#te_linea').append('<option value="' + data['linea_id'] + '">' + data['linea_nombre'] + '</option>');
 					});
 				}
 			});
 		});
 
-	});//end document ready.
+	}); //end document ready.
 </script>
-
-

@@ -54,7 +54,7 @@ CREATE TABLE `entry` (
   `reinspeccion` int(1) NOT NULL DEFAULT 0,
   `ficticio` int(1) NOT NULL DEFAULT 0,
   `discrepancia` int(1) NOT NULL DEFAULT 0,
-  `status` int(1) NOT NULL COMMENT '0 rechazado, 1 aceptado, 2 en espera por cambio de prioridad ',
+  `status` int(1) NOT NULL COMMENT '0 sin asignar, 1 rechazado, 2 aceptado, 3 en espera por cambio de prioridad ',
   `asignada` varchar(255) NOT NULL,
   `final_qty` int(11) NOT NULL,
   `location` int(11) NOT NULL,
