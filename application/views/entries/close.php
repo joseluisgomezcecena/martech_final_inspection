@@ -162,11 +162,11 @@
 						<div class="row">
 							<div class=" col-lg-3">
 								<label for="browser">Cerrar orden:</label>
-								<select name="status" id="status" class="form-control">
+								<select name="final_result" id="status" class="form-control">
 									<option value="">Seleccione Resultado</option>
-									<option value="0">No</option>
-									<option value="1">Si</option>
-									<option value="2">En espera por cambio de prioridad</option>
+									<option value="1">No</option>
+									<option value="2">Si</option>
+									<option value="3">En espera por cambio de prioridad</option>
 								</select>
 							</div>
 
@@ -192,7 +192,7 @@
 
 
 							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo">
-								<label for="">Descripcion de discrepancia</label>
+								<label for="">Descripción de discrepancia</label>
 								<textarea class="form-control" name="discrepancia_descr" rows="8"></textarea>
 							</div>
 
@@ -226,7 +226,7 @@
 		$('#status').change(function() {
 			var status = $('#status').val();
 
-			if (status == 0) {
+			if (status == 1) {
 				$('#razon_rechazo').show("300");
 			} else {
 				$('#razon_rechazo').hide();

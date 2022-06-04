@@ -9,7 +9,7 @@
 	<meta name="keywords" content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, Ample lite admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, Ample admin lite dashboard bootstrap 5 dashboard template">
 	<meta name="description" content="Ample Admin Lite is powerful and clean admin dashboard template, inpired from Bootstrap Framework">
 	<meta name="robots" content="noindex,nofollow">
-	<title>Eficiencia</title>
+	<title>Final Inspection</title>
 	<link rel="canonical" href="https://www.wrappixel.com/templates/ample-admin-lite/" />
 	<!-- Favicon icon -->
 	<link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
@@ -131,24 +131,25 @@
 								<span class="hide-menu">Inicio</span>
 							</a>
 						</li>
-						<li class="sidebar-item">
-							<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>forms/create" aria-expanded="false">
-								<i class="fa fa-edit" aria-hidden="true"></i>
-								<span class="hide-menu">Agregar Datos</span>
-							</a>
-						</li>
-						<li class="sidebar-item">
-							<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/index" aria-expanded="false">
-								<i class="fa fa-table" aria-hidden="true"></i>
-								<span class="hide-menu">Base de datos</span>
-							</a>
-						</li>
-						<li class="sidebar-item">
-							<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/index" aria-expanded="false">
-								<i class="fa fa-table" aria-hidden="true"></i>
-								<span class="hide-menu">Reporte de horas ganadas</span>
-							</a>
-						</li>
+
+						<?php if ($this->session->userdata(DEPARTMENT_ID) == 3) : ?>
+							<li class="sidebar-item">
+								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/calidad" aria-expanded="false">
+									<i class="fa fa-edit" aria-hidden="true"></i>
+									<span class="hide-menu">Ordenes Cerradas</span>
+								</a>
+							</li>
+
+							<li class="sidebar-item">
+								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/index" aria-expanded="false">
+									<i class="fa fa-table" aria-hidden="true"></i>
+									<span class="hide-menu">Tiempos por Orden</span>
+								</a>
+							</li>
+
+						<?php endif; ?>
+
+
 
 						<li class="sidebar-item">
 							<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>logout" aria-expanded="false">

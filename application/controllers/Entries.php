@@ -152,7 +152,7 @@ class Entries extends BaseController
 
 
 		$this->form_validation->set_rules('id', 'ID o Folio', 'required');
-		$this->form_validation->set_rules('status', 'Status', 'required');
+		$this->form_validation->set_rules('final_result', 'Resultado', 'required');
 		$this->form_validation->set_rules('cerrada_por', 'Cerrada por', 'required');
 		$this->form_validation->set_rules('rev_mapics', 'Revision contra Mapics', 'required');
 
@@ -299,5 +299,97 @@ class Entries extends BaseController
 	function api_entries_not_closed()
 	{
 		return $this->api_get_entries(TRUE);
+	}
+
+
+
+	function api_entries_closed()
+	{
+		$this->load->helper('time');
+
+		## Read value
+		$draw = $this->input->post('draw');
+		$row = $this->input->post('start');
+
+		$start_date = $this->input->get('start_date') . ' 00:00:00';
+		$end_date = $this->input->get('end_date') . ' 23:59:59';
+
+
+		$rowperpage = $this->input->post('length'); // Rows display per page
+		$columnIndex = $this->input->post('order')[0]['column']; // Column index
+		$columnName = $this->input->post('columns')[$columnIndex]['data']; // Column name
+		$columnSortOrder = $this->input->post('order')[0]['dir']; // asc or desc
+		$searchValue = $this->input->post('search')['value']; // Search value
+
+		## Search
+		$searchQuery = " ";
+		if ($searchValue != '') {
+			$searchQuery = " AND (entry.id like '%" . $searchValue . "%' OR
+				entry.part_no like '%" . $searchValue . "%' OR
+				entry.lot_no like '%" . $searchValue . "%' 
+				)";
+		}
+
+
+		$sql = 'SELECT count(*) AS allcount from entry WHERE progress = ' . PROGRESS_CLOSED;
+
+		if (!($start_date == '' &&  $end_date == '')) {
+			$sql .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
+		}
+
+		$query = $this->db->query($sql);
+		$records = $query->result_array();
+		$totalRecords = $records[0]['allcount'];
+
+
+
+		$empQuery = "SELECT id, part_no, lot_no, qty, plant, created_at, 
+		TIMEDIFF(asignada_date, created_at) as assigned_elapsed_time,
+		TIMEDIFF(liberada_date, created_at) as released_elapsed_time,
+		TIMEDIFF(cerrada_date, created_at) as closed_elapsed_time FROM entry WHERE  progress = " . PROGRESS_CLOSED;
+
+		if (!($start_date == '' &&  $end_date == '')) {
+			$empQuery .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
+		}
+
+
+		//%H %M
+
+		if ($columnName == 'entry_id')
+			$columnName = 'id';
+
+		$empQuery .=  $searchQuery . " ORDER BY " . $columnName . "  " . $columnSortOrder . " LIMIT " . $row . " , " . $rowperpage;
+
+
+		$empRecords = $this->db->query($empQuery)->result_array();
+
+		$data = array();
+
+		foreach ($empRecords as $row) {
+
+
+			$data[] = array(
+				"id" => $row['id'],
+				"part_no" => $row['part_no'],
+				"lot_no" => $row['lot_no'],
+				"qty" => $row['qty'],
+				"plant" => $row['plant'],
+				"created_at" => date_format(new DateTime($row['created_at']), 'm/d/y g:i A'),
+				"assigned_elapsed_time" => convert_time_string_to_float($row['assigned_elapsed_time']),
+				"released_elapsed_time" =>  convert_time_string_to_float($row['released_elapsed_time']),
+				"closed_elapsed_time" =>  convert_time_string_to_float($row['closed_elapsed_time']),
+				"entry_id" => '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">Detalle</a></td>',
+			);
+		}
+
+		## Response
+		$response = array(
+			"draw" => intval($draw),
+			"iTotalRecords" => $totalRecords,
+			"iTotalDisplayRecords" => count($empRecords),
+			"aaData" => $data
+		);
+
+		echo json_encode($response);
 	}
 }

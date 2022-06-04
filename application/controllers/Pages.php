@@ -27,9 +27,26 @@ class Pages extends BaseController
 			redirect('/');
 		}
 
+		//Get the pending jobs
+		/*
+		SELECT plantas.planta_nombre as plant, COUNT(martech_final_inspection.entry.plant) as pending  FROM martech_final_inspection.entry
+		INNER JOIN plantas ON martech_final_inspection.entry.plant = plantas.planta_id 
+		WHERE progress <> 3 AND status <> 1
+		GROUP BY martech_final_inspection.entry.plant;
+				*/
+		$this->db->select('plantas.planta_nombre as plant, COUNT(entry.plant) as pending');
+		$this->db->from('entry');
+		$this->db->join('plantas', 'entry.plant = plantas.planta_id');
+		$this->db->where('progress <>', '' . PROGRESS_CLOSED);
+		$this->db->where('status <>', '' . STATUS_REJECTED);
+		$this->db->group_by("entry.plant");
+		$data['plants'] = $this->db->get()->result_array();
+
 		$data['title'] = ucfirst('home_production');
 		$data['entries'] = $this->EntryModel->get_pending();
 		$data['user_type'] = $this->session->userdata(USER_TYPE);
+
+
 
 		//load header, page & footer
 		$this->load->view('templates/header');

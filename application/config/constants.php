@@ -116,3 +116,36 @@ defined('PROGRESS_NOT_ASSIGNED')      or define('PROGRESS_NOT_ASSIGNED', 0);
 defined('PROGRESS_ASSIGNED')      or define('PROGRESS_ASSIGNED', 1);
 defined('PROGRESS_RELEASED')      or define('PROGRESS_RELEASED', 2);
 defined('PROGRESS_CLOSED')      or define('PROGRESS_CLOSED', 3);
+
+
+//0 sin asignar, 1 rechazado, 2 aceptado, 3 en espera por cambio de prioridad
+defined('STATUS_NOT_ASSIGNED')      or define('STATUS_NOT_ASSIGNED', 0);
+defined('STATUS_REJECTED')      or define('STATUS_REJECTED', 1);
+defined('STATUS_ACCEPTED')      or define('STATUS_ACCEPTED', 2);
+defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
+
+
+//(1,'MOQC'),(2,'ASQC'),(3,'MPQC'),(4,'MPQCWH'),(5,'INGE 3S'),(6,'INGE')
+defined('LOCATION_MOQC')      or define('LOCATION_MOQC', 1);
+defined('LOCATION_MOQC_STR')      or define('LOCATION_MOQC_STR', 'MOQC');
+
+defined('LOCATION_ASQC')      or define('LOCATION_ASQC', 2);
+defined('LOCATION_ASQC_STR')      or define('LOCATION_ASQC_STR', 'ASQC');
+
+defined('LOCATION_MPQC')      or define('LOCATION_MPQC', 3);
+defined('LOCATION_MPQC_STR')      or define('LOCATION_MPQC_STR', 'MPQC');
+
+defined('LOCATION_MPQCWH')      or define('LOCATION_MPQCWH', 4);
+defined('LOCATION_MPQCWH_STR')      or define('LOCATION_MPQCWH_STR', 'MPQCWH');
+
+defined('LOCATION_INGE3S')      or define('LOCATION_INGE3S', 5);
+defined('LOCATION_INGE3S_STR')      or define('LOCATION_INGE3S_STR', 'INGE 3S');
+
+defined('LOCATION_INGE')      or define('LOCATION_INGE', 6);
+defined('LOCATION_INGE_STR')      or define('LOCATION_INGE_STR', 'INGE');
+
+
+defined('FINAL_RESULT_NOT_DEFINED')      or define('FINAL_RESULT_NOT_DEFINED', 0);
+defined('FINAL_RESULT_CLOSED')      or define('FINAL_RESULT_CLOSED', 2);
+defined('FINAL_RESULT_NOT_CLOSED')      or define('FINAL_RESULT_NOT_CLOSED', 1);
+defined('FINAL_RESULT_WAITING')      or define('FINAL_RESULT_WAITING', 3);

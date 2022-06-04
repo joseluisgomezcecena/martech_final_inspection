@@ -21,6 +21,7 @@ $route['home/production'] = 'pages/home_production';
 //reports
 $route['reports/index'] = 'reports/index';
 $route['reports/calidad'] = 'reports/reporte_calidad';
+$route['reports/detail/(:any)'] = 'reports/detail/$1';
 
 //produccion
 $route['entries/create'] = 'entries/create';
@@ -31,6 +32,7 @@ $route['entries/close/(:any)'] = 'entries/close/$1';
 $route['entries/assign/(:any)'] = 'entries/assign/$1';
 
 $route['entries/all-not-closed']['post'] = 'entries/api_entries_not_closed';
+$route['entries/all-closed']['post'] = 'entries/api_entries_closed';
 
 
 
