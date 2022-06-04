@@ -311,8 +311,11 @@ class Entries extends BaseController
 		$draw = $this->input->post('draw');
 		$row = $this->input->post('start');
 
-		$start_date = $this->input->get('start_date') . ' 00:00:00';
-		$end_date = $this->input->get('end_date') . ' 23:59:59';
+		$start_date = $this->input->get('start_date');
+		if ($start_date != '') $start_date .= ' 00:00:00';
+
+		$end_date = $this->input->get('end_date');
+		if ($end_date != '') $end_date .= ' 23:59:59';
 
 
 		$rowperpage = $this->input->post('length'); // Rows display per page
@@ -343,10 +346,12 @@ class Entries extends BaseController
 
 
 
-		$empQuery = "SELECT id, part_no, lot_no, qty, plant, created_at, 
+		$empQuery = "SELECT id, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, 
 		TIMEDIFF(asignada_date, created_at) as assigned_elapsed_time,
 		TIMEDIFF(liberada_date, created_at) as released_elapsed_time,
-		TIMEDIFF(cerrada_date, created_at) as closed_elapsed_time FROM entry WHERE  progress = " . PROGRESS_CLOSED;
+		TIMEDIFF(cerrada_date, created_at) as closed_elapsed_time FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id";
+
+		$empQuery .= " WHERE progress = " . PROGRESS_CLOSED;
 
 		if (!($start_date == '' &&  $end_date == '')) {
 			$empQuery .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
@@ -360,6 +365,7 @@ class Entries extends BaseController
 
 		$empQuery .=  $searchQuery . " ORDER BY " . $columnName . "  " . $columnSortOrder . " LIMIT " . $row . " , " . $rowperpage;
 
+		$sql = $empQuery;
 
 		$empRecords = $this->db->query($empQuery)->result_array();
 
@@ -387,7 +393,8 @@ class Entries extends BaseController
 			"draw" => intval($draw),
 			"iTotalRecords" => $totalRecords,
 			"iTotalDisplayRecords" => count($empRecords),
-			"aaData" => $data
+			"aaData" => $data,
+			"sql" => $sql,
 		);
 
 		echo json_encode($response);
