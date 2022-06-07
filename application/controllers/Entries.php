@@ -193,43 +193,16 @@ class Entries extends BaseController
 
 	function api_get_entries($apply_filter_not_closed = FALSE)
 	{
-		## Read value
-		$draw = $this->input->post('draw');
-		$row = $this->input->post('start');
-		$rowperpage = $this->input->post('length'); // Rows display per page
-		$columnIndex = $this->input->post('order')[0]['column']; // Column index
-		$columnName = $this->input->post('columns')[$columnIndex]['data']; // Column name
-		$columnSortOrder = $this->input->post('order')[0]['dir']; // asc or desc
-		$searchValue = $this->input->post('search')['value']; // Search value
-
-		## Search
-		$searchQuery = " ";
-		if ($searchValue != '') {
-			$searchQuery = " AND (entry.id like '%" . $searchValue . "%' OR
-			entry.part_no like '%" . $searchValue . "%' OR
-			entry.lot_no like '%" . $searchValue . "%' 
-			)";
-		}
 
 
-		$sql = 'SELECT count(*) AS allcount from entry';
-		if ($apply_filter_not_closed == TRUE) {
-			$sql .= ' WHERE progress < ' . PROGRESS_CLOSED;
-		}
-		$query = $this->db->query($sql);
-		$records = $query->result_array();
-		$totalRecords = $records[0]['allcount'];
+		$this->load->helper('time');
 
+		$start_date = $this->input->get('start_date');
+		if ($start_date != '') $start_date .= ' 00:00:00';
 
+		$end_date = $this->input->get('end_date');
+		if ($end_date != '') $end_date .= ' 23:59:59';
 
-		$sql = 'SELECT count(*) AS allcount from entry WHERE 1 ';
-		if ($apply_filter_not_closed == TRUE) {
-			$sql .= ' AND (progress < ' . PROGRESS_CLOSED . ') ';
-		}
-		$sql .= $searchQuery;
-		$query = $this->db->query($sql);
-		$records = $query->result_array();
-		$totalRecordwithFilter = $records[0]['allcount'];
 
 
 		## Fetch records
@@ -239,7 +212,8 @@ class Entries extends BaseController
 		if ($apply_filter_not_closed == TRUE) {
 			$empQuery .= ' AND (progress < ' . PROGRESS_CLOSED . ') ';
 		}
-		$empQuery .=  $searchQuery . " ORDER BY " . $columnName . "  " . $columnSortOrder . " LIMIT " . $row . " , " . $rowperpage;
+		$empQuery .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
+		//$empQuery .=  $searchQuery . " ORDER BY " . $columnName . "  " . $columnSortOrder . " LIMIT " . $row . " , " . $rowperpage;
 
 		$empRecords = $this->db->query($empQuery)->result_array();
 
@@ -285,12 +259,9 @@ class Entries extends BaseController
 		}
 
 		## Response
-		$response = array(
-			"draw" => intval($draw),
-			"iTotalRecords" => $totalRecords,
-			"iTotalDisplayRecords" => $totalRecordwithFilter,
-			"aaData" => $data
-		);
+		$response['data'] = $data;
+		//$response['start_date'] = $start_date;
+		//$response['end_date'] = $end_date;
 
 		echo json_encode($response);
 	}
@@ -305,11 +276,8 @@ class Entries extends BaseController
 
 	function api_entries_closed()
 	{
-		$this->load->helper('time');
 
-		## Read value
-		$draw = $this->input->post('draw');
-		$row = $this->input->post('start');
+		$this->load->helper('time');
 
 		$start_date = $this->input->get('start_date');
 		if ($start_date != '') $start_date .= ' 00:00:00';
@@ -318,23 +286,8 @@ class Entries extends BaseController
 		if ($end_date != '') $end_date .= ' 23:59:59';
 
 
-		$rowperpage = $this->input->post('length'); // Rows display per page
-		$columnIndex = $this->input->post('order')[0]['column']; // Column index
-		$columnName = $this->input->post('columns')[$columnIndex]['data']; // Column name
-		$columnSortOrder = $this->input->post('order')[0]['dir']; // asc or desc
-		$searchValue = $this->input->post('search')['value']; // Search value
-
-		## Search
-		$searchQuery = " ";
-		if ($searchValue != '') {
-			$searchQuery = " AND (entry.id like '%" . $searchValue . "%' OR
-				entry.part_no like '%" . $searchValue . "%' OR
-				entry.lot_no like '%" . $searchValue . "%' 
-				)";
-		}
-
-
-		$sql = 'SELECT count(*) AS allcount from entry WHERE progress = ' . PROGRESS_CLOSED;
+		$sql = 'SELECT count(*) AS allcount from entry';
+		$sql .= ' WHERE progress = ' . PROGRESS_CLOSED;
 
 		if (!($start_date == '' &&  $end_date == '')) {
 			$sql .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
@@ -343,29 +296,18 @@ class Entries extends BaseController
 		$query = $this->db->query($sql);
 		$records = $query->result_array();
 		$totalRecords = $records[0]['allcount'];
+		$totalRecordwithFilter = $records[0]['allcount'];
 
 
 
-		$empQuery = "SELECT id, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, 
-		TIMEDIFF(asignada_date, created_at) as assigned_elapsed_time,
+		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, TIMEDIFF(asignada_date, created_at) as assigned_elapsed_time,
 		TIMEDIFF(liberada_date, created_at) as released_elapsed_time,
-		TIMEDIFF(cerrada_date, created_at) as closed_elapsed_time FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id";
-
-		$empQuery .= " WHERE progress = " . PROGRESS_CLOSED;
+		TIMEDIFF(cerrada_date, created_at) as closed_elapsed_time  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+		$empQuery .= ' AND (progress = ' . PROGRESS_CLOSED . ') ';
 
 		if (!($start_date == '' &&  $end_date == '')) {
 			$empQuery .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
 		}
-
-
-		//%H %M
-
-		if ($columnName == 'entry_id')
-			$columnName = 'id';
-
-		$empQuery .=  $searchQuery . " ORDER BY " . $columnName . "  " . $columnSortOrder . " LIMIT " . $row . " , " . $rowperpage;
-
-		$sql = $empQuery;
 
 		$empRecords = $this->db->query($empQuery)->result_array();
 
@@ -388,14 +330,9 @@ class Entries extends BaseController
 			);
 		}
 
-		## Response
-		$response = array(
-			"draw" => intval($draw),
-			"iTotalRecords" => $totalRecords,
-			"iTotalDisplayRecords" => count($empRecords),
-			"aaData" => $data,
-			"sql" => $sql,
-		);
+
+
+		$response['data'] = $data;
 
 		echo json_encode($response);
 	}

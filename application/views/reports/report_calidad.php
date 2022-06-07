@@ -44,29 +44,29 @@
 
 		<div class="col-lg-12">
 			<div class="white-box analytics-info">
-				<div class="table-responsive">
-					<table style="width: 100%" id="entries-list" class="table">
-						<thead>
-							<tr>
-								<th class="border-top-0">Folio</th>
-								<th class="border-top-0">Parte</th>
-								<th class="border-top-0">Lote</th>
-								<th class="border-top-0">Cantidad</th>
-								<th class="border-top-0">Planta</th>
-								<th class="border-top-0">Inicio</th>
-								<th class="border-top-0">Tiempo en Asignar</th>
-								<th class="border-top-0">Tiempo en Liberar</th>
-								<th class="border-top-0">Tiempo en Cerrar</th>
-								<th class="border-top-0">Detalles</th>
-							</tr>
 
-						</thead>
-						<tbody>
+				<table style="width: 100%" id="entries-list" class="table table-striped">
+					<thead>
+						<tr>
+							<th class="border-top-0">Folio</th>
+							<th class="border-top-0">Parte</th>
+							<th class="border-top-0">Lote</th>
+							<th class="border-top-0">Cantidad</th>
+							<th class="border-top-0">Planta</th>
+							<th class="border-top-0">Inicio</th>
+							<th class="border-top-0">Tiempo en Asignar</th>
+							<th class="border-top-0">Tiempo en Liberar</th>
+							<th class="border-top-0">Tiempo en Cerrar</th>
+							<th class="border-top-0">Detalles</th>
+						</tr>
 
-						</tbody>
+					</thead>
+					<tbody>
 
-					</table>
-				</div>
+					</tbody>
+
+				</table>
+
 			</div>
 		</div>
 
@@ -79,7 +79,13 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 
+<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+
+
 <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.bootstrap5.min.js"></script>
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
@@ -91,34 +97,31 @@
 	//created_at between '2011-03-17 06:42:10' and '2011-03-17 07:42:50';
 
 
-	$('#entries-list').DataTable({
-		'scrollX': true,
-		//'bSort': false,
-		//'scrollCollapse': true,
-		dom: 'Bfrtip',
-		buttons: [{
-			extend: 'copy',
-			title: 'Listado de Ordenes Cerradas'
-		}, {
-			extend: 'csvHtml5',
-			title: 'Listado de Ordenes Cerradas'
-		}, {
-			extend: 'excelHtml5',
-			title: 'Listado de Ordenes Cerradas'
-		}, {
-			extend: 'pdfHtml5',
-			title: 'Listado de Ordenes Cerradas'
-		}, {
-			extend: 'print',
-			title: 'Listado de Ordenes Cerradas'
-		}],
-		processing: true,
-		serverSide: true,
-		serverMethod: 'post',
-		ajax: {
+	var table = $('#entries-list').DataTable({
+		dom: "<'row'<'col-sm-12 col-md-3'l><'col-sm-12 col-md-6 text-center'B><'col-sm-12 col-md-3'f>>" +
+			"<'row'<'col-sm-12'tr>>" +
+			"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+		'ajax': {
 			'url': '<?php echo base_url() ?>entries/all-closed?start_date=<?= $start_date ?>&end_date=<?= $end_date ?>'
 		},
-		columns: [{
+		buttons: [{
+			extend: 'copy',
+			title: 'Listado de Ordenes Cerradas',
+			text: '<i class="fa fa-copy"></i> Copiar'
+		}, {
+			extend: 'excelHtml5',
+			title: 'Listado de Ordenes Cerradas',
+			text: '<i class="fa fa-file-excel-o"></i> Excel'
+		}, {
+			extend: 'pdfHtml5',
+			title: 'Listado de Ordenes Cerradas',
+			text: '<i class="fa fa-file-pdf-o"></i> Pdf'
+		}, {
+			extend: 'print',
+			title: 'Listado de Ordenes Cerradas',
+			text: '<i class="fa fa-print"></i> Impr'
+		}],
+		'columns': [{
 				data: 'id'
 			},
 			{
@@ -149,8 +152,24 @@
 				data: 'entry_id'
 			},
 
-		]
+		],
+		"oLanguage": {
+			"sInfo": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+			"sLengthMenu": "Mostrar _MENU_ registros",
+			"sSearch": "Buscar:",
+			"oPaginate": {
+				"sFirst": "Primero",
+				"sPrevious": "Previo",
+				"sNext": "Siguiente",
+				"sLast": "Ultimo"
+			},
+		}
+
 	});
+
+
+	table.buttons().container()
+		.appendTo('#entries-list .col-md-6:eq(0)');
 
 
 	$('#inputStartDate').change(function() {

@@ -257,7 +257,7 @@
 		$('#status').change(function() {
 			var status = $('#status').val();
 
-			if (status == 0) {
+			if (status == 1) {
 				$('#razon_rechazo').show("300");
 			} else {
 				$('#razon_rechazo').hide();

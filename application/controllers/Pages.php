@@ -23,28 +23,51 @@ class Pages extends BaseController
 
 	public function home()
 	{
-		if (!$this->is_logged_in()) {
-			redirect('/');
+		//if (!$this->is_logged_in()) {
+		//	redirect('/');
+		//}
+
+
+		/*if (true) {
+			echo "yea";
+			return;
+		}*/
+
+
+		$start_date = $this->input->get('start_date');
+		$end_date = $this->input->get('end_date');
+
+		if ($start_date == null && $end_date == null) {
+			$current_date = new DateTime();
+			$end_date = $current_date->format("Y-m-d");
+
+			$current_date = $current_date->modify('-1 months');
+			$start_date = $current_date->format("Y-m-d");
 		}
 
-		//Get the pending jobs
-		/*
-		SELECT plantas.planta_nombre as plant, COUNT(martech_final_inspection.entry.plant) as pending  FROM martech_final_inspection.entry
-		INNER JOIN plantas ON martech_final_inspection.entry.plant = plantas.planta_id 
-		WHERE progress <> 3 AND status <> 1
-		GROUP BY martech_final_inspection.entry.plant;
-				*/
+		$this->load->helper('time');
+
+
 		$this->db->select('plantas.planta_nombre as plant, COUNT(entry.plant) as pending');
 		$this->db->from('entry');
 		$this->db->join('plantas', 'entry.plant = plantas.planta_id');
 		$this->db->where('progress <>', '' . PROGRESS_CLOSED);
 		$this->db->where('status <>', '' . STATUS_REJECTED);
+
+		$this->db->where("created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'");
+
 		$this->db->group_by("entry.plant");
+
+		//$empQuery .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
+
 		$data['plants'] = $this->db->get()->result_array();
 
 		$data['title'] = ucfirst('home_production');
 		$data['entries'] = $this->EntryModel->get_pending();
 		$data['user_type'] = $this->session->userdata(USER_TYPE);
+
+		$data['start_date'] = $start_date;
+		$data['end_date'] = $end_date;
 
 
 

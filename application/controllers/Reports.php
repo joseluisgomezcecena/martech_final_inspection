@@ -22,6 +22,14 @@ class Reports extends CI_Controller
 		$start_date = $this->input->get('start_date');
 		$end_date = $this->input->get('end_date');
 
+		if ($start_date == null && $end_date == null) {
+			$current_date = new DateTime();
+			$end_date = $current_date->format("Y-m-d");
+
+			$current_date = $current_date->modify('-1 months');
+			$start_date = $current_date->format("Y-m-d");
+		}
+
 		$this->load->helper('time');
 
 		$closed_orders = $this->EntryModel->get_closed();

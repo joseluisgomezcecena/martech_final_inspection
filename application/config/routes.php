@@ -13,7 +13,7 @@ $route['translate_uri_dashes'] = FALSE;
 
 
 $route['home'] = 'pages/home'; //this will server for quality and for production...
-$route['home/production'] = 'pages/home_production';
+$route['home/production']['get'] = 'pages/home_production';
 
 //login?user_email=ejauregui@martechmedical.com&user_name=Emanuel&user_lastname=Jauregui&user_martech_number=10111&user_active=1&user_is_admin=1&user_level_name=Supervisor&user_level_value=2&from=http://localhost/martech_final_inspection/
 
@@ -31,8 +31,8 @@ $route['entries/release/(:any)'] = 'entries/release/$1';
 $route['entries/close/(:any)'] = 'entries/close/$1';
 $route['entries/assign/(:any)'] = 'entries/assign/$1';
 
-$route['entries/all-not-closed']['post'] = 'entries/api_entries_not_closed';
-$route['entries/all-closed']['post'] = 'entries/api_entries_closed';
+$route['entries/all-not-closed']['get'] = 'entries/api_entries_not_closed';
+$route['entries/all-closed']['get'] = 'entries/api_entries_closed';
 
 
 
