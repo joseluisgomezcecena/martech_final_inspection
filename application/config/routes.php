@@ -21,6 +21,8 @@ $route['home/production']['get'] = 'pages/home_production';
 //reports
 $route['reports/index'] = 'reports/index';
 $route['reports/calidad'] = 'reports/reporte_calidad';
+$route['reports/produccion'] = 'reports/reporte_produccion';
+
 $route['reports/detail/(:any)'] = 'reports/detail/$1';
 
 //produccion

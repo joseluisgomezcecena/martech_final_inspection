@@ -76,22 +76,9 @@
 </div>
 
 
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-
-<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
-
-
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.bootstrap5.min.js"></script>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
-
+<?php
+$this->load->view('templates/datatables');
+?>
 
 <script>
 	//created_at between '2011-03-17 06:42:10' and '2011-03-17 07:42:50';
@@ -154,7 +141,9 @@
 
 		],
 		"oLanguage": {
+			"sEmptyTable": "No hay datos disponibles",
 			"sInfo": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+			"sInfoEmpty": "Mostrando 0 a 0 de 0 registros",
 			"sLengthMenu": "Mostrar _MENU_ registros",
 			"sSearch": "Buscar:",
 			"oPaginate": {

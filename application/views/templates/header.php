@@ -12,14 +12,20 @@
 	<title>Final Inspection</title>
 	<link rel="canonical" href="https://www.wrappixel.com/templates/ample-admin-lite/" />
 	<!-- Favicon icon -->
-	<link rel="icon" type="image/png" sizes="16x16" href="plugins/images/favicon.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="<?php echo base_url() ?>assets/img/inspection.png">
 	<!-- Custom CSS -->
 	<link href="<?php echo base_url() ?>assets/css/style.min.css" rel="stylesheet">
 
-	<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
-	<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.bootstrap5.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+	<link rel="stylesheet" href="<?php echo base_url() ?>assets/datatables/DataTables-1.12.1/css/dataTables.bootstrap5.min.css">
+	<link rel="stylesheet" href="<?php echo base_url() ?>assets/datatables/Buttons-2.2.3/css/buttons.bootstrap5.min.css">
+	<link rel="stylesheet" href="<?php echo base_url() ?>assets/font-awesome-4.7.0/css/font-awesome.min.css">
+
+
+
+	<!-- This is gonna be the chart.js -->
+	<script src="<?php echo base_url() ?>assets\js\chart.min.js"></script>
+	<script src="<?php echo base_url() ?>assets\js\chartjs-plugin-datalabels.min.js"></script>
 
 
 
@@ -139,6 +145,14 @@
 						</li>
 
 						<?php if ($this->session->userdata(DEPARTMENT_ID) == 3) : ?>
+
+							<li class="sidebar-item">
+								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/produccion" aria-expanded="false">
+									<i class="fa fa-edit" aria-hidden="true"></i>
+									<span class="hide-menu">Ordenes Por Trabajar</span>
+								</a>
+							</li>
+
 							<li class="sidebar-item">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/calidad" aria-expanded="false">
 									<i class="fa fa-edit" aria-hidden="true"></i>
@@ -146,12 +160,14 @@
 								</a>
 							</li>
 
+							<!--
 							<li class="sidebar-item">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/index" aria-expanded="false">
 									<i class="fa fa-table" aria-hidden="true"></i>
 									<span class="hide-menu">Tiempos por Orden</span>
 								</a>
 							</li>
+						-->
 
 						<?php endif; ?>
 

@@ -15,7 +15,7 @@ class Pages extends BaseController
 		if ((isset($logged_in) && $logged_in == TRUE) && (isset($user_type) && $user_type == QUALITY_USER)) {
 			redirect('pages/home');
 		} else if ((isset($logged_in) && $logged_in == TRUE) && (isset($user_type) && $user_type == PRODUCTION_USER)) {
-			redirect('pages/home');
+			redirect('reports/produccion');
 		} else {
 			$this->load->view('pages/intro');
 		}
@@ -23,17 +23,6 @@ class Pages extends BaseController
 
 	public function home()
 	{
-		//if (!$this->is_logged_in()) {
-		//	redirect('/');
-		//}
-
-
-		/*if (true) {
-			echo "yea";
-			return;
-		}*/
-
-
 		$start_date = $this->input->get('start_date');
 		$end_date = $this->input->get('end_date');
 
@@ -41,39 +30,44 @@ class Pages extends BaseController
 			$current_date = new DateTime();
 			$end_date = $current_date->format("Y-m-d");
 
-			$current_date = $current_date->modify('-1 months');
+			//$current_date = $current_date->modify('-1 months');
 			$start_date = $current_date->format("Y-m-d");
 		}
 
 		$this->load->helper('time');
 
 
-		$this->db->select('plantas.planta_nombre as plant, COUNT(entry.plant) as pending');
+		$this->db->select('plantas.planta_nombre as plant, planta_id, 
+		COUNT(entry.plant) as count,
+		SUM(if(entry.progress <> 3, 1, 0)) AS opened,
+		SUM(if(entry.progress = 0, 1, 0)) AS not_assigned,
+		SUM(if(entry.progress = 1, 1, 0)) AS assigned,
+		SUM(if(entry.progress = 2, 1, 0)) AS released,
+		SUM(if(entry.progress = 3, 1, 0)) AS closed,
+		SUM( if( (entry.status = 1 AND entry.progress = 2) OR (entry.status = 1 AND entry.progress = 3), 1, 0)) AS rejected,
+		SUM( if( (entry.status = 2 AND entry.progress = 2) OR (entry.status = 2 AND entry.progress = 3), 1, 0)) AS accepted,
+		SUM( if((entry.status = 3 AND entry.progress = 2) OR (entry.status = 3 AND entry.progress = 3) , 1, 0)) AS waiting');
 		$this->db->from('entry');
 		$this->db->join('plantas', 'entry.plant = plantas.planta_id');
-		$this->db->where('progress <>', '' . PROGRESS_CLOSED);
-		$this->db->where('status <>', '' . STATUS_REJECTED);
-
-		$this->db->where("created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'");
-
-		$this->db->group_by("entry.plant");
+		$this->db->where("created_at BETWEEN '" . $start_date . " 00:00:00' AND '" . $end_date . " 23:59:59'");
+		$this->db->group_by("planta_nombre");
 
 		//$empQuery .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
 
 		$data['plants'] = $this->db->get()->result_array();
 
 		$data['title'] = ucfirst('home_production');
-		$data['entries'] = $this->EntryModel->get_pending();
+		//$data['entries'] = $this->EntryModel->get_pending();
 		$data['user_type'] = $this->session->userdata(USER_TYPE);
 
 		$data['start_date'] = $start_date;
 		$data['end_date'] = $end_date;
-
+		$data['sql'] = $this->db->last_query();
 
 
 		//load header, page & footer
 		$this->load->view('templates/header');
-		$this->load->view('pages/home_production', $data); //loading page and data
+		$this->load->view('pages/home', $data); //loading page and data
 		$this->load->view('templates/footer');
 	}
 

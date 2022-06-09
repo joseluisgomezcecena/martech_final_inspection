@@ -16,7 +16,7 @@
     <!-- Custom CSS -->
     <link href="<?php echo base_url() ?>assets/css/style.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.0/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="<?php echo base_url() ?>assets/datatables/DataTables-1.12.1/css/dataTables.bootstrap5.min.css">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -128,16 +128,16 @@
     <!-- ============================================================== -->
     <!-- All Jquery -->
     <!-- ============================================================== -->
-    <script src="<?php echo base_url() ?>/assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="<?php echo base_url() ?>assets/plugins/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap tether Core JavaScript -->
-    <script src="<?php echo base_url() ?>/assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="<?php echo base_url() ?>/assets/js/app-style-switcher.js"></script>
+    <script src="<?php echo base_url() ?>assets/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<?php echo base_url() ?>assets/js/app-style-switcher.js"></script>
     <!--Wave Effects -->
-    <script src="<?php echo base_url() ?>/assets/js/waves.js"></script>
+    <script src="<?php echo base_url() ?>assets/js/waves.js"></script>
     <!--Menu sidebar -->
-    <script src="<?php echo base_url() ?>/assets/js/sidebarmenu.js"></script>
+    <script src="<?php echo base_url() ?>assets/js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
-    <script src="<?php echo base_url() ?>/assets/js/custom.js"></script>
+    <script src="<?php echo base_url() ?>assets/js/custom.js"></script>
 </body>
 
 </html>

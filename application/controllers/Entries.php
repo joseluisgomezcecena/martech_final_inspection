@@ -100,7 +100,7 @@ class Entries extends BaseController
 
 
 
-		if ($this->input->post('status') == 2) {
+		if ($this->input->post('status') == 1) {
 			$this->form_validation->set_rules('razon_rechazo', 'Razon del rechazo.', 'required');
 		}
 
@@ -193,8 +193,6 @@ class Entries extends BaseController
 
 	function api_get_entries($apply_filter_not_closed = FALSE)
 	{
-
-
 		$this->load->helper('time');
 
 		$start_date = $this->input->get('start_date');
@@ -202,8 +200,6 @@ class Entries extends BaseController
 
 		$end_date = $this->input->get('end_date');
 		if ($end_date != '') $end_date .= ' 23:59:59';
-
-
 
 		## Fetch records
 		//$empQuery = "SELECT * FROM entry
