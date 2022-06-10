@@ -23,7 +23,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/martech_final_inspection';
+$config['base_url'] =   SERVER_PATH_URL . 'martech_final_inspection/';
+
 
 /*
 |--------------------------------------------------------------------------
