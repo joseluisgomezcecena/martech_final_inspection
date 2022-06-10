@@ -137,40 +137,39 @@
 				<nav class="sidebar-nav">
 					<ul id="sidebarnav">
 						<!-- User Profile-->
-						<li class="sidebar-item pt-2">
-							<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>" aria-expanded="false">
-								<i class="far fa-clock" aria-hidden="true"></i>
-								<span class="hide-menu">Inicio</span>
-							</a>
-						</li>
 
 						<?php if ($this->session->userdata(DEPARTMENT_ID) == 3) : ?>
-
+							<!-- Calidad -->
 							<li class="sidebar-item">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/produccion" aria-expanded="false">
-									<i class="fa fa-edit" aria-hidden="true"></i>
+									<i class="fa fa-play" aria-hidden="true"></i>
 									<span class="hide-menu">Ordenes Por Trabajar</span>
 								</a>
 							</li>
-
+						<?php else : ?>
+							<!-- Produccion -->
 							<li class="sidebar-item">
-								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/calidad" aria-expanded="false">
-									<i class="fa fa-edit" aria-hidden="true"></i>
-									<span class="hide-menu">Ordenes Cerradas</span>
+								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/produccion" aria-expanded="false">
+									<i class="fa fa-play" aria-hidden="true"></i>
+									<span class="hide-menu">Ordenes Abiertas</span>
 								</a>
 							</li>
-
-							<!--
-							<li class="sidebar-item">
-								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/index" aria-expanded="false">
-									<i class="fa fa-table" aria-hidden="true"></i>
-									<span class="hide-menu">Tiempos por Orden</span>
-								</a>
-							</li>
-						-->
-
 						<?php endif; ?>
 
+						<li class="sidebar-item">
+							<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/calidad" aria-expanded="false">
+								<i class="fa fa-ban" aria-hidden="true"></i>
+								<span class="hide-menu">Ordenes Cerradas</span>
+							</a>
+						</li>
+
+
+						<li class="sidebar-item pt-2">
+							<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>pages/home" aria-expanded="false">
+								<i class="far fa-clock" aria-hidden="true"></i>
+								<span class="hide-menu">Panorama General</span>
+							</a>
+						</li>
 
 
 						<li class="sidebar-item">

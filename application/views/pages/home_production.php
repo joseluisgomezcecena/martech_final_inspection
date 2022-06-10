@@ -1,4 +1,4 @@
-<form method="get" action="<?= base_url() ?>pages/home">
+<form method="get" action="<?= base_url() . $reload_route ?>">
 	<div class="page-breadcrumb bg-white">
 		<div class="row align-items-center">
 			<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -44,42 +44,93 @@
 
 
 <div class="container-fluid">
+
+
+
+	<?php
+	if (isset($success_message)) {
+		echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+		' . $success_message . '
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		</div>';
+	}
+	?>
+
+
+	<?php if ($user_type == PRODUCTION_USER) : ?>
+		<div class="row justify-content-center">
+
+			<!-- Other corlors text-info text-purple -->
+			<div class="col-lg-12">
+				<div class="white-box analytics-info">
+					<h3 class="text-center text-primary">Rechazadas</h3>
+
+					<div class="table-responsive">
+						<table style="width: 100%" id="entries-rejected-list" class="table table-striped">
+							<thead>
+								<th>Folio</th>
+								<th>Fecha Registro</th>
+								<th>Parte</th>
+								<th>Lote</th>
+								<th>Cantidad</th>
+								<th>Planta</th>
+								<th>Progreso</th>
+								<th>Razón</th>
+								<th>Acción</th>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+
+
+
+				</div>
+			</div>
+
+
+		</div>
+	<?php endif; ?>
+
 	<!-- ============================================================== -->
 	<!-- Three charts -->
 	<!-- ============================================================== -->
 	<div class="row justify-content-center">
 
-
-
 		<!-- Other corlors text-info text-purple -->
-
 		<div class="col-lg-12">
 			<div class="white-box analytics-info">
 
-				<table style="width: 100%" id="entries-list" class="table table-striped">
-					<thead>
-						<th>Folio</th>
-						<th>Fecha Registro</th>
-						<th>Parte</th>
-						<th>Lote</th>
-						<th>Cantidad</th>
-						<th>Planta</th>
-						<th>Progreso</th>
+				<?php if ($user_type == PRODUCTION_USER) : ?>
+					<h3 class="text-center text-primary">Ordenes Abiertas</h3>
+				<?php endif; ?>
 
-						<?php if ($user_type == QUALITY_USER) : ?>
-							<th>Accion</th>
-						<?php endif; ?>
+				<div class="table-responsive">
+					<table style="width: 100%" id="entries-list" class="table table-striped">
+						<thead>
+							<th>Folio</th>
+							<th>Fecha Registro</th>
+							<th>Tiempo Transcurrido</th>
+							<th>Parte</th>
+							<th>Lote</th>
+							<th>Cantidad</th>
+							<th>Planta</th>
+							<th>Progreso</th>
+							<th>Status</th>
+							<?php if ($user_type == QUALITY_USER) : ?>
+								<th>Accion</th>
+							<?php endif; ?>
 
-					</thead>
-					<tbody>
 
-					</tbody>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
 
-				</table>
 
 			</div>
 		</div>
-
 
 
 	</div>
@@ -99,23 +150,23 @@ $this->load->view('templates/datatables');
 			"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 
 		'ajax': {
-			'url': '<?php echo base_url() ?>entries/all-not-closed?start_date=<?= $start_date ?>&end_date=<?= $end_date ?>'
+			'url': '<?php echo base_url() ?>entries/all-opened?start_date=<?= $start_date ?>&end_date=<?= $end_date ?>'
 		},
 		buttons: [{
 			extend: 'copy',
-			title: 'Listado de Ordenes Cerradas',
+			title: 'Listado de Ordenes Abiertas',
 			text: '<i class="fa fa-copy"></i> Copiar'
 		}, {
 			extend: 'excelHtml5',
-			title: 'Listado de Ordenes Cerradas',
+			title: 'Listado de Ordenes Abiertas',
 			text: '<i class="fa fa-file-excel-o"></i> Excel'
 		}, {
 			extend: 'pdfHtml5',
-			title: 'Listado de Ordenes Cerradas',
+			title: 'Listado de Ordenes Abiertas',
 			text: '<i class="fa fa-file-pdf-o"></i> Pdf'
 		}, {
 			extend: 'print',
-			title: 'Listado de Ordenes Cerradas',
+			title: 'Listado de Ordenes Abiertas',
 			text: '<i class="fa fa-print"></i> Impr'
 		}],
 		'columns': [{
@@ -123,6 +174,9 @@ $this->load->view('templates/datatables');
 			},
 			{
 				data: 'created_at'
+			},
+			{
+				data: 'elapsed_time'
 			},
 			{
 				data: 'part_no'
@@ -138,6 +192,9 @@ $this->load->view('templates/datatables');
 			},
 			{
 				data: 'progress'
+			},
+			{
+				data: 'status'
 			},
 			<?php if ($user_type == QUALITY_USER) : ?> {
 					data: 'btn_id'
@@ -158,4 +215,81 @@ $this->load->view('templates/datatables');
 			},
 		}
 	});
+
+
+
+
+	<?php if ($user_type == PRODUCTION_USER) : ?>
+		$('#entries-rejected-list').DataTable({
+			'scrollX': true,
+
+			dom: "<'row'<'col-sm-12 col-md-3'l><'col-sm-12 col-md-6 text-center'B><'col-sm-12 col-md-3'f>>" +
+				"<'row'<'col-sm-12'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+			'ajax': {
+				'url': '<?php echo base_url() ?>entries/all-rejected?start_date=<?= $start_date ?>&end_date=<?= $end_date ?>&reload_route=<?= $reload_route ?>'
+			},
+			buttons: [{
+				extend: 'copy',
+				title: 'Listado de Ordenes Rechazadas',
+				text: '<i class="fa fa-copy"></i> Copiar'
+			}, {
+				extend: 'excelHtml5',
+				title: 'Listado de Ordenes Rechazadas',
+				text: '<i class="fa fa-file-excel-o"></i> Excel'
+			}, {
+				extend: 'pdfHtml5',
+				title: 'Listado de Ordenes Rechazadas',
+				text: '<i class="fa fa-file-pdf-o"></i> Pdf'
+			}, {
+				extend: 'print',
+				title: 'Listado de Ordenes Rechazadas',
+				text: '<i class="fa fa-print"></i> Impr'
+			}],
+			'columns': [{
+					data: 'id'
+				},
+				{
+					data: 'created_at'
+				},
+				{
+					data: 'part_no'
+				},
+				{
+					data: 'lot_no'
+				},
+				{
+					data: 'qty'
+				},
+				{
+					data: 'plant'
+				},
+				{
+					data: 'progress'
+				},
+				{
+					data: 'razon_rechazo'
+				},
+				{
+					data: 'action'
+				}
+
+			],
+			"oLanguage": {
+				"sEmptyTable": "No hay datos disponibles",
+				"sInfo": "Mostrando _START_ a _END_ de _TOTAL_ registros",
+				"sInfoEmpty": "Mostrando 0 a 0 de 0 registros",
+				"sLengthMenu": "Mostrar _MENU_ registros",
+				"sSearch": "Buscar:",
+				"oPaginate": {
+					"sFirst": "Primero",
+					"sPrevious": "Previo",
+					"sNext": "Siguiente",
+					"sLast": "Ultimo"
+				},
+			}
+		});
+
+	<?php endif; ?>
 </script>

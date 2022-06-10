@@ -1,4 +1,4 @@
-<form method="get" action="<?= base_url() ?>reports/calidad">
+<form method="get" action="<?= base_url() . $reload_route ?>">
 	<div class="page-breadcrumb bg-white">
 		<div class="row align-items-center">
 			<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
@@ -45,27 +45,31 @@
 		<div class="col-lg-12">
 			<div class="white-box analytics-info">
 
-				<table style="width: 100%" id="entries-list" class="table table-striped">
-					<thead>
-						<tr>
-							<th class="border-top-0">Folio</th>
-							<th class="border-top-0">Parte</th>
-							<th class="border-top-0">Lote</th>
-							<th class="border-top-0">Cantidad</th>
-							<th class="border-top-0">Planta</th>
-							<th class="border-top-0">Inicio</th>
-							<th class="border-top-0">Tiempo en Asignar</th>
-							<th class="border-top-0">Tiempo en Liberar</th>
-							<th class="border-top-0">Tiempo en Cerrar</th>
-							<th class="border-top-0">Detalles</th>
-						</tr>
+				<div class="table-responsive">
+					<table style="width: 100%" id="entries-list" class="table table-striped">
+						<thead>
+							<tr>
+								<th class="border-top-0">Folio</th>
+								<th class="border-top-0">Parte</th>
+								<th class="border-top-0">Lote</th>
+								<th class="border-top-0">Cantidad</th>
+								<th class="border-top-0">Planta</th>
+								<th class="border-top-0">Inicio</th>
+								<th class="border-top-0">Tiempo en Asignar</th>
+								<th class="border-top-0">Tiempo en Liberar</th>
+								<th class="border-top-0">Tiempo en Cerrar</th>
+								<th class="border-top-0">Status</th>
+								<th class="border-top-0">Comentarios</th>
+								<th class="border-top-0">Detalles</th>
+							</tr>
 
-					</thead>
-					<tbody>
+						</thead>
+						<tbody>
 
-					</tbody>
+						</tbody>
 
-				</table>
+					</table>
+				</div>
 
 			</div>
 		</div>
@@ -134,6 +138,12 @@ $this->load->view('templates/datatables');
 			},
 			{
 				data: 'closed_elapsed_time'
+			},
+			{
+				data: 'status'
+			},
+			{
+				data: 'comments'
 			},
 			{
 				data: 'entry_id'

@@ -13,7 +13,7 @@ class Pages extends BaseController
 		$user_type = $this->session->userdata(USER_TYPE);
 
 		if ((isset($logged_in) && $logged_in == TRUE) && (isset($user_type) && $user_type == QUALITY_USER)) {
-			redirect('pages/home');
+			redirect('reports/produccion');
 		} else if ((isset($logged_in) && $logged_in == TRUE) && (isset($user_type) && $user_type == PRODUCTION_USER)) {
 			redirect('reports/produccion');
 		} else {

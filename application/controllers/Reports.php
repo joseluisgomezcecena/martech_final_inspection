@@ -44,6 +44,7 @@ class Reports extends CI_Controller
 		$data['orders'] = $closed_orders;
 		$data['start_date'] = $start_date;
 		$data['end_date'] = $end_date;
+		$data['reload_route'] = 'reports/calidad';
 
 
 		$this->load->view('templates/header');
@@ -57,37 +58,22 @@ class Reports extends CI_Controller
 		$end_date = $this->input->get('end_date');
 
 		if ($start_date == null && $end_date == null) {
-			$current_date = new DateTime();
-			$end_date = $current_date->format("Y-m-d");
 
-			//$current_date = $current_date->modify('-1 months');
-			$start_date = $current_date->format("Y-m-d");
+			$start_date = '';
+			$end_date = '';
 		}
 
 		$this->load->helper('time');
 
 
-		$this->db->select('plantas.planta_nombre as plant, COUNT(entry.plant) as pending');
-		$this->db->from('entry');
-		$this->db->join('plantas', 'entry.plant = plantas.planta_id');
-		$this->db->where('progress <>', '' . PROGRESS_CLOSED);
-		$this->db->where('status <>', '' . STATUS_REJECTED);
-
-		$this->db->where("created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'");
-
-		$this->db->group_by("entry.plant");
-
-		//$empQuery .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
-
-		$data['plants'] = $this->db->get()->result_array();
-
 		$data['title'] = ucfirst('home_production');
-		$data['entries'] = $this->EntryModel->get_pending();
+		//$data['entries'] = $this->EntryModel->get_pending();
 		$data['user_type'] = $this->session->userdata(USER_TYPE);
 
 		$data['start_date'] = $start_date;
 		$data['end_date'] = $end_date;
-
+		$data['reload_route'] = 'reports/produccion';
+		$data['success_message'] = $this->input->get('success_message');
 
 
 		//load header, page & footer

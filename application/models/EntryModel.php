@@ -55,11 +55,13 @@ class EntryModel extends CI_Model
 		$reinspeccion = $this->input->post('reinspeccion');
 		$ficticio = $this->input->post('ficticio');
 		$discrepancia = $this->input->post('discrepancia');
+		$from = $this->input->post('from');
 
 		$parcial = (isset($parcial) ? 1 : 0);
 		$reinspeccion = (isset($reinspeccion) ? 1 : 0);
 		$ficticio = (isset($ficticio) ? 1 : 0);
 		$discrepancia = (isset($discrepancia) ? 1 : 0);
+		$substitutes_to = (isset($from) ? $from : NULL);
 
 		$data = array(
 			'part_no' => $this->input->post('part_no'),
@@ -70,6 +72,7 @@ class EntryModel extends CI_Model
 			'reinspeccion' => $reinspeccion,
 			'ficticio' => $ficticio,
 			'discrepancia' => $discrepancia,
+			'substitutes_to' => $substitutes_to,
 		);
 
 		return $this->db->insert('entry', $data);
@@ -105,7 +108,6 @@ class EntryModel extends CI_Model
 
 		$data = array(
 			'progress' => $progress,
-
 			'liberada_date' => $release_date,
 			'status' => $this->input->post('status'),
 			'final_qty' => $this->input->post('final_qty'),

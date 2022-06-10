@@ -27,16 +27,17 @@ $route['reports/detail/(:any)'] = 'reports/detail/$1';
 
 //produccion
 $route['entries/create'] = 'entries/create';
+$route['entries/rework']['get'] = 'entries/rework';
+$route['entries/rework']['post'] = 'entries/rework_save';
 
 //calidad
 $route['entries/release/(:any)'] = 'entries/release/$1';
 $route['entries/close/(:any)'] = 'entries/close/$1';
 $route['entries/assign/(:any)'] = 'entries/assign/$1';
 
-$route['entries/all-not-closed']['get'] = 'entries/api_entries_not_closed';
+$route['entries/all-opened']['get'] = 'entries/api_entries_opened';
 $route['entries/all-closed']['get'] = 'entries/api_entries_closed';
-
-
+$route['entries/all-rejected']['get'] = 'entries/api_entries_rejected';
 
 
 //forms
