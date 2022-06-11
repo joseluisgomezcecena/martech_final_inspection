@@ -20,6 +20,12 @@ class Entries extends BaseController
 		$this->form_validation->set_rules('plant', 'Planta', 'required');
 
 		if ($this->form_validation->run() === FALSE) {
+
+			$data['old']['part_no'] = $this->input->post('part_no') == null ? '' : $this->input->post('part_no');
+			$data['old']['lot_no'] = $this->input->post('lot_no') == null ? '' : $this->input->post('lot_no');
+			$data['old']['qty'] = $this->input->post('qty') == null ? '' : $this->input->post('qty');
+			$data['old']['plant'] = $this->input->post('plant') == null ? '' : $this->input->post('plant');
+
 			$this->load->view('templates/header');
 			$this->load->view('entries/create', $data);
 			$this->load->view('templates/footer');
@@ -53,10 +59,10 @@ class Entries extends BaseController
 		$data['message'] = $message;
 
 		$data['from'] = $from;
-		$data['part_no'] = $entry_from['part_no'];
-		$data['lot_no'] = $entry_from['lot_no'];
-		$data['plant'] = $entry_from['plant'];
-		$data['qty'] = $entry_from['qty'];
+		$data['old']['part_no'] = $entry_from['part_no'];
+		$data['old']['lot_no'] = $entry_from['lot_no'];
+		$data['old']['plant'] = $entry_from['plant'];
+		$data['old']['qty'] = $entry_from['qty'];
 
 		$data['parcial'] = $entry_from['parcial'];
 		$data['reinspeccion'] = $entry_from['reinspeccion'];
@@ -78,7 +84,6 @@ class Entries extends BaseController
 
 		$from = $this->input->get('from');
 		$data = $this->retrieve_data($from);
-
 
 		$this->load->view('templates/header');
 		$this->load->view('entries/rework', $data);

@@ -58,7 +58,7 @@
 						<div class="row">
 							<div class=" col-lg-3">
 								<label for="browser">Numero de parte:</label>
-								<input class="form-control" list="part" name="part_no" id="part_no">
+								<input class="form-control" list="part" name="part_no" value="<?= $old["part_no"] ?>" id=" part_no" required oninvalid="this.setCustomValidity('Escriba el no. de Parte')" oninput="this.setCustomValidity('')">
 
 								<datalist id="part">
 									<?php foreach ($parts as $part) : ?>
@@ -70,25 +70,29 @@
 
 							<div class=" col-lg-3">
 								<label for="">Numero de lote</label>
-								<input type="text" class="form-control" name="lot_no" required>
+								<input type="text" class="form-control" name="lot_no" value="<?= $old["lot_no"] ?>" required oninvalid="this.setCustomValidity('Escriba el no. de Lote')" oninput="this.setCustomValidity('')">
 							</div>
 
 
 							<div class=" col-lg-3">
 								<label for="">Cantidad enviada</label>
-								<input type="number" class="form-control" name="qty" required>
+								<input type="number" class="form-control" name="qty" value="<?= $old["qty"] ?>" required oninvalid="this.setCustomValidity('Coloque la cantidad enviada')" oninput="this.setCustomValidity('')">
 							</div>
 
 
 							<div class="col-lg-3">
 								<label for="">Planta</label>
-								<select class="form-control" name="plant" id="plant_id" required>
+								<select class="form-control" name="plant" id="plant_id" required oninvalid="this.setCustomValidity('Elija la planta')" oninput="this.setCustomValidity('')">
 									<option value="">Seleccione una planta</option>
 									<?php
-									foreach ($plantas as $planta) :
+									foreach ($plantas as $planta) {
+										$str_option = '<option value="' . $planta['planta_id'] . '" ';
+										if ($planta['planta_id'] == $old["plant"])
+											$str_option .= 'selected';
+										$str_option .= ' >' . $planta['planta_nombre'] . '</option>';
+										echo $str_option;
+									}
 									?>
-										<option value="<?php echo $planta['planta_id'] ?>"><?php echo $planta['planta_nombre'] ?></option>
-									<?php endforeach; ?>
 								</select>
 							</div>
 
