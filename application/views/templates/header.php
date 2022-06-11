@@ -163,13 +163,15 @@
 							</a>
 						</li>
 
+						<?php if ($this->session->userdata(USER_TYPE) == QUALITY_USER) : ?>
 
-						<li class="sidebar-item pt-2">
-							<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>pages/home" aria-expanded="false">
-								<i class="far fa-clock" aria-hidden="true"></i>
-								<span class="hide-menu">Panorama General</span>
-							</a>
-						</li>
+							<li class="sidebar-item pt-2">
+								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>pages/home" aria-expanded="false">
+									<i class="far fa-clock" aria-hidden="true"></i>
+									<span class="hide-menu">Panorama General</span>
+								</a>
+							</li>
+						<?php endif; ?>
 
 
 						<li class="sidebar-item">

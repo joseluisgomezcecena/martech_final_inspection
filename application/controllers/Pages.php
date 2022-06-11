@@ -39,11 +39,13 @@ class Pages extends BaseController
 
 		$this->db->select('plantas.planta_nombre as plant, planta_id, 
 		COUNT(entry.plant) as count,
-		SUM(if(entry.progress <> 3, 1, 0)) AS opened,
+	
+		SUM(if( entry.progress = 0 OR entry.progress = 1 OR ((entry.progress = 2 AND entry.status = 2) OR (entry.progress = 2 AND entry.status = 3)) OR (entry.progress = 3 AND final_result = 3) ,1, 0)) AS opened, 
+		SUM(if(  NOT( entry.progress = 0 OR entry.progress = 1 OR ((entry.progress = 2 AND entry.status = 2) OR (entry.progress = 2 AND entry.status = 3)) OR (entry.progress = 3 AND final_result = 3) )    , 1, 0)) AS closed,
+
 		SUM(if(entry.progress = 0, 1, 0)) AS not_assigned,
 		SUM(if(entry.progress = 1, 1, 0)) AS assigned,
 		SUM(if(entry.progress = 2, 1, 0)) AS released,
-		SUM(if(entry.progress = 3, 1, 0)) AS closed,
 		SUM( if( (entry.status = 1 AND entry.progress = 2) OR (entry.status = 1 AND entry.progress = 3), 1, 0)) AS rejected,
 		SUM( if( (entry.status = 2 AND entry.progress = 2) OR (entry.status = 2 AND entry.progress = 3), 1, 0)) AS accepted,
 		SUM( if((entry.status = 3 AND entry.progress = 2) OR (entry.status = 3 AND entry.progress = 3) , 1, 0)) AS waiting');
