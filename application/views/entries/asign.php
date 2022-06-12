@@ -3,13 +3,20 @@
 		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
 			<h4 class="page-title">Asignar orden</h4>
 		</div>
+
+		<!--
 		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 			<div class="d-md-flex">
 				<ol class="breadcrumb ms-auto">
-					<li><a href="#" class="fw-normal">Asignar orden</a></li>
+					<a href="javascript:history.back()" target="" class="btn btn-light  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
+						<i class="fa fa-arrow-left" style="color:#000;" aria-hidden="true"></i>
+					</a>
 				</ol>
+
 			</div>
 		</div>
+-->
+
 	</div>
 	<!-- /.col-lg-12 -->
 </div>
@@ -88,7 +95,7 @@
 
 
 
-							<div class="col-lg-12 mt-5 mb-5 text-primary">
+							<div class="col-lg-12 mt-3 mb-3 text-primary">
 
 								<?php
 								if ($entry['parcial'] == 1) {
@@ -154,7 +161,7 @@
 																									echo $entry['asignada'];
 																								} else {
 																									echo "";
-																								} ?>" id="part_no" required>
+																								} ?>" id="part_no" required oninvalid="this.setCustomValidity('Elija al inspector encargado')" oninput="this.setCustomValidity('')">
 
 								<datalist id="part">
 									<?php foreach ($users as $user) : ?>

@@ -167,18 +167,28 @@ class Entries extends BaseController
 
 		$data['entry'] = $this->EntryModel->get_single_entry($id);
 		$data['locations'] = $this->LocationModel->get_locations();
+		$data['location'] = $this->LocationModel->get_location($data['entry']['location']);
 		$data['plants'] =  $this->LocationModel->get_plants();
 
-		$this->form_validation->set_rules('id', 'ID o Folio', 'required');
-		$this->form_validation->set_rules('status', 'Status', 'required');
-		$this->form_validation->set_rules('final_qty', 'Cantidad final', 'required|callback_check_is_positive');
-		$this->form_validation->set_rules('wo_escaneadas', 'Work orders escaneadas', 'required');
-		$this->form_validation->set_rules('location', 'Locacion', 'required');
-		$this->form_validation->set_rules('rev_dibujo', 'Revision de dibujo', 'required');
-		$this->form_validation->set_rules('empaque', 'Empaque', 'required');
-		$this->form_validation->set_rules('documentos_rev', 'Documentos revisados', 'required');
-		$this->form_validation->set_rules('has_fecha_exp', 'Fecha de expiracion si o no', 'required');
 
+		if ($this->input->post('status') == STATUS_WAITING) {
+			$this->form_validation->set_rules('id', 'ID o Folio', 'required');
+			$this->form_validation->set_rules('status', 'Status', 'required');
+
+			//Si trae la cantidad validarla
+			if ($this->input->post('final_qty') != null)
+				$this->form_validation->set_rules('final_qty', 'Cantidad final', 'required|callback_check_is_positive');
+		} else {
+			$this->form_validation->set_rules('id', 'ID o Folio', 'required');
+			$this->form_validation->set_rules('status', 'Status', 'required');
+			$this->form_validation->set_rules('final_qty', 'Cantidad final', 'required|callback_check_is_positive');
+			$this->form_validation->set_rules('wo_escaneadas', 'Work orders escaneadas', 'required');
+			$this->form_validation->set_rules('location', 'Locacion', 'required');
+			$this->form_validation->set_rules('rev_dibujo', 'Revision de dibujo', 'required');
+			$this->form_validation->set_rules('empaque', 'Empaque', 'required');
+			$this->form_validation->set_rules('documentos_rev', 'Documentos revisados', 'required');
+			$this->form_validation->set_rules('has_fecha_exp', 'Fecha de expiracion si o no', 'required');
+		}
 
 
 		if ($this->input->post('status') == 1) {
@@ -198,6 +208,11 @@ class Entries extends BaseController
 		}
 
 		if ($this->form_validation->run() === FALSE || $error_message != NULL) {
+
+			/*if (true) {
+				echo json_encode($data);
+				return;
+			}*/
 
 			$this->load->view('templates/header');
 			$this->load->view('entries/release', $data);
@@ -225,20 +240,24 @@ class Entries extends BaseController
 			redirect('/');
 		}
 
-
 		$data['entry'] = $this->EntryModel->get_single_entry($id);
-		$data['locations'] = $this->LocationModel->get_locations();
-		$data['plants'] = $this->LocationModel->get_plants();
+		$data['location'] = $this->LocationModel->get_location($data['entry']['location']);
 		$data['users'] = $this->UserModel->get_users_quality();
 
 
-		$this->form_validation->set_rules('id', 'ID o Folio', 'required');
-		$this->form_validation->set_rules('final_result', 'Resultado', 'required');
-		$this->form_validation->set_rules('cerrada_por', 'Cerrada por', 'required');
-		$this->form_validation->set_rules('rev_mapics', 'Revision contra Mapics', 'required');
-
+		if ($this->input->post('final_result') == FINAL_RESULT_WAITING) {
+			$this->form_validation->set_rules('id', 'ID o Folio', 'required');
+			$this->form_validation->set_rules('final_result', 'Resultado', 'required');
+		} else {
+			$this->form_validation->set_rules('id', 'ID o Folio', 'required');
+			$this->form_validation->set_rules('final_result', 'Resultado', 'required');
+			$this->form_validation->set_rules('cerrada_por', 'Cerrada por', 'required');
+			$this->form_validation->set_rules('rev_mapics', 'Revision contra Mapics', 'required');
+		}
 
 		if ($this->form_validation->run() === FALSE) {
+
+
 
 			$this->load->view('templates/header');
 			$this->load->view('entries/close', $data);
@@ -250,7 +269,7 @@ class Entries extends BaseController
 			//session message
 			$this->session->set_flashdata('cerrada', 'Se ha cerrado la entrada.');
 
-			redirect(base_url() . 'entries/release/' . $id);
+			redirect(base_url() . 'entries/close/' . $id);
 		}
 	}
 
@@ -393,9 +412,16 @@ class Entries extends BaseController
 				$link = "entries/release/{$row['id']}";
 				$text =  "1/3 Asignado en espera a Liberar";
 			} elseif ($row['progress'] == PROGRESS_RELEASED) {
-				$btn_title = "Cerrar";
-				$link = "entries/close/{$row['id']}";
+
 				$text =  "2/3 Liberado en espera a Cerrar";
+
+				if ($row['status'] == STATUS_WAITING) {
+					$btn_title = "Liberar";
+					$link = "entries/release/{$row['id']}";
+				} else {
+					$btn_title = "Cerrar";
+					$link = "entries/close/{$row['id']}";
+				}
 			} elseif ($row['progress'] == PROGRESS_CLOSED) {
 				$btn_title = "Cerrar";
 				$link = "entries/close/{$row['id']}";

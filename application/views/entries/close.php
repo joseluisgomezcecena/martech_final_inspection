@@ -3,13 +3,19 @@
 		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
 			<h4 class="page-title">Cerrar entrada</h4>
 		</div>
+
+		<!--
 		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 			<div class="d-md-flex">
 				<ol class="breadcrumb ms-auto">
-					<li><a href="#" class="fw-normal">Cerrar entrada</a></li>
+					<a href="javascript:history.back()" target="" class="btn btn-light  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
+						<i class="fa fa-arrow-left" style="color:#000;" aria-hidden="true"></i>
+					</a>
 				</ol>
+
 			</div>
 		</div>
+-->
 	</div>
 	<!-- /.col-lg-12 -->
 </div>
@@ -17,7 +23,7 @@
 
 
 
-<div class="container-fluid">
+<div class="container-fluid" ng-app="myApp" ng-controller="myCtrl">
 	<!-- ============================================================== -->
 	<!-- Contenido -->
 	<!-- ============================================================== -->
@@ -96,12 +102,12 @@
 
 							<div class=" col-lg-12">
 								<label for="">Locacion</label>
-								<input type="text" class="form-control" value="<?php echo $entry['final_qty'] ?>" disabled>
+								<input type="text" class="form-control" value="<?php echo $location ?>" disabled>
 							</div>
 
 
 
-							<div class="col-lg-12 mt-5 mb-5 text-primary">
+							<div class="col-lg-12 mt-3 mb-3 text-primary">
 
 								<?php
 								if ($entry['parcial'] == 1) {
@@ -145,13 +151,15 @@
 
 				<div class="row">
 					<div class="col-lg-12">
-						<?php echo form_open('entries/close/' .  $entry['id'], $_GET) ?>
+						<?php
+						$attributes = array('name' => 'myform');
+						echo form_open('entries/close/' .  $entry['id'], $attributes) ?>
 						<h3 class="box-title mb-2 text-primary">Cerrar orden</h3>
 
 						<div class="mt-5 mb-5">
 							<?php echo validation_errors(
 								'<div class="alert alert-danger alert-dismissible fade show" role="alert">',
-								'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>'
+								'<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
 							); ?>
 						</div>
 
@@ -161,19 +169,23 @@
 
 						<div class="row">
 							<div class=" col-lg-3">
-								<label for="browser">Cerrar orden:</label>
-								<select name="final_result" id="status" class="form-control">
-									<option value="">Seleccione Resultado</option>
+
+								<label for="status" class="text-primary">Cerrar orden:</label>
+								<select name="final_result" id="status" ng-model="status" ng-change="select_status()" class="form-control">
+									<option value="">---Seleccione Resultado---</option>
 									<option value="1">No</option>
 									<option value="2">Si</option>
 									<option value="3">En espera por cambio de prioridad</option>
 								</select>
+								<small class="text-danger" ng-show="(validate_status && status == '') || (validate_status && status == null)">Seleccione el Resultado</small>
 							</div>
 
 
 							<div class=" col-lg-3">
-								<label for="">Cerrada por</label>
-								<input class="form-control" list="part" name="cerrada_por" id="part_no">
+								<label for="" class="text-primary">Cerrada por</label>
+								<input class="form-control" list="part" name="cerrada_por" id="cerrada_por" ng-model="cerrada_por">
+								<small class="text-danger" ng-show="validate_cerrada_por && cerrada_por == ''">Se requiere el Supervisor.</small>
+
 
 								<datalist id="part">
 									<?php foreach ($users as $user) : ?>
@@ -183,26 +195,28 @@
 							</div>
 
 
-
-
 							<div class=" col-lg-3">
-								<label for="">Revision contra mapics</label>
-								<input type="text" class="form-control" name="rev_mapics" required>
+								<label for="" class="text-primary">Revision contra mapics</label>
+								<input type="text" class="form-control" name="rev_mapics" id="rev_mapics" ng-model="rev_mapics" value="<?php echo $entry['rev_mapics']; ?>">
+								<small class="text-danger" ng-show="validate_rev_mapics && rev_mapics == ''">Se requiere la Revisión contra mapics</small>
 							</div>
 
 
-							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo">
-								<label for="">Descripción de discrepancia</label>
-								<textarea class="form-control" name="discrepancia_descr" rows="8"></textarea>
+							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo" ng-show="status == 1">
+								<label for="" class="text-primary">Descripción de discrepancia</label>
+								<textarea class="form-control" name="discrepancia_descr" ng-model="discrepancia_descr" rows="8" id="discrepancia_descr">value="<?php echo $entry['discrepancia_descr']; ?>"</textarea>
+								<small class="text-danger" ng-show="validate_discrepancia_descr && discrepancia_descr == ''">Se requiere la Revisión contra mapics</small>
 							</div>
 
 						</div>
 
 
-
-
 						<div class="form-group mt-5">
-							<input style="width: 100%" type="submit" name="save_close" class="btn btn-primary text-white btn-lg" value="Cerrar Orden">
+							<input style="width: 100%" type="submit" name="save_close" class="btn btn-primary text-white btn-lg" value="Cerrar Orden" ng-disabled="!( 
+								(  validate_status && status != '') && 
+								( validate_cerrada_por == false ? true : (validate_cerrada_por && cerrada_por != '')) && 
+								( validate_rev_mapics == false ? true : (validate_rev_mapics && rev_mapics != '')) && 
+								( validate_discrepancia_descr == false ? true : (validate_discrepancia_descr && discrepancia_descr != ''))  )">
 						</div>
 						<?php echo form_close() ?>
 					</div>
@@ -219,18 +233,49 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
-	$(document).ready(function() {
+	var app = angular.module('myApp', []);
+	app.controller('myCtrl', function($scope) {
 
-		$('#razon_rechazo').hide();
 
-		$('#status').change(function() {
-			var status = $('#status').val();
+		$scope.status = null;
+		$scope.cerrada_por = '<?php echo $entry['cerrada_por']; ?>';
+		$scope.rev_mapics = '<?php echo $entry['rev_mapics']; ?>';
+		$scope.discrepancia_descr = '<?php echo $entry['discrepancia_descr']; ?>';
 
-			if (status == 1) {
-				$('#razon_rechazo').show("300");
+		$scope.validate_status = true;
+		$scope.validate_cerrada_por = false;
+		$scope.validate_rev_mapics = false;
+		$scope.validate_discrepancia_descr = true;
+
+
+		$scope.select_status = function() {
+
+			if ($scope.status == null) {
+				$scope.validate_cerrada_por = true;
+				$scope.validate_rev_mapics = true;
+				$scope.validate_discrepancia_descr = true;
+			} else if ($scope.status == 1) {
+				//No
+				$scope.validate_cerrada_por = true;
+				$scope.validate_rev_mapics = true;
+				$scope.validate_discrepancia_descr = true;
+			} else if ($scope.status == 2) {
+				//Si
+				$scope.validate_cerrada_por = true;
+				$scope.validate_rev_mapics = true;
+				$scope.validate_discrepancia_descr = false;
+			} else if ($scope.status == 3) {
+				//En espera
+				$scope.validate_cerrada_por = false;
+				$scope.validate_rev_mapics = false;
+				$scope.validate_discrepancia_descr = false;
 			} else {
-				$('#razon_rechazo').hide();
+				$scope.validate_cerrada_por = false;
+				$scope.validate_rev_mapics = false;
+				$scope.validate_discrepancia_descr = false;
 			}
-		});
+
+		}
+
 	});
 </script>
