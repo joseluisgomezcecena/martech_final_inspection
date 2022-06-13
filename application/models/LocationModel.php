@@ -37,6 +37,12 @@ class  LocationModel extends  CI_Model
 		$this->db->select('*');
 		$this->db->from('locations');
 		$this->db->where('location_id', $id);
-		return $this->db->get()->result_array()[0]['location_name'];
+
+		$result = $this->db->get()->result_array();
+
+		if (count($result) > 0)
+			return $result[0]['location_name'];
+		else
+			return '';
 	}
 }

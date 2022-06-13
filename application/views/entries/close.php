@@ -213,7 +213,7 @@
 
 						<div class="form-group mt-5">
 							<input style="width: 100%" type="submit" name="save_close" class="btn btn-primary text-white btn-lg" value="Cerrar Orden" ng-disabled="!( 
-								(  validate_status && status != '') && 
+								(  validate_status == false ? true : (validate_status && status != '')) && 
 								( validate_cerrada_por == false ? true : (validate_cerrada_por && cerrada_por != '')) && 
 								( validate_rev_mapics == false ? true : (validate_rev_mapics && rev_mapics != '')) && 
 								( validate_discrepancia_descr == false ? true : (validate_discrepancia_descr && discrepancia_descr != ''))  )">
@@ -237,7 +237,7 @@
 	app.controller('myCtrl', function($scope) {
 
 
-		$scope.status = null;
+		$scope.status = '';
 		$scope.cerrada_por = '<?php echo $entry['cerrada_por']; ?>';
 		$scope.rev_mapics = '<?php echo $entry['rev_mapics']; ?>';
 		$scope.discrepancia_descr = '<?php echo $entry['discrepancia_descr']; ?>';
@@ -250,7 +250,7 @@
 
 		$scope.select_status = function() {
 
-			if ($scope.status == null) {
+			if ($scope.status == '') {
 				$scope.validate_cerrada_por = true;
 				$scope.validate_rev_mapics = true;
 				$scope.validate_discrepancia_descr = true;

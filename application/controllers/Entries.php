@@ -31,6 +31,11 @@ class Entries extends BaseController
 			$this->load->view('templates/footer');
 		} else {
 
+			/*if (true) {
+				echo json_encode($this->input->post());
+				return;
+			}*/
+
 			$this->EntryModel->create_entry();
 
 			//session message
@@ -171,6 +176,20 @@ class Entries extends BaseController
 		$data['plants'] =  $this->LocationModel->get_plants();
 
 
+		$this->load->view('templates/header');
+		$this->load->view('entries/release', $data);
+		$this->load->view('templates/footer');
+	}
+
+
+	public function release_save($id = NULL)
+	{
+		//liberar
+		if (!($this->is_logged_in() && $this->is_quality())) {
+			redirect('/');
+		}
+
+
 		if ($this->input->post('status') == STATUS_WAITING) {
 			$this->form_validation->set_rules('id', 'ID o Folio', 'required');
 			$this->form_validation->set_rules('status', 'Status', 'required');
@@ -199,20 +218,33 @@ class Entries extends BaseController
 			$this->form_validation->set_rules('fecha_exp', 'Fecha de expiracion', 'required');
 		}
 
+		$data['entry'] = $this->EntryModel->get_single_entry($id);
 		$quantity = $data['entry']['qty'];
 		$final_qty = $this->input->post('final_qty');
+
+
 		$error_message = NULL;
 		if ($final_qty > $quantity) {
 			$error_message = 'La cantidad final no puede ser mayor a la cantidad enviada, por favor verifique la informacion';
 			$data['error_message'] = $error_message;
 		}
 
-		if ($this->form_validation->run() === FALSE || $error_message != NULL) {
 
-			/*if (true) {
-				echo json_encode($data);
-				return;
-			}*/
+		if ($this->form_validation->run() === FALSE || $error_message != NULL) {
+			$data['entry']['status'] = $this->input->post('status');
+			$data['entry']['final_qty'] = $this->input->post('final_qty');
+			$data['entry']['location'] = $this->input->post('location');
+			$data['entry']['wo_escaneadas'] = $this->input->post('wo_escaneadas');
+			$data['entry']['has_fecha_exp'] = $this->input->post('has_fecha_exp');
+			$data['entry']['fecha_exp'] = $this->input->post('fecha_exp');
+			$data['entry']['rev_dibujo'] = $this->input->post('rev_dibujo');
+			$data['entry']['empaque'] = $this->input->post('empaque');
+			$data['entry']['documentos_rev'] = $this->input->post('documentos_rev');
+			$data['entry']['razon_rechazo'] = $this->input->post('razon_rechazo');
+
+			$data['locations'] = $this->LocationModel->get_locations();
+			$data['location'] = $this->LocationModel->get_location($data['entry']['location']);
+			$data['plants'] =  $this->LocationModel->get_plants();
 
 			$this->load->view('templates/header');
 			$this->load->view('entries/release', $data);
@@ -605,7 +637,7 @@ class Entries extends BaseController
 
 
 
-		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, razon_rechazo, to_rework  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
 		$empQuery .= ' AND ((progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_REJECTED . ') OR (progress = ' . PROGRESS_CLOSED . ' AND final_result = ' . FINAL_RESULT_NOT_CLOSED . '))';
 		$empQuery .= ' AND to_rework = 0';
 

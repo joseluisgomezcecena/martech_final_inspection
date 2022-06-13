@@ -31,7 +31,10 @@ $route['entries/rework']['get'] = 'entries/rework';
 $route['entries/rework']['post'] = 'entries/rework_save';
 
 //calidad
-$route['entries/release/(:any)'] = 'entries/release/$1';
+$route['entries/release/(:any)']['get'] = 'entries/release/$1';
+$route['entries/release/(:any)']['post'] = 'entries/release_save/$1';
+
+
 $route['entries/close/(:any)'] = 'entries/close/$1';
 $route['entries/assign/(:any)'] = 'entries/assign/$1';
 

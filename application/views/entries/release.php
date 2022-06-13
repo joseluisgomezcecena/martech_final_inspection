@@ -192,7 +192,7 @@
 									<?php foreach ($locations as $location) {
 										$str = '';
 
-										if ($location['location_id'] ==  $entry['location'])
+										if ($location['location_id'] == $entry['location'])
 											$str = ' selected';
 
 										echo '<option value="' . $location['location_id'] . '"' . $str . '>' . $location['location_name'] . '</option>';
@@ -303,7 +303,7 @@
 		$scope.final_qty = <?php echo $entry['final_qty'] ?>;
 		$scope.validate_final_qty = false;
 
-		$scope.location = '<?php echo $location['location_id'] ?>';
+		$scope.location = '<?php echo $entry['location'] ?>';
 		$scope.validate_location = false;
 
 		$scope.wo_escaneadas = '<?php echo $entry['wo_escaneadas'] ?>';
