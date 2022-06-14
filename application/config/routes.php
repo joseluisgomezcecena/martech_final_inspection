@@ -52,5 +52,5 @@ $route['users/login'] = 'users/login';
 $route['users/profile'] = 'users/profile';
 
 //Authentication
-$route['login'] = 'login/login';
+$route['login'] = 'login/do_login';
 $route['logout'] = 'login/logout';

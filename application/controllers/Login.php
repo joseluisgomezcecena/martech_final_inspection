@@ -4,11 +4,8 @@ class Login extends CI_Controller
 {
 
 
-    //public function 
 
-
-
-    public function login()
+    public function do_login()
     {
 
         $user_email = $this->input->get('user_email');
