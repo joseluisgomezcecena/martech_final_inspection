@@ -57,6 +57,7 @@
 		<!-- Topbar header - style you can find in pages.scss -->
 		<!-- ============================================================== -->
 		<header class="topbar" data-navbarbg="skin5">
+
 			<nav class="navbar top-navbar navbar-expand-md navbar-dark">
 				<div class="navbar-header" data-logobg="skin6">
 					<!-- ============================================================== -->
@@ -98,18 +99,17 @@
 					<!-- ============================================================== -->
 					<ul class="navbar-nav ms-auto d-flex align-items-center">
 
-						<!-- ============================================================== -->
-						<!-- Search -->
-						<!-- ==============================================================
-					<li class=" in">
-						<form role="search" class="app-search d-none d-md-block me-3">
-							<input type="text" placeholder="Search..." class="form-control mt-0">
-							<a href="" class="active">
-								<i class="fa fa-search"></i>
-							</a>
-						</form>
-					</li>
-					-->
+						<!--
+						<li class=" in">
+							<form role="search" class="app-search d-none d-md-block me-3">
+								<input type="text" placeholder="Search..." class="form-control mt-0">
+								<a href="" class="active">
+									<i class="fa fa-search"></i>
+								</a>
+							</form>
+						</li>
+						-->
+
 						<!-- ============================================================== -->
 						<!-- User profile and search -->
 						<!-- ==============================================================
@@ -118,7 +118,7 @@
 							<img src="plugins/images/users/varun.jpg" alt="user-img" width="36"
 								 class="img-circle"><span class="text-white font-medium">Steave</span></a>
 					</li>
-					-->
+					
 						<!-- ============================================================== -->
 						<!-- User profile and search -->
 						<!-- ============================================================== -->
@@ -140,7 +140,8 @@
 					<ul id="sidebarnav">
 						<!-- User Profile-->
 
-						<?php if ($this->session->userdata(DEPARTMENT_ID) == 3) : ?>
+
+						<?php if ($this->session->userdata(DEPARTMENT_ID) == DEPARTMENT_QUALITY) : ?>
 							<!-- Calidad -->
 							<li class="sidebar-item">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/produccion" aria-expanded="false">
@@ -156,7 +157,22 @@
 									<span class="hide-menu">Ordenes Abiertas</span>
 								</a>
 							</li>
+
+							<li class="sidebar-item">
+								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>production/rejected_by_product" aria-expanded="false">
+									<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+									<span class="hide-menu">Rechazos x Producto</span>
+								</a>
+							</li>
+
+							<li class="sidebar-item">
+								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>production/rejected_by_document" aria-expanded="false">
+									<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+									<span class="hide-menu">Rechazos x Documentos</span>
+								</a>
+							</li>
 						<?php endif; ?>
+
 
 						<li class="sidebar-item">
 							<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/calidad" aria-expanded="false">
@@ -166,6 +182,13 @@
 						</li>
 
 						<?php if ($this->session->userdata(USER_TYPE) == QUALITY_USER) : ?>
+
+							<li class="sidebar-item pt-2">
+								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>production/all_entries" aria-expanded="false">
+									<i class="far fa-clock" aria-hidden="true"></i>
+									<span class="hide-menu">Todas las Ordenes</span>
+								</a>
+							</li>
 
 							<li class="sidebar-item pt-2">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>pages/home" aria-expanded="false">

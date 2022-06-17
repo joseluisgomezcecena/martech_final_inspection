@@ -1,21 +1,21 @@
 <div class="page-breadcrumb bg-white">
 	<div class="row align-items-center">
-		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+		<div class="col-lg-6 col-md-4 col-sm-4 col-xs-12">
 			<h4 class="page-title">Liberar orden</h4>
 		</div>
 
-		<!--
-		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+
+		<div class="col-lg-6 col-sm-8 col-md-8 col-xs-12">
 			<div class="d-md-flex">
 				<ol class="breadcrumb ms-auto">
-					<a href="javascript:history.back()" target="" class="btn btn-light  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
+					<a href="<?php echo base_url() . $reload_route ?>" target="" class="btn btn-light  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
 						<i class="fa fa-arrow-left" style="color:#000;" aria-hidden="true"></i>
 					</a>
 				</ol>
 
 			</div>
 		</div>
--->
+		-
 	</div>
 	<!-- /.col-lg-12 -->
 </div>
@@ -92,10 +92,7 @@
 							</div>
 
 
-
-
 							<div class="col-lg-12 mt-3 mb-3 text-primary">
-
 								<?php
 								if ($entry['parcial'] == 1) {
 									echo "Parcial<br>";
@@ -168,9 +165,10 @@
 								<label for="status" class="text-primary">Resultado de la inspección</label>
 								<select name="status" id="status" class="form-control" ng-model="status" ng-change="select_status()">
 									<option value="">-- Seleccione Resultado --</option>
-									<option value="3" <?php if ($entry['status'] == "3") echo ' selected'; ?>>En espera</option>
-									<option value="1" <?php if ($entry['status'] == "1") echo ' selected'; ?>>Rechazado</option>
-									<option value="2" <?php if ($entry['status'] == "2") echo ' selected'; ?>>Aceptado</option>
+									<option value="<?= STATUS_WAITING ?>" <?php if ($entry['status'] == STATUS_WAITING) echo ' selected'; ?>>En espera</option>
+									<option value="<?= STATUS_REJECTED_BY_PRODUCT ?>" <?php if ($entry['status'] == STATUS_REJECTED_BY_PRODUCT) echo ' selected'; ?>>Rechazado por Producto</option>
+									<option value="<?= STATUS_REJECTED_BY_DOCUMENTATION ?>" <?php if ($entry['status'] == STATUS_REJECTED_BY_DOCUMENTATION) echo ' selected'; ?>>Rechazado por Documentación</option>
+									<option value="<?= STATUS_ACCEPTED ?>" <?php if ($entry['status'] == STATUS_ACCEPTED) echo ' selected'; ?>>Aceptado</option>
 								</select>
 								<small class="text-danger" ng-show="(validate_status && status == '') || (validate_status && status == null)">Seleccione el Resultado</small>
 							</div>
@@ -254,7 +252,7 @@
 							</div>
 
 
-							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo" ng-show="status == 1">
+							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo" ng-show="status == <?= STATUS_REJECTED_BY_PRODUCT ?> || status == <?= STATUS_REJECTED_BY_DOCUMENTATION ?>">
 								<label for="" class="text-primary">Razón del rechazo si aplica</label>
 								<textarea class="form-control" name="razon_rechazo" rows="8" ng-model="razon_rechazo"></textarea>
 								<small class=" text-danger" ng-show="(validate_razon_rechazo && razon_rechazo == '')">Indique la razon del rechazo</small>
@@ -329,6 +327,8 @@
 
 		$scope.select_status = function() {
 
+			console.log('select status' + $scope.status);
+
 			if ($scope.status == null || $scope.status == '') {
 				$scope.validate_final_qty = true;
 				$scope.validate_location = true;
@@ -339,7 +339,7 @@
 				$scope.validate_empaque = true;
 				$scope.validate_documentos_rev = true;
 				$scope.validate_razon_rechazo = false;
-			} else if ($scope.status == 1) {
+			} else if ($scope.status == <?= STATUS_REJECTED_BY_PRODUCT ?>) {
 				//No
 				$scope.validate_final_qty = true;
 				$scope.validate_location = true;
@@ -350,7 +350,22 @@
 				$scope.validate_empaque = true;
 				$scope.validate_documentos_rev = true;
 				$scope.validate_razon_rechazo = true;
-			} else if ($scope.status == 2) {
+				console.log('entering here' + $scope.status);
+
+			} else if ($scope.status == <?= STATUS_REJECTED_BY_DOCUMENTATION ?>) {
+				//No
+				$scope.validate_final_qty = true;
+				$scope.validate_location = true;
+				$scope.validate_wo_escaneadas = true;
+				$scope.validate_has_exp_date = true;
+				//$scope.validate_fecha_exp = false;
+				$scope.validate_rev_dibujo = true;
+				$scope.validate_empaque = true;
+				$scope.validate_documentos_rev = true;
+				$scope.validate_razon_rechazo = true;
+				console.log('entering here' + $scope.status);
+
+			} else if ($scope.status == <?= STATUS_ACCEPTED ?>) {
 				//Si
 				$scope.validate_final_qty = true;
 				$scope.validate_location = true;
@@ -361,7 +376,7 @@
 				$scope.validate_empaque = true;
 				$scope.validate_documentos_rev = true;
 				$scope.validate_razon_rechazo = false;
-			} else if ($scope.status == 3) {
+			} else if ($scope.status == <?= STATUS_WAITING ?>) {
 				$scope.validate_final_qty = false;
 				$scope.validate_location = false;
 				$scope.validate_wo_escaneadas = false;

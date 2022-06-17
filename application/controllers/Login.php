@@ -11,6 +11,9 @@ class Login extends CI_Controller
         $user_email = $this->input->get('user_email');
         $user_name =  $this->input->get('user_name');
         $user_lastname = $this->input->get('user_lastname');
+
+        $user_level_name = $this->input->get('user_level_name');
+
         $martech_number = $this->input->get('user_martech_number');
         $department_name = $this->input->get('user_department_name');
         $department_id = $this->input->get('user_department_id');
@@ -22,6 +25,7 @@ class Login extends CI_Controller
             && isset($martech_number)
             && isset($department_name)
             && isset($department_id)
+            && isset($user_level_name)
         ) {
 
             if ($department_name == 'Quality' && $department_id == '3') {
@@ -34,6 +38,8 @@ class Login extends CI_Controller
                 $this->session->set_userdata(MARTECH_NUMBER, $martech_number);
                 $this->session->set_userdata(DEPARTMENT_NAME, $department_name);
                 $this->session->set_userdata(DEPARTMENT_ID, $department_id);
+                $this->session->set_userdata(LEVEL_NAME, $user_level_name);
+
                 redirect($this->input->get('from'));
             } else {
                 //No pertenece al equipo de calidad....send message

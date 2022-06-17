@@ -119,14 +119,19 @@ defined('PROGRESS_CLOSED')      or define('PROGRESS_CLOSED', 3);
 
 //0 sin asignar, 1 rechazado, 2 aceptado, 3 en espera por cambio de prioridad
 defined('STATUS_NOT_ASSIGNED')      or define('STATUS_NOT_ASSIGNED', 0);
-defined('STATUS_REJECTED')      or define('STATUS_REJECTED', 1);
+defined('STATUS_REJECTED_BY_PRODUCT')      or define('STATUS_REJECTED_BY_PRODUCT', 1);
+defined('STATUS_REJECTED_BY_DOCUMENTATION')      or define('STATUS_REJECTED_BY_DOCUMENTATION', 4);
 defined('STATUS_ACCEPTED')      or define('STATUS_ACCEPTED', 2);
 defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
+defined('STATUS_VERIFY')      or define('STATUS_VERIFY', 5);
+
 
 defined('FINAL_RESULT_NOT_DEFINED')      or define('FINAL_RESULT_NOT_DEFINED', 0);
 defined('FINAL_RESULT_CLOSED')      or define('FINAL_RESULT_CLOSED', 2);
-defined('FINAL_RESULT_NOT_CLOSED')      or define('FINAL_RESULT_NOT_CLOSED', 1);
+defined('FINAL_RESULT_REJECTED_BY_PRODUCT')      or define('FINAL_RESULT_REJECTED_BY_PRODUCT', 1);
+defined('FINAL_RESULT_REJECTED_BY_DOCUMENTATION')      or define('FINAL_RESULT_REJECTED_BY_DOCUMENTATION', 4);
 defined('FINAL_RESULT_WAITING')      or define('FINAL_RESULT_WAITING', 3);
+defined('FINAL_RESULT_VERIFY')      or define('FINAL_RESULT_VERIFY', 5);
 
 
 //(1,'MOQC'),(2,'ASQC'),(3,'MPQC'),(4,'MPQCWH'),(5,'INGE 3S'),(6,'INGE')
@@ -147,3 +152,11 @@ defined('LOCATION_INGE3S_STR')      or define('LOCATION_INGE3S_STR', 'INGE 3S');
 
 defined('LOCATION_INGE')      or define('LOCATION_INGE', 6);
 defined('LOCATION_INGE_STR')      or define('LOCATION_INGE_STR', 'INGE');
+
+
+
+defined('DEPARTMENT_QUALITY')      or define('DEPARTMENT_QUALITY', 3);
+defined('DEPARTMENT_PRODUCTION')      or define('DEPARTMENT_PRODUCTION', 5);
+
+
+defined('DATETIME_FORMAT')      or define('DATETIME_FORMAT', 'Y-m-d H:i:s');

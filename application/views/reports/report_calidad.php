@@ -55,9 +55,16 @@
 								<th class="border-top-0">Cantidad</th>
 								<th class="border-top-0">Planta</th>
 								<th class="border-top-0">Inicio</th>
-								<th class="border-top-0">Tiempo en Asignar</th>
-								<th class="border-top-0">Tiempo en Liberar</th>
-								<th class="border-top-0">Tiempo en Cerrar</th>
+								<th class="border-top-0">Hrs en Asignar</th>
+								<th class="border-top-0">Hrs en Liberar</th>
+								<th class="border-top-0">Hrs en Cerrar</th>
+
+
+								<th class="border-top-0">Hrs en Espera</th>
+								<th class="border-top-0">Hrs en Rechazo </th>
+								<th class="border-top-0">Hrs en Calidad (Estimadas)</th>
+
+
 								<th class="border-top-0">Status</th>
 								<th class="border-top-0">Comentarios</th>
 								<th class="border-top-0">Detalles</th>
@@ -138,6 +145,15 @@ $this->load->view('templates/datatables');
 			},
 			{
 				data: 'closed_elapsed_time'
+			},
+			{
+				data: 'waiting_hours'
+			},
+			{
+				data: 'rejected_doc_hours'
+			},
+			{
+				data: 'estimated'
 			},
 			{
 				data: 'status'

@@ -172,10 +172,13 @@
 
 								<label for="status" class="text-primary">Cerrar orden:</label>
 								<select name="final_result" id="status" ng-model="status" ng-change="select_status()" class="form-control">
+
 									<option value="">---Seleccione Resultado---</option>
-									<option value="1">No</option>
-									<option value="2">Si</option>
-									<option value="3">En espera por cambio de prioridad</option>
+									<option value="<?= FINAL_RESULT_CLOSED ?>">Si</option>
+									<option value="<?= FINAL_RESULT_REJECTED_BY_PRODUCT ?>">Rechazar por Producto</option>
+									<option value="<?= FINAL_RESULT_REJECTED_BY_DOCUMENTATION ?>">Rechazar por Documentación</option>
+									<option value="<?= FINAL_RESULT_WAITING ?>">En espera por cambio de prioridad</option>
+
 								</select>
 								<small class="text-danger" ng-show="(validate_status && status == '') || (validate_status && status == null)">Seleccione el Resultado</small>
 							</div>
@@ -184,7 +187,7 @@
 							<div class=" col-lg-3">
 								<label for="" class="text-primary">Cerrada por</label>
 								<input class="form-control" list="part" name="cerrada_por" id="cerrada_por" ng-model="cerrada_por">
-								<small class="text-danger" ng-show="validate_cerrada_por && cerrada_por == ''">Se requiere el Supervisor.</small>
+								<small class="text-danger" ng-show="validate_cerrada_por && cerrada_por == ''">Colocar persona que la orden.</small>
 
 
 								<datalist id="part">
@@ -202,8 +205,8 @@
 							</div>
 
 
-							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo" ng-show="status == 1">
-								<label for="" class="text-primary">Descripción de discrepancia</label>
+							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo" ng-show="status == <?= FINAL_RESULT_REJECTED_BY_PRODUCT ?> || status == <?= FINAL_RESULT_REJECTED_BY_DOCUMENTATION ?> ">
+								<label for="" class="text-primary">Descripción de discrepancia / Razón de Rechazo</label>
 								<textarea class="form-control" name="discrepancia_descr" ng-model="discrepancia_descr" rows="8" id="discrepancia_descr">value="<?php echo $entry['discrepancia_descr']; ?>"</textarea>
 								<small class="text-danger" ng-show="validate_discrepancia_descr && discrepancia_descr == ''">Se requiere la Revisión contra mapics</small>
 							</div>
@@ -254,17 +257,22 @@
 				$scope.validate_cerrada_por = true;
 				$scope.validate_rev_mapics = true;
 				$scope.validate_discrepancia_descr = true;
-			} else if ($scope.status == 1) {
-				//No
+			} else if ($scope.status == <?= FINAL_RESULT_REJECTED_BY_PRODUCT ?>) {
+				//No rechazar por producto
 				$scope.validate_cerrada_por = true;
 				$scope.validate_rev_mapics = true;
 				$scope.validate_discrepancia_descr = true;
-			} else if ($scope.status == 2) {
+			} else if ($scope.status == <?= FINAL_RESULT_REJECTED_BY_DOCUMENTATION ?>) {
+				//No rechazar por documentacion
+				$scope.validate_cerrada_por = true;
+				$scope.validate_rev_mapics = true;
+				$scope.validate_discrepancia_descr = true;
+			} else if ($scope.status == <?= FINAL_RESULT_CLOSED ?>) {
 				//Si
 				$scope.validate_cerrada_por = true;
 				$scope.validate_rev_mapics = true;
 				$scope.validate_discrepancia_descr = false;
-			} else if ($scope.status == 3) {
+			} else if ($scope.status == <?= FINAL_RESULT_WAITING ?>) {
 				//En espera
 				$scope.validate_cerrada_por = false;
 				$scope.validate_rev_mapics = false;

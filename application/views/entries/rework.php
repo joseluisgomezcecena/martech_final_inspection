@@ -103,12 +103,12 @@
 									<label class="form-check-label" for="inlineCheckbox2">Reinspeccion</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="discrepancia" <?php if ($progress == PROGRESS_CLOSED) echo 'checked'; ?>>
-									<label class="form-check-label" for="inlineCheckbox2">Discrepancia</label>
+									<input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="discrepancia" <?php if ($progress == PROGRESS_CLOSED) echo 'checked'; ?>>
+									<label class="form-check-label" for="inlineCheckbox3">Discrepancia</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="ficticio" <?php if ($ficticio == '1') echo 'checked'; ?>>
-									<label class="form-check-label" for="inlineCheckbox2">Ficticio</label>
+									<input class="form-check-input" type="checkbox" id="inlineCheckbox4" name="ficticio" <?php if ($ficticio == '1') echo 'checked'; ?>>
+									<label class="form-check-label" for="inlineCheckbox4">Ficticio</label>
 								</div>
 
 							</div>

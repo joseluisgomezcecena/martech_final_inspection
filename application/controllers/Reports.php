@@ -32,16 +32,18 @@ class Reports extends CI_Controller
 
 		$this->load->helper('time');
 
+		//Mo se necesita esta parte ya que los requests se hacen desde la API
+		/*
 		$closed_orders = $this->EntryModel->get_closed();
-
 		for ($i = 0; $i < count($closed_orders); $i++) {
 
 			$closed_orders[$i]['assigned_elapsed_time'] =  readable_elapsed_time($closed_orders[$i]['asignada_date'], $closed_orders[$i]['created_at']);
 			$closed_orders[$i]['released_elapsed_time'] =  readable_elapsed_time($closed_orders[$i]['liberada_date'], $closed_orders[$i]['created_at']);
 			$closed_orders[$i]['closed_elapsed_time'] =  readable_elapsed_time($closed_orders[$i]['cerrada_date'], $closed_orders[$i]['created_at']);
 		}
-
 		$data['orders'] = $closed_orders;
+		*/
+
 		$data['start_date'] = $start_date;
 		$data['end_date'] = $end_date;
 		$data['reload_route'] = 'reports/calidad';
@@ -67,7 +69,6 @@ class Reports extends CI_Controller
 
 
 		$data['title'] = ucfirst('home_production');
-		//$data['entries'] = $this->EntryModel->get_pending();
 		$data['user_type'] = $this->session->userdata(USER_TYPE);
 
 		$data['start_date'] = $start_date;
@@ -81,6 +82,97 @@ class Reports extends CI_Controller
 		$this->load->view('pages/home_production', $data); //loading page and data
 		$this->load->view('templates/footer');
 	}
+
+
+	public function rejected_by_product()
+	{
+		$start_date = $this->input->get('start_date');
+		$end_date = $this->input->get('end_date');
+
+		if ($start_date == null && $end_date == null) {
+
+			$start_date = '';
+			$end_date = '';
+		}
+
+		$this->load->helper('time');
+
+
+		$data['title'] = 'RECHAZADAS POR PRODUCTO';
+		$data['user_type'] = $this->session->userdata(USER_TYPE);
+
+		$data['start_date'] = $start_date;
+		$data['end_date'] = $end_date;
+		$data['reload_route'] = 'production/rejected_by_product';
+		$data['success_message'] = $this->input->get('success_message');
+
+
+		//load header, page & footer
+		$this->load->view('templates/header');
+		$this->load->view('pages/production_rejected_by_product', $data); //loading page and data
+		$this->load->view('templates/footer');
+	}
+
+
+	public function rejected_by_document()
+	{
+		$start_date = $this->input->get('start_date');
+		$end_date = $this->input->get('end_date');
+
+		if ($start_date == null && $end_date == null) {
+
+			$start_date = '';
+			$end_date = '';
+		}
+
+		$this->load->helper('time');
+
+
+		$data['title'] = 'RECHAZADAS POR DOCUMENTACION';
+		$data['user_type'] = $this->session->userdata(USER_TYPE);
+
+		$data['start_date'] = $start_date;
+		$data['end_date'] = $end_date;
+		$data['reload_route'] = 'production/rejected_by_document';
+		$data['success_message'] = $this->input->get('success_message');
+
+
+		//load header, page & footer
+		$this->load->view('templates/header');
+		$this->load->view('pages/production_rejected_by_document', $data); //loading page and data
+		$this->load->view('templates/footer');
+	}
+
+	public function all_entries()
+	{
+
+		$start_date = $this->input->get('start_date');
+		$end_date = $this->input->get('end_date');
+
+		if ($start_date == null && $end_date == null) {
+
+			$start_date = '';
+			$end_date = '';
+		}
+
+		$this->load->helper('time');
+
+
+		$data['title'] = 'Todas las Ordenes';
+		$data['user_type'] = $this->session->userdata(USER_TYPE);
+
+		$data['start_date'] = $start_date;
+		$data['end_date'] = $end_date;
+		$data['reload_route'] = 'production/all_entries';
+		$data['success_message'] = $this->input->get('success_message');
+
+
+		//load header, page & footer
+		$this->load->view('templates/header');
+		$this->load->view('pages/quality_all_entries', $data); //loading page and data
+		$this->load->view('templates/footer');
+	}
+
 
 	public function detail($id = NULL)
 	{

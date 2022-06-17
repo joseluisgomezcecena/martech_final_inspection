@@ -56,12 +56,16 @@ class EntryModel extends CI_Model
 		$ficticio = $this->input->post('ficticio');
 		$discrepancia = $this->input->post('discrepancia');
 		$from = $this->input->post('from');
+		$has_urgency = $this->input->post('has_urgency');
 
 		$parcial = (isset($parcial) ? 1 : 0);
 		$reinspeccion = (isset($reinspeccion) ? 1 : 0);
 		$ficticio = (isset($ficticio) ? 1 : 0);
 		$discrepancia = (isset($discrepancia) ? 1 : 0);
 		$substitutes_to = (isset($from) ? $from : NULL);
+		$has_urgency = (isset($has_urgency) ? 1 : 0);
+
+
 
 		$data = array(
 			'part_no' => $this->input->post('part_no'),
@@ -73,9 +77,75 @@ class EntryModel extends CI_Model
 			'ficticio' => $ficticio,
 			'discrepancia' => $discrepancia,
 			'substitutes_to' => $substitutes_to,
+			'has_urgency' => $has_urgency,
 		);
 
 		return $this->db->insert('entry', $data);
+	}
+
+
+	public function solve_entry()
+	{
+		$this->load->helper('time');
+
+		$progress = $this->input->post('progress');
+
+		$parcial = $this->input->post('parcial');
+		$reinspeccion = $this->input->post('reinspeccion');
+		$ficticio = $this->input->post('ficticio');
+		$discrepancia = $this->input->post('discrepancia');
+		$from = $this->input->post('from');
+
+		$parcial = (isset($parcial) ? 1 : 0);
+		$reinspeccion = (isset($reinspeccion) ? 1 : 0);
+		$ficticio = (isset($ficticio) ? 1 : 0);
+		$discrepancia = (isset($discrepancia) ? 1 : 0);
+
+		$data = array(
+			'parcial' => $parcial,
+			'reinspeccion' => $reinspeccion,
+			'ficticio' => $ficticio,
+			'discrepancia' => $discrepancia,
+		);
+
+		$current_date_time = new DateTime();
+
+		if ($progress == PROGRESS_RELEASED) {
+			$status_to_set = STATUS_VERIFY;
+			$data['status'] = $status_to_set;
+
+			/*codigo para salvar el tiempo*/
+			$this->db->select('status, waiting_start_time, waiting_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", waiting_start_time) as waiting_elapsed_time , rejected_doc_start_time, rejected_doc_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_doc_start_time) as rejected_doc_elapsed_time, rejected_prod_start_time, rejected_prod_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_prod_start_time) as rejected_prod_elapsed_time');
+			$this->db->from('entry');
+			$this->db->where('id', $from);
+			$entry_row = $this->db->get()->row_array();
+
+			if ($entry_row['status'] == STATUS_REJECTED_BY_DOCUMENTATION && $status_to_set != STATUS_REJECTED_BY_DOCUMENTATION) {
+				//Si esta en el estatus de waiting y se va a cambiar a otro, vamos a sumar el tiempo de waiting y colocarlo
+				$rejected_doc_hours = floatval($entry_row['rejected_doc_hours']);
+				$rejected_doc_hours = $rejected_doc_hours +  convert_time_string_to_float($entry_row['rejected_doc_elapsed_time']);
+				$data['rejected_doc_hours'] = $rejected_doc_hours;
+			}
+		} else if ($progress == PROGRESS_CLOSED) {
+			$status_to_set = FINAL_RESULT_VERIFY;
+			$data['final_result'] = $status_to_set;
+
+			/*codigo para salvar el tiempo*/
+			$this->db->select('final_result, waiting_start_time, waiting_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", waiting_start_time) as waiting_elapsed_time , rejected_doc_start_time, rejected_doc_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_doc_start_time) as rejected_doc_elapsed_time, rejected_prod_start_time, rejected_prod_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_prod_start_time) as rejected_prod_elapsed_time');
+			$this->db->from('entry');
+			$this->db->where('id', $from);
+			$entry_row = $this->db->get()->row_array();
+
+			if ($entry_row['final_result'] == FINAL_RESULT_REJECTED_BY_DOCUMENTATION && $status_to_set != FINAL_RESULT_REJECTED_BY_DOCUMENTATION) {
+				//Si esta en el estatus de waiting y se va a cambiar a otro, vamos a sumar el tiempo de waiting y colocarlo
+				$rejected_doc_hours = floatval($entry_row['rejected_doc_hours']);
+				$rejected_doc_hours = $rejected_doc_hours +  convert_time_string_to_float($entry_row['rejected_doc_elapsed_time']);
+				$data['rejected_doc_hours'] = $rejected_doc_hours;
+			}
+		}
+
+		$this->db->where('id', $from);
+		return $this->db->update('entry', $data);
 	}
 
 
@@ -96,20 +166,39 @@ class EntryModel extends CI_Model
 		return $this->db->update('entry', $data, array("id" => $id));
 	}
 
+	public function reassign_entry()
+	{
+		$id = $this->input->post('id');
+		$assign_date = date("Y-m-d H:i:s");
+
+		$data = array(
+			'asignada' => $this->input->post('asignada'),
+			'asignada_date' => $assign_date,
+		);
+
+		return $this->db->update('entry', $data, array("id" => $id));
+	}
+
 
 
 
 	public function release_entry()
 	{
-
+		$this->load->helper('time');
 		$id = $this->input->post('id');
 		$progress = 2;
 		$release_date = date("Y-m-d H:i:s");
+		$current_date_time = new DateTime();
 
+
+
+
+		//echo json_encode($entry_row);
+		$status_to_set = $this->input->post('status');
 		$data = array(
 			'progress' => $progress,
 			'liberada_date' => $release_date,
-			'status' => $this->input->post('status'),
+			'status' => $status_to_set,
 			'final_qty' => $this->input->post('final_qty'),
 			'location' => $this->input->post('location'),
 			'wo_escaneadas' => $this->input->post('wo_escaneadas'),
@@ -121,6 +210,54 @@ class EntryModel extends CI_Model
 			'razon_rechazo' => $this->input->post('razon_rechazo'),
 
 		);
+
+
+		/* CODIGO PARA GRABAR LOS TIEMPOS*/
+		//TIMEDIFF('2014-02-17 12:10:08', '2014-02-16 12:10:08')
+		$this->db->select('status, waiting_start_time, waiting_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", waiting_start_time) as waiting_elapsed_time , rejected_doc_start_time, rejected_doc_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_doc_start_time) as rejected_doc_elapsed_time, rejected_prod_start_time, rejected_prod_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_prod_start_time) as rejected_prod_elapsed_time');
+		$this->db->from('entry');
+		$this->db->where('id', $id);
+		$entry_row = $this->db->get()->row_array();
+
+		//Si se va a colocar en el estado de waiting
+		if ($entry_row['status'] == STATUS_NOT_ASSIGNED && $status_to_set == STATUS_WAITING) {
+			//Save the waiting_start_time
+			$data['waiting_start_time'] = $current_date_time->format(DATETIME_FORMAT);
+		}
+
+		if ($entry_row['status'] == STATUS_NOT_ASSIGNED && $status_to_set == STATUS_REJECTED_BY_PRODUCT) {
+			//Save the waiting_rejected_time
+			$data['rejected_prod_start_time'] = $current_date_time->format(DATETIME_FORMAT);
+		}
+
+		if ($entry_row['status'] == STATUS_NOT_ASSIGNED && $status_to_set == STATUS_REJECTED_BY_DOCUMENTATION) {
+			//Save the waiting_rejected_time
+			$data['rejected_doc_start_time'] = $current_date_time->format(DATETIME_FORMAT);
+		}
+
+
+		if ($entry_row['status'] == STATUS_WAITING && $status_to_set != STATUS_WAITING) {
+			//Si esta en el estatus de waiting y se va a cambiar a otro, vamos a sumar el tiempo de waiting y colocarlo
+			$waiting_hours = floatval($entry_row['waiting_hours']);
+			$waiting_hours = $waiting_hours +  convert_time_string_to_float($entry_row['waiting_elapsed_time']);
+			$data['waiting_hours'] = $waiting_hours;
+		}
+
+		if ($entry_row['status'] == STATUS_REJECTED_BY_PRODUCT && $status_to_set != STATUS_REJECTED_BY_PRODUCT) {
+			//Si esta en el estatus de waiting y se va a cambiar a otro, vamos a sumar el tiempo de waiting y colocarlo
+			$rejected_prod_hours = floatval($entry_row['rejected_prod_hours']);
+			$rejected_prod_hours = $rejected_prod_hours +  convert_time_string_to_float($entry_row['rejected_prod_elapsed_time']);
+			$data['rejected_prod_hours'] = $rejected_prod_hours;
+		}
+
+		if ($entry_row['status'] == STATUS_REJECTED_BY_DOCUMENTATION && $status_to_set != STATUS_REJECTED_BY_DOCUMENTATION) {
+			//Si esta en el estatus de waiting y se va a cambiar a otro, vamos a sumar el tiempo de waiting y colocarlo
+			$rejected_doc_hours = floatval($entry_row['rejected_doc_hours']);
+			$rejected_doc_hours = $rejected_doc_hours +  convert_time_string_to_float($entry_row['rejected_doc_elapsed_time']);
+			$data['rejected_doc_hours'] = $rejected_doc_hours;
+		}
+
+
 
 		return $this->db->update('entry', $data, array("id" => $id));
 	}
@@ -134,6 +271,8 @@ class EntryModel extends CI_Model
 		$id = $this->input->post('id');
 		$cerrada_date = date("Y-m-d H:i:s");
 		$discrepancia_descr = $this->input->post('discrepancia_descr');
+		$status_to_set = $this->input->post('final_result');
+
 
 		//discrepancia_descr
 		$data = array(
@@ -144,6 +283,55 @@ class EntryModel extends CI_Model
 			'cerrada_date' => $cerrada_date,
 			'discrepancia_descr' => $discrepancia_descr,
 		);
+
+
+		/* CODIGO PARA GRABAR LOS TIEMPOS*/
+		//TIMEDIFF('2014-02-17 12:10:08', '2014-02-16 12:10:08')
+		$current_date_time = new DateTime();
+		$this->db->select('final_result, waiting_start_time, waiting_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", waiting_start_time) as waiting_elapsed_time , rejected_doc_start_time, rejected_doc_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_doc_start_time) as rejected_doc_elapsed_time, rejected_prod_start_time, rejected_prod_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_prod_start_time) as rejected_prod_elapsed_time');
+		$this->db->from('entry');
+		$this->db->where('id', $id);
+		$entry_row = $this->db->get()->row_array();
+
+		//Si se va a colocar en el estado de waiting
+		if ($entry_row['final_result'] == FINAL_RESULT_NOT_DEFINED && $status_to_set == FINAL_RESULT_WAITING) {
+			//Save the waiting_start_time
+			$data['waiting_start_time'] = $current_date_time->format(DATETIME_FORMAT);
+		}
+
+		if ($entry_row['final_result'] == FINAL_RESULT_NOT_DEFINED && $status_to_set == FINAL_RESULT_REJECTED_BY_PRODUCT) {
+			//Save the waiting_rejected_time
+			$data['rejected_prod_start_time'] = $current_date_time->format(DATETIME_FORMAT);
+		}
+
+		if ($entry_row['final_result'] == FINAL_RESULT_NOT_DEFINED && $status_to_set == FINAL_RESULT_REJECTED_BY_DOCUMENTATION) {
+			//Save the waiting_rejected_time
+			$data['rejected_doc_start_time'] = $current_date_time->format(DATETIME_FORMAT);
+		}
+
+
+		if ($entry_row['final_result'] == FINAL_RESULT_WAITING && $status_to_set != FINAL_RESULT_WAITING) {
+			//Si esta en el estatus de waiting y se va a cambiar a otro, vamos a sumar el tiempo de waiting y colocarlo
+			$waiting_hours = floatval($entry_row['waiting_hours']);
+			$waiting_hours = $waiting_hours +  convert_time_string_to_float($entry_row['waiting_elapsed_time']);
+			$data['waiting_hours'] = $waiting_hours;
+		}
+
+		if ($entry_row['final_result'] == FINAL_RESULT_REJECTED_BY_PRODUCT && $status_to_set != FINAL_RESULT_REJECTED_BY_PRODUCT) {
+			//Si esta en el estatus de waiting y se va a cambiar a otro, vamos a sumar el tiempo de waiting y colocarlo
+			$rejected_prod_hours = floatval($entry_row['rejected_prod_hours']);
+			$rejected_prod_hours = $rejected_prod_hours +  convert_time_string_to_float($entry_row['rejected_prod_elapsed_time']);
+			$data['rejected_prod_hours'] = $rejected_prod_hours;
+		}
+
+		if ($entry_row['final_result'] == FINAL_RESULT_REJECTED_BY_DOCUMENTATION && $status_to_set != FINAL_RESULT_REJECTED_BY_DOCUMENTATION) {
+			//Si esta en el estatus de waiting y se va a cambiar a otro, vamos a sumar el tiempo de waiting y colocarlo
+			$rejected_doc_hours = floatval($entry_row['rejected_doc_hours']);
+			$rejected_doc_hours = $rejected_doc_hours +  convert_time_string_to_float($entry_row['rejected_doc_elapsed_time']);
+			$data['rejected_doc_hours'] = $rejected_doc_hours;
+		}
+
+
 
 		return $this->db->update('entry', $data, array("id" => $id));
 	}

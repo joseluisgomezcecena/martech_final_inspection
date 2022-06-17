@@ -1,18 +1,19 @@
 <div class="page-breadcrumb bg-white">
 	<div class="row align-items-center">
-		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-			<h4 class="page-title">Captura de ordenes</h4>
+		<div class="col-lg-6 col-md-4 col-sm-4 col-xs-12">
+			<h4 class="page-title"><?= $title ?></h4>
 		</div>
 
-		<!--
-		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+		<div class="col-lg-6 col-sm-8 col-md-8 col-xs-12">
 			<div class="d-md-flex">
 				<ol class="breadcrumb ms-auto">
-					<li><a href="#" class="fw-normal">Captura de ordenes</a></li>
+					<a href="javascript:history.back()" target="" class="btn btn-light  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
+						<i class="fa fa-arrow-left" style="color:#000;" aria-hidden="true"></i>
+					</a>
 				</ol>
 			</div>
 		</div>
--->
+
 	</div>
 	<!-- /.col-lg-12 -->
 </div>
@@ -27,26 +28,12 @@
 	<div class="row justify-content-center">
 		<div class="col-lg-12 col-md-12">
 
-			<?php if ($this->session->flashdata('created')) : ?>
-
-				<div class="alert alert-success alert-dismissible fade show" role="alert">
-					<strong class="uppercase"><bdi>Enviado a Inspeccion</bdi></strong>
-					Se ha guardado la orden y ha sido enviada a inspeccion. Haz click <a href="<?php echo  base_url() ?>">Aqui</a> para regresar
-					o cierra este mensaje para agregar otra orden.
-					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-
-				</div>
-
-			<?php endif; ?>
-
-
 			<div class="white-box analytics-info">
-				<h3 class="box-title">Captura de ordenes</h3>
 
 				<div class="row">
 					<div class="col-lg-12">
-						<?php echo form_open('entries/create') ?>
-						<h3 class="box-title mb-2 text-primary">Registra una orden para enviar a inspección</h3>
+						<?php echo form_open('entries/solved') ?>
+						<h3 class="box-title mb-2 text-primary"><?php echo $message ?></h3>
 
 
 						<div class="mt-5 mb-5">
@@ -57,11 +44,17 @@
 						</div>
 
 
+						<!-- DO NOT DELETE THESSE ARE FOR REDIRECTION PURPOSES -->
+						<input type="text" hidden class="form-control" name="from" value="<?= $from ?>">
+						<input type="text" hidden class="form-control" name="progress" value="<?= $progress ?>">
+						<input type="text" hidden class="form-control" name="reload_route" value="<?= $reload_route ?>">
+						<input type="text" hidden class="form-control" name="start_date" value="<?= $start_date ?>">
+						<input type="text" hidden class="form-control" name="end_date" value="<?= $end_date ?>">
 
 						<div class="row">
 							<div class=" col-lg-3">
 								<label for="browser">Numero de parte:</label>
-								<input class="form-control" list="part" name="part_no" value="<?= $old["part_no"] ?>" id=" part_no" required oninvalid="this.setCustomValidity('Escriba el no. de Parte')" oninput="this.setCustomValidity('')">
+								<input class="form-control" list="part" name="part_no" value="<?= $old["part_no"] ?>" id="part_no" required oninvalid="this.setCustomValidity('Escriba el no. de Parte')" oninput="this.setCustomValidity('')" readonly>
 
 								<datalist id="part">
 									<?php foreach ($parts as $part) : ?>
@@ -73,58 +66,29 @@
 
 							<div class=" col-lg-3">
 								<label for="">Numero de lote</label>
-								<input type="text" class="form-control" name="lot_no" value="<?= $old["lot_no"] ?>" required oninvalid="this.setCustomValidity('Escriba el no. de Lote')" oninput="this.setCustomValidity('')">
+								<input type="text" class="form-control" name="lot_no" value="<?= $old["lot_no"] ?>" required oninvalid="this.setCustomValidity('Escriba el no. de Lote')" oninput="this.setCustomValidity('')" readonly>
 							</div>
 
 
-							<div class=" col-lg-3">
-								<label for="">Cantidad enviada</label>
-								<input type="number" class="form-control" name="qty" value="<?= $old["qty"] ?>" required oninvalid="this.setCustomValidity('Coloque la cantidad enviada')" oninput="this.setCustomValidity('')">
-							</div>
 
-
-							<div class="col-lg-3">
-								<label for="">Planta</label>
-								<select class="form-control" name="plant" id="plant_id" required oninvalid="this.setCustomValidity('Elija la planta')" oninput="this.setCustomValidity('')">
-									<option value="">Seleccione una planta</option>
-									<?php
-									foreach ($plantas as $planta) {
-										$str_option = '<option value="' . $planta['planta_id'] . '" ';
-										if ($planta['planta_id'] == $old["plant"])
-											$str_option .= 'selected';
-										$str_option .= ' >' . $planta['planta_nombre'] . '</option>';
-										echo $str_option;
-									}
-									?>
-								</select>
-							</div>
-
-
-							<div class="col-lg-9 mt-5 mb-5">
+							<div class="col-lg-6 mb-5">
+								<p>Modificar propiedades de la orden</p>
 								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="parcial" value="1">
+									<input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="parcial" <?php if ($parcial == '1') echo 'checked'; ?>>
 									<label class="form-check-label" for="inlineCheckbox1">Parcial</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="reinspeccion" value="1">
+									<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="reinspeccion" <?php if ($reinspeccion == '1') echo 'checked'; ?>>
 									<label class="form-check-label" for="inlineCheckbox2">Reinspeccion</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="discrepancia" value="1">
+									<input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="discrepancia" <?php if ($progress == PROGRESS_CLOSED) echo 'checked'; ?>>
 									<label class="form-check-label" for="inlineCheckbox3">Discrepancia</label>
 								</div>
 								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox4" name="ficticio" value="1">
+									<input class="form-check-input" type="checkbox" id="inlineCheckbox4" name="ficticio" <?php if ($ficticio == '1') echo 'checked'; ?>>
 									<label class="form-check-label" for="inlineCheckbox4">Ficticio</label>
 								</div>
-
-							</div>
-
-							<div class="col-lg-3  mt-5 mb-5">
-								<label class="form-check-label" for="flexCheckDefault">
-									Es Urgente?
-								</label>
-								<input class="form-check-input" type="checkbox" name="has_urgency" id="flexCheckDefault">
 
 							</div>
 
@@ -135,7 +99,7 @@
 
 
 						<div class="form-group">
-							<input style="width: 100%" type="submit" name="save_asistencia" class="btn btn-primary text-white btn-lg" value="Enviar a Inspección">
+							<input style="width: 100%" type="submit" name="save_asistencia" class="btn btn-primary text-white btn-lg" value="CONFIRMAR SOLUCIÓN DEL PROBLEMA">
 						</div>
 						<?php echo form_close() ?>
 					</div>

@@ -1,7 +1,7 @@
 <div class="page-breadcrumb bg-white">
 	<div class="row align-items-center">
 		<div class="col-lg-6 col-md-4 col-sm-4 col-xs-12">
-			<h4 class="page-title">Asignar orden</h4>
+			<h4 class="page-title">Reasignar la orden a otra persona</h4>
 		</div>
 
 
@@ -35,7 +35,7 @@
 
 				<div class="alert alert-success alert-dismissible fade show" role="alert">
 					<strong class="uppercase"><bdi>Asignada</bdi></strong>
-					La orden ha sido asignada y sera insepccionada. Haga Click <a href="<?php echo base_url() ?>"> Aqui </a> para regresar o
+					La orden ha sido reasignada. Haga Click <a href="<?php echo base_url() ?>"> Aqui </a> para regresar o
 					cierre este mensaje para cambiar el inspector asignado.
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
@@ -135,12 +135,12 @@
 		<div class="col-lg-8 col-md-8">
 
 			<div class="white-box analytics-info">
-				<h3 class="box-title">Asignar Orden</h3>
+				<h3 class="box-title">Reasignar Orden</h3>
 
 				<div class="row">
 					<div class="col-lg-12">
-						<?php echo form_open('entries/assign/' .  $entry['id'], $_GET) ?>
-						<h3 class="box-title mb-2 text-primary">Asigne una orden a un inspector</h3>
+						<?php echo form_open('entries/reassign/' .  $entry['id'], $_GET) ?>
+						<h3 class="box-title mb-2 text-primary">Reasigne una orden a un inspector</h3>
 
 						<div class="mt-5 mb-5">
 							<?php echo validation_errors(
@@ -176,7 +176,7 @@
 
 
 						<div class="form-group mt-5">
-							<input style="width: 100%" type="submit" name="save_release" class="btn btn-primary text-white btn-lg" value="Asignar Orden">
+							<input style="width: 100%" type="submit" name="save_release" class="btn btn-primary text-white btn-lg" value="Reasignar Orden">
 						</div>
 						<?php echo form_close() ?>
 					</div>

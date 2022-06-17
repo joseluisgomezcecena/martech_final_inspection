@@ -1,12 +1,12 @@
 <form method="get" action="<?= base_url() . $reload_route ?>">
 	<div class="page-breadcrumb bg-white">
 		<div class="row align-items-center">
-			<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-				<h4 class="page-title">ORDENES ABIERTAS</h4>
+			<div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+				<h4 class="page-title"><?= $title ?></h4>
 			</div>
 
 
-			<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+			<div class="col-lg-8 col-sm-8 col-md-8 col-xs-12">
 				<div class="d-md-flex breadcrumb">
 					<ol class="breadcrumb ms-auto">
 
@@ -56,40 +56,24 @@
 	}
 	?>
 
-
-
-	<!-- ============================================================== -->
-	<!-- Three charts -->
-	<!-- ============================================================== -->
 	<div class="row justify-content-center">
 
 		<!-- Other corlors text-info text-purple -->
 		<div class="col-lg-12">
 			<div class="white-box analytics-info">
 
-				<?php if ($user_type == PRODUCTION_USER) : ?>
-					<h3 class="text-center text-primary">Ordenes Abiertas</h3>
-				<?php endif; ?>
-
 				<div class="table-responsive">
-					<table style="width: 100%" id="entries-list" class="table table-striped">
+					<table style="width: 100%" id="entries-rejected-list" class="table table-striped">
 						<thead>
 							<th>Folio</th>
-							<th>Prioridad</th>
 							<th>Fecha Registro</th>
-							<th>Tiempo Transcurrido</th>
 							<th>Parte</th>
 							<th>Lote</th>
 							<th>Cantidad</th>
-							<th>Asignado a:</th>
 							<th>Planta</th>
 							<th>Progreso</th>
-							<th>Status</th>
-							<?php if ($user_type == QUALITY_USER) : ?>
-								<th>Accion</th>
-							<?php endif; ?>
-
-
+							<th>Razón</th>
+							<th>Acción</th>
 						</thead>
 						<tbody>
 						</tbody>
@@ -97,11 +81,15 @@
 				</div>
 
 
+
 			</div>
 		</div>
 
 
 	</div>
+
+
+
 </div>
 
 
@@ -110,7 +98,7 @@ $this->load->view('templates/datatables');
 ?>
 
 <script>
-	$('#entries-list').DataTable({
+	$('#entries-rejected-list').DataTable({
 		'scrollX': true,
 
 		dom: "<'row'<'col-sm-12 col-md-3'l><'col-sm-12 col-md-6 text-center'B><'col-sm-12 col-md-3'f>>" +
@@ -118,36 +106,30 @@ $this->load->view('templates/datatables');
 			"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
 
 		'ajax': {
-			'url': '<?php echo base_url() ?>entries/all-opened?start_date=<?= $start_date ?>&end_date=<?= $end_date ?>'
+			'url': '<?php echo base_url() ?>entries/rejected-by-product?start_date=<?= $start_date ?>&end_date=<?= $end_date ?>&reload_route=<?= $reload_route ?>'
 		},
 		buttons: [{
 			extend: 'copy',
-			title: 'Listado de Ordenes Abiertas',
+			title: 'Listado de Ordenes Rechazadas',
 			text: '<i class="fa fa-copy"></i> Copiar'
 		}, {
 			extend: 'excelHtml5',
-			title: 'Listado de Ordenes Abiertas',
+			title: 'Listado de Ordenes Rechazadas',
 			text: '<i class="fa fa-file-excel-o"></i> Excel'
 		}, {
 			extend: 'pdfHtml5',
-			title: 'Listado de Ordenes Abiertas',
+			title: 'Listado de Ordenes Rechazadas',
 			text: '<i class="fa fa-file-pdf-o"></i> Pdf'
 		}, {
 			extend: 'print',
-			title: 'Listado de Ordenes Abiertas',
+			title: 'Listado de Ordenes Rechazadas',
 			text: '<i class="fa fa-print"></i> Impr'
 		}],
 		'columns': [{
 				data: 'id'
 			},
 			{
-				data: 'has_urgency'
-			},
-			{
 				data: 'created_at'
-			},
-			{
-				data: 'elapsed_time'
 			},
 			{
 				data: 'part_no'
@@ -159,21 +141,18 @@ $this->load->view('templates/datatables');
 				data: 'qty'
 			},
 			{
-				data: 'asignada'
-			},
-			{
-				data: 'planta'
+				data: 'plant'
 			},
 			{
 				data: 'progress'
 			},
 			{
-				data: 'status'
+				data: 'razon_rechazo'
 			},
-			<?php if ($user_type == QUALITY_USER) : ?> {
-					data: 'btn_id'
-				},
-			<?php endif; ?>
+			{
+				data: 'action'
+			}
+
 		],
 		"oLanguage": {
 			"sEmptyTable": "No hay datos disponibles",
