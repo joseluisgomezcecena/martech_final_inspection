@@ -85,12 +85,12 @@
 
 							<div class="col-lg-4 col-md-6 col-sm-12 mt-5">
 								<label for="" class="text-primary">PLANTA</label>
-								<select class="form-control" name="plant" id="plant_id" required oninvalid="this.setCustomValidity('Elija la planta')" oninput="this.setCustomValidity('')">
+								<select class="form-control" name="plant" id="plant_id" required oninvalid="this.setCustomValidity('Elija la planta')" oninput="this.setCustomValidity('')" <?php if ($this->session->userdata(PLANT_ID) > 0) echo ' disabled' ?>>
 									<option value="">Seleccione una planta</option>
 									<?php
 									foreach ($plantas as $planta) {
 										$str_option = '<option value="' . $planta['planta_id'] . '" ';
-										if ($planta['planta_id'] == $old["plant"])
+										if ($planta['planta_id'] == $old["plant"] || $planta['planta_id'] ==  $this->session->userdata(PLANT_ID))
 											$str_option .= 'selected';
 										$str_option .= ' >' . $planta['planta_nombre'] . '</option>';
 										echo $str_option;

@@ -49,7 +49,7 @@ class Entries extends BaseController
 
 	public function retrieve_data($from)
 	{
-		$this->db->select('id, created_at, part_no, lot_no, plant, qty, parcial, reinspeccion, ficticio, progress');
+		$this->db->select('id, created_at, part_no, lot_no, plant, qty, parcial, reinspeccion, ficticio, progress, assigned_by');
 		$this->db->from('entry');
 		$this->db->where('id', $from);
 		$entry_from = $this->db->get()->result_array()[0];
