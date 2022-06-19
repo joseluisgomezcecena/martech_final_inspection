@@ -162,7 +162,7 @@
 						<div class="row">
 							<div class=" col-lg-6">
 
-								<label for="status" class="text-primary">Resultado de la inspección</label>
+								<label for="status" class="text-primary">RESULTADO DE LA INSPECCIÓN</label>
 								<select name="status" id="status" class="form-control" ng-model="status" ng-change="select_status()">
 									<option value="">-- Seleccione Resultado --</option>
 									<option value="<?= STATUS_WAITING ?>" <?php if ($entry['status'] == STATUS_WAITING) echo ' selected'; ?>>En espera</option>
@@ -175,7 +175,7 @@
 
 
 							<div class="col-lg-6">
-								<label for="" class="text-primary">Cantidad Final</label>
+								<label for="" class="text-primary">CANTIDAD FINAL</label>
 								<input type="number" id="qty" class="form-control" name="final_qty" ng-model="final_qty">
 								<small class="text-danger" ng-show="(validate_final_qty && final_qty == '')">Elija la cantidad final de la parte</small>
 							</div>
@@ -184,7 +184,7 @@
 
 						<div class="row mt-3">
 							<div class=" col-lg-6">
-								<label for="location" class="text-primary">Locacion:</label>
+								<label for="location" class="text-primary">LOCACIÓN</label>
 								<select name="location" id="location" class="form-control" ng-model="location">
 									<option value="">Seleccione Locacion</option>
 									<?php foreach ($locations as $location) {
@@ -202,7 +202,7 @@
 
 
 							<div class=" col-lg-6">
-								<label for="" class="text-primary">Work orders escaneadas</label>
+								<label for="" class="text-primary">WO ESCANEADAS</label>
 								<input type="text" id="wo_escaneadas" class="form-control" name="wo_escaneadas" ng-model="wo_escaneadas">
 								<small class=" text-danger" ng-show="(validate_wo_escaneadas && wo_escaneadas == '')">Esciba las work orders escaneadas</small>
 							</div>
@@ -211,7 +211,7 @@
 
 						<div class="row mt-3">
 							<div class=" col-lg-6">
-								<label for="" class="text-primary">Tiene fecha de expiracion?</label>
+								<label for="" class="text-primary">TIENE FECHA DE EXPIRACIÓN?</label>
 								<select class="form-control" name="has_fecha_exp" id="has_exp_date" ng-model="has_exp_date" ng-change="select_fecha_exp()">
 									<option value="">-- Seleccione --</option>
 									<option value="1">Si</option>
@@ -220,9 +220,9 @@
 								<small class=" text-danger" ng-show="(validate_has_exp_date && has_exp_date == '')">Seleccione si existe fecha de expiracion</small>
 							</div>
 
-							<div class=" col-lg-6" id="fecha_exp" ng-show="has_exp_date == 1">
-								<label for="" class="text-primary">Fecha de expiracion</label>
-								<input type="date" class="form-control" name="fecha_exp" ng-model="fecha_exp">
+							<div class=" col-lg-6" id="fecha_exp">
+								<label for="" class="text-primary">FECHA DE EXPIRACIÓN</label>
+								<input type="date" class="form-control" name="fecha_exp" ng-model="fecha_exp" ng-disabled="has_exp_date != 1">
 								<small class=" text-danger" ng-show="(validate_fecha_exp && fecha_exp == '')">Establezca la fecha de expiracion</small>
 							</div>
 						</div>
@@ -231,14 +231,14 @@
 						<div class="row mt-3">
 
 							<div class=" col-lg-6">
-								<label for="" class="text-primary">Revision de dibujo</label>
+								<label for="" class="text-primary">REVISIÓN DE DIBUJO</label>
 								<input type="text" class="form-control" id="rev_dibujo" name="rev_dibujo" ng-model="rev_dibujo">
 								<small class=" text-danger" ng-show="(validate_rev_dibujo && rev_dibujo == '')">Escriba la revisión del dibujo</small>
 							</div>
 
 
 							<div class=" col-lg-6">
-								<label for="" class="text-primary">Empaque</label>
+								<label for="" class="text-primary">EMPAQUE DEL MATERIAL (PSF)</label>
 								<input type="text" class="form-control" id="empaque" name="empaque" ng-model="empaque">
 								<small class=" text-danger" ng-show="(validate_empaque && empaque == '')">Escriba la revisión del dibujo</small>
 							</div>
@@ -246,16 +246,27 @@
 
 						<div class="row mt-3">
 							<div class=" col-lg-6">
-								<label for="" class="text-primary">Documentos revisados</label>
+								<label for="documentos_rev" class="text-primary">DOCUMENTOS REVISADOS POR</label>
+
+								<!--
 								<input type="text" class="form-control" id="documentos_rev" name="documentos_rev" ng-model="documentos_rev">
+								-->
+								<input class="form-control" list="list_documentos_rev" id="input_documentos_rev" name="documentos_rev" ng-model="documentos_rev">
+								<datalist id="list_documentos_rev">
+									<?php foreach ($quality_users as $user) : ?>
+										<option value="<?php echo $user['user_martech_sign'] ?>">
+										<?php endforeach; ?>
+								</datalist>
+
 								<small class=" text-danger" ng-show="(validate_documentos_rev && documentos_rev == '')">Indique los documentos revisados</small>
+
 							</div>
 
 
-							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo" ng-show="status == <?= STATUS_REJECTED_BY_PRODUCT ?> || status == <?= STATUS_REJECTED_BY_DOCUMENTATION ?>">
-								<label for="" class="text-primary">Razón del rechazo si aplica</label>
+							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo">
+								<label for="" class="text-primary">RAZÓN DE RECHAZO / COMENTARIO </label>
 								<textarea class="form-control" name="razon_rechazo" rows="8" ng-model="razon_rechazo"></textarea>
-								<small class=" text-danger" ng-show="(validate_razon_rechazo && razon_rechazo == '')">Indique la razon del rechazo</small>
+								<small class="text-danger" ng-show="(validate_razon_rechazo && razon_rechazo == '')">Indique la razon del rechazo</small>
 							</div>
 
 						</div>

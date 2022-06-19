@@ -52,8 +52,8 @@
 						<input type="text" hidden class="form-control" name="end_date" value="<?= $end_date ?>">
 
 						<div class="row">
-							<div class=" col-lg-3">
-								<label for="browser">Numero de parte:</label>
+							<div class="col-lg-4 col-md-6 col-sm-12">
+								<label for="browser" class="text-primary">NO. DE PARTE</label>
 								<input class="form-control" list="part" name="part_no" value="<?= $old["part_no"] ?>" id="part_no" required oninvalid="this.setCustomValidity('Escriba el no. de Parte')" oninput="this.setCustomValidity('')">
 
 								<datalist id="part">
@@ -64,20 +64,20 @@
 							</div>
 
 
-							<div class=" col-lg-3">
-								<label for="">Numero de lote</label>
+							<div class="col-lg-4 col-md-6 col-sm-12">
+								<label for="" class="text-primary">NO. DE LOTE</label>
 								<input type="text" class="form-control" name="lot_no" value="<?= $old["lot_no"] ?>" required oninvalid="this.setCustomValidity('Escriba el no. de Lote')" oninput="this.setCustomValidity('')">
 							</div>
 
 
-							<div class=" col-lg-3">
-								<label for="">Cantidad enviada</label>
+							<div class="col-lg-4 col-md-6 col-sm-12">
+								<label for="" class="text-primary">CANTIDAD ENVIADA</label>
 								<input type="number" class="form-control" name="qty" value="<?= $old["qty"] ?>" required oninvalid="this.setCustomValidity('Coloque la cantidad enviada')" oninput="this.setCustomValidity('')">
 							</div>
 
 
-							<div class="col-lg-3">
-								<label for="">Planta</label>
+							<div class="col-lg-4 col-md-6 col-sm-12 mt-5">
+								<label for="" class="text-primary">PLANTA</label>
 								<select class="form-control" name="plant" id="plant_id" required oninvalid="this.setCustomValidity('Elija la planta')" oninput="this.setCustomValidity('')">
 									<option value="">Seleccione una planta</option>
 									<?php
@@ -93,25 +93,52 @@
 							</div>
 
 
-							<div class="col-lg-12 mt-5 mb-5">
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="parcial" <?php if ($parcial == '1') echo 'checked'; ?>>
-									<label class="form-check-label" for="inlineCheckbox1">Parcial</label>
-								</div>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="reinspeccion" <?php if ($reinspeccion == '1') echo 'checked'; ?>>
-									<label class="form-check-label" for="inlineCheckbox2">Reinspeccion</label>
-								</div>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="discrepancia" <?php if ($progress == PROGRESS_CLOSED) echo 'checked'; ?>>
-									<label class="form-check-label" for="inlineCheckbox3">Discrepancia</label>
-								</div>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox4" name="ficticio" <?php if ($ficticio == '1') echo 'checked'; ?>>
-									<label class="form-check-label" for="inlineCheckbox4">Ficticio</label>
+							<div class="col-lg-4 col-md-6 col-sm-12 mt-5">
+								<label for="assigned_by" class="text-primary">SUPERVISOR / GUIA</label>
+								<input class="form-control" list="production_users" name="assigned_by" id="assigned_by" value="<?= $old["assigned_by"] ?>" id="assigned_by" required oninvalid="this.setCustomValidity('Escriba el Nombre del Supervisor o Guía')" oninput="this.setCustomValidity('')">
+
+								<datalist id="production_users">
+									<?php foreach ($production_users as $supervisor) : ?>
+										<option value="<?php echo $supervisor['user_martech_sign'] ?>">
+										<?php endforeach; ?>
+								</datalist>
+							</div>
+
+
+							<div class="col-lg-4 col-md-6 col-sm-12 mt-5">
+
+								<label for="assigned_by" class="text-primary">CARACTERÍSTICA(S)</label>
+								<div class="form-group">
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="parcial" <?php if ($parcial == '1') echo 'checked'; ?>>
+										<label class="form-check-label" for="inlineCheckbox1">Parcial</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="reinspeccion" <?php if ($reinspeccion == '1') echo 'checked'; ?>>
+										<label class="form-check-label" for="inlineCheckbox2">Reinspeccion</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="discrepancia" <?php if ($progress == PROGRESS_CLOSED) echo 'checked'; ?>>
+										<label class="form-check-label" for="inlineCheckbox3">Discrepancia</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="checkbox" id="inlineCheckbox4" name="ficticio" <?php if ($ficticio == '1') echo 'checked'; ?>>
+										<label class="form-check-label" for="inlineCheckbox4">Ficticio</label>
+									</div>
 								</div>
 
+
+
 							</div>
+
+							<div class="col-lg-12 mt-5 mb-5 text-start">
+
+								<input class="form-check-input" type="checkbox" name="has_urgency" id="flexCheckDefault">
+								<label class="form-check-label" for="flexCheckDefault">
+									Es Urgente?
+								</label>
+							</div>
+
 
 
 						</div>

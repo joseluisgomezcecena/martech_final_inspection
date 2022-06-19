@@ -78,6 +78,7 @@ class EntryModel extends CI_Model
 			'discrepancia' => $discrepancia,
 			'substitutes_to' => $substitutes_to,
 			'has_urgency' => $has_urgency,
+			'assigned_by' => $this->input->post('assigned_by'),
 		);
 
 		return $this->db->insert('entry', $data);
@@ -273,11 +274,12 @@ class EntryModel extends CI_Model
 		$discrepancia_descr = $this->input->post('discrepancia_descr');
 		$status_to_set = $this->input->post('final_result');
 
+		$final_result = $this->input->post('final_result');
 
 		//discrepancia_descr
 		$data = array(
 			'progress' => PROGRESS_CLOSED,
-			'final_result' => $this->input->post('final_result'),
+			'final_result' => $final_result,
 			'rev_mapics' => $this->input->post('rev_mapics'),
 			'cerrada_por' => $this->input->post('cerrada_por'),
 			'cerrada_date' => $cerrada_date,
@@ -331,8 +333,23 @@ class EntryModel extends CI_Model
 			$data['rejected_doc_hours'] = $rejected_doc_hours;
 		}
 
+		$this->db->update('entry', $data, array("id" => $id));
 
+		if ($final_result == FINAL_RESULT_CLOSED) {
 
-		return $this->db->update('entry', $data, array("id" => $id));
+			//insert in another table
+			$this->db->select('*');
+			$this->db->from('entry');
+			$this->db->where('id', $id);
+			$data = $this->db->get()->row_array();
+			$this->db->insert('entry_accepted', $data);
+
+			//delete from entry
+			$this->db->where('id', $id);
+			$this->db->delete('entry');
+			return FALSE;
+		}
+
+		return TRUE;
 	}
 }

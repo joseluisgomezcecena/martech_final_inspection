@@ -170,7 +170,7 @@
 						<div class="row">
 							<div class=" col-lg-3">
 
-								<label for="status" class="text-primary">Cerrar orden:</label>
+								<label for="status" class="text-primary">CERRAR ORDEN</label>
 								<select name="final_result" id="status" ng-model="status" ng-change="select_status()" class="form-control">
 
 									<option value="">---Seleccione Resultado---</option>
@@ -185,28 +185,28 @@
 
 
 							<div class=" col-lg-3">
-								<label for="" class="text-primary">Cerrada por</label>
+								<label for="" class="text-primary">CERRADA POR</label>
 								<input class="form-control" list="part" name="cerrada_por" id="cerrada_por" ng-model="cerrada_por">
 								<small class="text-danger" ng-show="validate_cerrada_por && cerrada_por == ''">Colocar persona que la orden.</small>
 
 
 								<datalist id="part">
 									<?php foreach ($users as $user) : ?>
-										<option value="<?php echo $user['user_name'] ?>">
+										<option value="<?php echo $user['user_martech_sign'] ?>">
 										<?php endforeach; ?>
 								</datalist>
 							</div>
 
 
 							<div class=" col-lg-3">
-								<label for="" class="text-primary">Revision contra mapics</label>
-								<input type="text" class="form-control" name="rev_mapics" id="rev_mapics" ng-model="rev_mapics" value="<?php echo $entry['rev_mapics']; ?>">
+								<label for="" class="text-primary">REVISIÓN VS MAPICS</label>
+								<input type="text" class="form-control" list="part" name="rev_mapics" id="rev_mapics" ng-model="rev_mapics" value="<?php echo $entry['rev_mapics']; ?>">
 								<small class="text-danger" ng-show="validate_rev_mapics && rev_mapics == ''">Se requiere la Revisión contra mapics</small>
 							</div>
 
 
-							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo" ng-show="status == <?= FINAL_RESULT_REJECTED_BY_PRODUCT ?> || status == <?= FINAL_RESULT_REJECTED_BY_DOCUMENTATION ?> ">
-								<label for="" class="text-primary">Descripción de discrepancia / Razón de Rechazo</label>
+							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo">
+								<label for="" class="text-primary">DISCREPANCIA / COMENTARIO</label>
 								<textarea class="form-control" name="discrepancia_descr" ng-model="discrepancia_descr" rows="8" id="discrepancia_descr">value="<?php echo $entry['discrepancia_descr']; ?>"</textarea>
 								<small class="text-danger" ng-show="validate_discrepancia_descr && discrepancia_descr == ''">Se requiere la Revisión contra mapics</small>
 							</div>

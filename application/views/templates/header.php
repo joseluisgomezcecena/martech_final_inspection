@@ -98,7 +98,7 @@
 					<!-- Right side toggle and nav items -->
 					<!-- ============================================================== -->
 					<ul class="navbar-nav ms-auto d-flex align-items-center">
-
+						<h3 class="text-light me-3"><?php echo $this->session->userdata(PLANT_NAME); ?> </h3>
 						<!--
 						<li class=" in">
 							<form role="search" class="app-search d-none d-md-block me-3">
@@ -150,11 +150,21 @@
 								</a>
 							</li>
 						<?php else : ?>
+
+
+
 							<!-- Produccion -->
 							<li class="sidebar-item">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/produccion" aria-expanded="false">
 									<i class="fa fa-play" aria-hidden="true"></i>
 									<span class="hide-menu">Ordenes Abiertas</span>
+								</a>
+							</li>
+
+							<li class="sidebar-item">
+								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>entries/create" aria-expanded="false">
+									<i class="fa fa-plus aria-hidden=" true"></i>
+									<span class="hide-menu">Crear Nueva Orden</span>
 								</a>
 							</li>
 
@@ -176,26 +186,36 @@
 
 						<li class="sidebar-item">
 							<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/calidad" aria-expanded="false">
-								<i class="fa fa-ban" aria-hidden="true"></i>
-								<span class="hide-menu">Ordenes Cerradas</span>
+								<i class="fa fa-check" aria-hidden="true"></i>
+								<span class="hide-menu">Cerradas y Aceptadas</span>
 							</a>
 						</li>
 
 						<?php if ($this->session->userdata(USER_TYPE) == QUALITY_USER) : ?>
 
 							<li class="sidebar-item pt-2">
+								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>production/all_rejected" aria-expanded="false">
+									<i class="far fa-times-circle" aria-hidden="true"></i>
+									<span class="hide-menu">Rechazadas</span>
+								</a>
+							</li>
+
+							<li class="sidebar-item pt-2">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>production/all_entries" aria-expanded="false">
-									<i class="far fa-clock" aria-hidden="true"></i>
+									<i class="far fa-folder" aria-hidden="true"></i>
 									<span class="hide-menu">Todas las Ordenes</span>
 								</a>
 							</li>
 
+							<!--
 							<li class="sidebar-item pt-2">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>pages/home" aria-expanded="false">
 									<i class="far fa-clock" aria-hidden="true"></i>
 									<span class="hide-menu">Panorama General</span>
 								</a>
 							</li>
+							-->
+
 						<?php endif; ?>
 
 

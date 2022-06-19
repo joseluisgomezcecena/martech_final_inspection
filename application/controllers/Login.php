@@ -44,11 +44,15 @@ class Login extends CI_Controller
             } else {
                 //No pertenece al equipo de calidad....send message
                 $data['error_message'] = "Este usuario no forma parte del equipo de Calidad según nuestros registros.";
+                $data['plantas'] = $this->db->get('plantas')->result_array();
                 $this->load->view('pages/intro', $data);
             }
         } else {
             //Not All data retrieved...
             $data['error_message'] = "No hay datos suficientes para darle autorización al Sistema.";
+            $data['plantas'] = $this->db->get('plantas')->result_array();
+
+
             $this->load->view('pages/intro', $data);
         }
     }

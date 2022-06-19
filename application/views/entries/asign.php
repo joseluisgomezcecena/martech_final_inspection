@@ -165,7 +165,7 @@
 
 								<datalist id="part">
 									<?php foreach ($users as $user) : ?>
-										<option value="<?php echo $user['user_name'] ?>">
+										<option value="<?php echo $user['user_martech_sign'] ?>">
 										<?php endforeach; ?>
 								</datalist>
 								<small>El usuario asignado sera responsable de liberar la orden.</small>

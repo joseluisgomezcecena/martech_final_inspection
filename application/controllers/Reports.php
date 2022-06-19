@@ -32,18 +32,6 @@ class Reports extends CI_Controller
 
 		$this->load->helper('time');
 
-		//Mo se necesita esta parte ya que los requests se hacen desde la API
-		/*
-		$closed_orders = $this->EntryModel->get_closed();
-		for ($i = 0; $i < count($closed_orders); $i++) {
-
-			$closed_orders[$i]['assigned_elapsed_time'] =  readable_elapsed_time($closed_orders[$i]['asignada_date'], $closed_orders[$i]['created_at']);
-			$closed_orders[$i]['released_elapsed_time'] =  readable_elapsed_time($closed_orders[$i]['liberada_date'], $closed_orders[$i]['created_at']);
-			$closed_orders[$i]['closed_elapsed_time'] =  readable_elapsed_time($closed_orders[$i]['cerrada_date'], $closed_orders[$i]['created_at']);
-		}
-		$data['orders'] = $closed_orders;
-		*/
-
 		$data['start_date'] = $start_date;
 		$data['end_date'] = $end_date;
 		$data['reload_route'] = 'reports/calidad';
@@ -61,8 +49,11 @@ class Reports extends CI_Controller
 
 		if ($start_date == null && $end_date == null) {
 
-			$start_date = '';
-			$end_date = '';
+			$current_date = new DateTime();
+			$end_date = $current_date->format("Y-m-d");
+
+			//$current_date = $current_date->modify('-1 months');
+			$start_date = $current_date->format("Y-m-d");
 		}
 
 		$this->load->helper('time');
@@ -91,8 +82,11 @@ class Reports extends CI_Controller
 
 		if ($start_date == null && $end_date == null) {
 
-			$start_date = '';
-			$end_date = '';
+			$current_date = new DateTime();
+			$end_date = $current_date->format("Y-m-d");
+
+			//$current_date = $current_date->modify('-1 months');
+			$start_date = $current_date->format("Y-m-d");
 		}
 
 		$this->load->helper('time');
@@ -121,8 +115,11 @@ class Reports extends CI_Controller
 
 		if ($start_date == null && $end_date == null) {
 
-			$start_date = '';
-			$end_date = '';
+			$current_date = new DateTime();
+			$end_date = $current_date->format("Y-m-d");
+
+			//$current_date = $current_date->modify('-1 months');
+			$start_date = $current_date->format("Y-m-d");
 		}
 
 		$this->load->helper('time');
@@ -151,14 +148,15 @@ class Reports extends CI_Controller
 
 		if ($start_date == null && $end_date == null) {
 
-			$start_date = '';
-			$end_date = '';
+			$current_date = new DateTime();
+			$end_date = $current_date->format("Y-m-d");
+			$start_date = $current_date->format("Y-m-d");
 		}
 
 		$this->load->helper('time');
 
 
-		$data['title'] = 'Todas las Ordenes';
+		$data['title'] = 'TODAS LAS ORDENES';
 		$data['user_type'] = $this->session->userdata(USER_TYPE);
 
 		$data['start_date'] = $start_date;
@@ -174,12 +172,59 @@ class Reports extends CI_Controller
 	}
 
 
+
+	public function all_rejected()
+	{
+
+		$start_date = $this->input->get('start_date');
+		$end_date = $this->input->get('end_date');
+
+		if ($start_date == null && $end_date == null) {
+
+			$current_date = new DateTime();
+			$end_date = $current_date->format("Y-m-d");
+			$start_date = $current_date->format("Y-m-d");
+		}
+
+		$this->load->helper('time');
+
+
+		$data['title'] = 'ORDENES RECHAZADAS';
+		$data['user_type'] = $this->session->userdata(USER_TYPE);
+
+		$data['start_date'] = $start_date;
+		$data['end_date'] = $end_date;
+		$data['reload_route'] = 'production/all_rejected';
+		$data['success_message'] = $this->input->get('success_message');
+
+
+		//load header, page & footer
+		$this->load->view('templates/header');
+		$this->load->view('pages/quality_all_rejected', $data); //loading page and data
+		$this->load->view('templates/footer');
+	}
+
+
+
 	public function detail($id = NULL)
 	{
 		$this->db->select('entry.*, plantas.planta_nombre as plant_name');
 		$this->db->from('entry');
 		$this->db->where('id', $id);
 		$this->db->join('plantas', 'entry.plant = plantas.planta_id');
+		$data['entry'] = $this->db->get()->result_array()[0];
+
+		$this->load->view('templates/header');
+		$this->load->view('entries/detail', $data); //loading page and data
+		$this->load->view('templates/footer');
+	}
+
+	public function detail_accepted($id = NULL)
+	{
+		$this->db->select('entry_accepted.*, plantas.planta_nombre as plant_name');
+		$this->db->from('entry_accepted');
+		$this->db->where('id', $id);
+		$this->db->join('plantas', 'entry_accepted.plant = plantas.planta_id');
 		$data['entry'] = $this->db->get()->result_array()[0];
 
 		$this->load->view('templates/header');

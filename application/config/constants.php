@@ -110,6 +110,8 @@ defined('LEVEL_VALUE')      or define('LEVEL_VALUE', 'final_inspection_level_val
 defined('DEPARTMENT_NAME')      or define('DEPARTMENT_NAME', 'final_inspection_department_name');
 defined('DEPARTMENT_ID')      or define('DEPARTMENT_ID', 'final_inspection_department_id');
 
+defined('PLANT_ID')      or define('PLANT_ID', 'plant_id');
+defined('PLANT_NAME')      or define('PLANT_NAME', 'plant_name');
 
 
 defined('PROGRESS_NOT_ASSIGNED')      or define('PROGRESS_NOT_ASSIGNED', 0);

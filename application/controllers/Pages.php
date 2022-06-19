@@ -17,9 +17,32 @@ class Pages extends BaseController
 		} else if ((isset($logged_in) && $logged_in == TRUE) && (isset($user_type) && $user_type == PRODUCTION_USER)) {
 			redirect('reports/produccion');
 		} else {
-			$this->load->view('pages/intro');
+
+			$data['plantas'] = $this->db->get('plantas')->result_array();
+			$this->load->view('pages/intro', $data);
 		}
 	}
+
+	public function default_save()
+	{
+		//echo json_encode($this->input->post());
+		$user = $this->input->post('user');
+		$plant_id = $this->input->post('plant_id');
+		$plant_name = $this->input->post('plant_name');
+
+
+		$this->session->set_userdata(PLANT_ID, $plant_id);
+		$this->session->set_userdata(PLANT_NAME, $plant_name);
+
+		if ($user == QUALITY_USER) {
+			redirect(LOGIN_URL);
+		} else if ($user == PRODUCTION_USER) {
+
+			redirect(base_url() . 'home/production');
+		}
+	}
+
+
 
 	public function home()
 	{
@@ -36,13 +59,24 @@ class Pages extends BaseController
 
 		$this->load->helper('time');
 
+		/*
+		$query = "";
+		$query .= "SELECT plantas.planta_nombre as plant, planta_id, 
+		COUNT(entry.plant) as count,
+		SUM(if( entry.progress = 0 OR entry.progress = 1 OR ((entry.progress = 2 AND entry.status = 2) OR (entry.progress = 2 AND entry.status = 3)) OR (entry.progress = 3 AND final_result = 3) ,1, 0)) AS opened, 
+		SUM(if(  NOT( entry.progress = 0 OR entry.progress = 1 OR ((entry.progress = 2 AND entry.status = 2) OR (entry.progress = 2 AND entry.status = 3)) OR (entry.progress = 3 AND final_result = 3) )    , 1, 0)) AS closed,
+		SUM(if(entry.progress = 0, 1, 0)) AS not_assigned,
+		SUM(if(entry.progress = 1, 1, 0)) AS assigned,
+		SUM(if(entry.progress = 2, 1, 0)) AS released,
+		SUM( if( (entry.status = 1 AND entry.progress = 2) OR (entry.status = 1 AND entry.progress = 3), 1, 0)) AS rejected,
+		SUM( if( (entry.status = 2 AND entry.progress = 2) OR (entry.status = 2 AND entry.progress = 3), 1, 0)) AS accepted,
+		SUM( if((entry.status = 3 AND entry.progress = 2) OR (entry.status = 3 AND entry.progress = 3) , 1, 0)) AS waiting";
+		*/
 
 		$this->db->select('plantas.planta_nombre as plant, planta_id, 
 		COUNT(entry.plant) as count,
-	
 		SUM(if( entry.progress = 0 OR entry.progress = 1 OR ((entry.progress = 2 AND entry.status = 2) OR (entry.progress = 2 AND entry.status = 3)) OR (entry.progress = 3 AND final_result = 3) ,1, 0)) AS opened, 
 		SUM(if(  NOT( entry.progress = 0 OR entry.progress = 1 OR ((entry.progress = 2 AND entry.status = 2) OR (entry.progress = 2 AND entry.status = 3)) OR (entry.progress = 3 AND final_result = 3) )    , 1, 0)) AS closed,
-
 		SUM(if(entry.progress = 0, 1, 0)) AS not_assigned,
 		SUM(if(entry.progress = 1, 1, 0)) AS assigned,
 		SUM(if(entry.progress = 2, 1, 0)) AS released,

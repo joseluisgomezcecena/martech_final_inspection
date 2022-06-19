@@ -12,7 +12,10 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 
-$route['home'] = 'pages/home'; //this will server for quality and for production...
+$route['home']['get'] = 'pages/home'; //this will server for quality and for production...
+$route['pages/default']['post'] = 'pages/default_save'; //this will server for quality and for production...
+
+
 $route['home/production']['get'] = 'pages/home_production';
 
 //login?user_email=ejauregui@martechmedical.com&user_name=Emanuel&user_lastname=Jauregui&user_martech_number=10111&user_active=1&user_is_admin=1&user_level_name=Supervisor&user_level_value=2&from=http://localhost/martech_final_inspection/
@@ -27,8 +30,10 @@ $route['reports/produccion'] = 'reports/reporte_produccion';
 $route['production/rejected_by_product'] = 'reports/rejected_by_product';
 $route['production/rejected_by_document'] = 'reports/rejected_by_document';
 $route['production/all_entries'] = 'reports/all_entries';
+$route['production/all_rejected'] = 'reports/all_rejected';
 
 $route['reports/detail/(:any)'] = 'reports/detail/$1';
+$route['reports/detail_accepted/(:any)'] = 'reports/detail_accepted/$1';
 
 //produccion
 $route['entries/create'] = 'entries/create';
@@ -54,6 +59,7 @@ $route['entries/all-rejected']['get'] = 'entries/api_entries_rejected';
 $route['entries/rejected-by-product']['get'] = 'entries/api_entries_rejected_by_product';
 $route['entries/rejected-by-document']['get'] = 'entries/api_entries_rejected_by_document';
 $route['entries/quality-all']['get'] = 'entries/api_entries_quality_all';
+$route['entries/quality-rejected']['get'] = 'entries/api_entries_quality_rejected';
 
 //forms
 $route['forms/create'] = 'forms/create';

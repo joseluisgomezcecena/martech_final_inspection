@@ -55,11 +55,16 @@
 							</div>
 
 
-							<div class=" col-lg-3">
+							<div class="col-lg-3">
 								<label for="">Planta</label>
 								<input type="text" class="form-control" value="<?php echo $entry['plant_name'] ?>" readonly>
 							</div>
 
+
+							<div class="col-lg-3">
+								<label for="">Supervisor / Guía</label>
+								<input type="text" class="form-control" value="<?php echo $entry['assigned_by'] ?>" readonly>
+							</div>
 
 							<div class="col-lg-9 mt-2">
 								<label for="origen">Causa de Origen</label>
@@ -84,6 +89,8 @@
 									</div>
 								</div>
 							</div>
+
+
 
 
 
@@ -258,7 +265,7 @@
 
 								<?php if ($entry['status'] == STATUS_REJECTED_BY_PRODUCT || $entry['status'] == STATUS_REJECTED_BY_DOCUMENTATION) : ?>
 									<div class="col-lg-9">
-										<label for="">Razón del Rechazo</label>
+										<label for="">Discrepancia / Comentario</label>
 										<textarea class="form-control" list="part" name="razon_rechazo" readonly><?php echo $entry['razon_rechazo'] ?></textarea>
 									</div>
 								<?php endif; ?>
@@ -334,7 +341,7 @@
 
 								<?php if ($entry['final_result'] == FINAL_RESULT_REJECTED_BY_PRODUCT || $entry['final_result'] == FINAL_RESULT_REJECTED_BY_DOCUMENTATION) : ?>
 									<div class="col-lg-6 mt-3">
-										<label for="">Descripción de la Discrepancia / Razón del rechazo</label>
+										<label for="">Comentario</label>
 										<textarea class="form-control" list="part" name="discrepancia_descr" readonly><?php echo $entry['discrepancia_descr'] ?></textarea>
 									</div>
 								<?php endif; ?>

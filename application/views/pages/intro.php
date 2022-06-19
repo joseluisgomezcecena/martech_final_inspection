@@ -61,9 +61,10 @@
 
 
             <div class="row justify-content-center">
-                <div class="col-lg-4 col-md-12">
+                <div class="col-lg-5 col-md-12">
 
-                    <a href="<?= base_url() ?>home/production">
+
+                    <!-- <a href="<?= base_url() ?>home/production">
                         <div class="white-box analytics-info mt-4">
                             <h3 class="box-title">PRODUCCION</h3>
                             <ul class="list-inline two-part d-flex align-items-center mb-0">
@@ -73,10 +74,109 @@
                                 </li>
                             </ul>
                         </div>
-                    </a>
+                        </a>
+                        -->
+
+                    <div class="white-box analytics-info mt-4">
+
+                        <?php
+                        echo '<form action="' . base_url() . 'pages/default" method="post">';
+                        ?>
+                        <div class="row">
+
+                            <input name="user" value="<?= PRODUCTION_USER ?>" hidden />
+                            <input name="plant_name" value="Todas las Plantas" hidden />
+                            <input name="plant_id" value="0" hidden />
+                            <button class="btn btn-light" type="submit">
+                                <h3 class="text-center">PRODUCCIÓN</h3>
+                            </button>
+                        </div>
+
+                        </form>
+
+                        <div class="row mt-2">
+
+                            <?php
+                            foreach ($plantas as $planta) {
+
+
+                                echo '<form action="' . base_url() . 'pages/default" method="post">';
+                                echo  '  <div class="row mt-2 mb-2">';
+
+                                echo  '    <input name="user" value="' . PRODUCTION_USER . '" hidden/>';
+                                echo  '    <input name="plant_name" value="' . $planta['planta_nombre'] . '" hidden/>';
+                                echo  '    <input name="plant_id" value="' . $planta['planta_id'] . '" hidden/>
+        
+            <button class="btn btn-light">
+                <h3 class="box-title" type="submit">' . $planta['planta_nombre'] . '</h3>
+            </button>';
+
+
+                                echo '</div>';
+                                echo "</form>";
+                            }
+                            ?>
+
+
+
+                        </div>
+
+                    </div>
 
                 </div>
-                <div class="col-lg-4 col-md-12">
+
+
+                <div class="col-lg-5 col-md-12">
+
+
+                    <div class="white-box analytics-info mt-4">
+
+                        <?php
+                        echo '<form action="' . base_url() . 'pages/default" method="post">';
+                        ?>
+                        <div class="row">
+
+                            <input name="user" value="<?= QUALITY_USER ?>" hidden />
+                            <input name="plant_name" value="Todas las Plantas" hidden />
+                            <input name="plant_id" value="0" hidden />
+                            <button class="btn btn-light" type="submit">
+                                <h3 class="text-center">CALIDAD</h3>
+                            </button>
+                        </div>
+
+                        </form>
+
+                        <div class="row mt-2">
+
+                            <?php
+                            foreach ($plantas as $planta) {
+
+
+                                echo '<form action="' . base_url() . 'pages/default" method="post">';
+                                echo  '  <div class="row mt-2 mb-2">';
+
+                                echo  '    <input name="user" value="' . QUALITY_USER . '" hidden/>';
+                                echo  '    <input name="plant_name" value="' . $planta['planta_nombre'] . '" hidden/>';
+                                echo  '    <input name="plant_id" value="' . $planta['planta_id'] . '" hidden/>
+                                
+                                    <button class="btn btn-light">
+                                        <h3 class="box-title" type="submit">' . $planta['planta_nombre'] . '</h3>
+                                    </button>';
+
+
+                                echo '</div>';
+                                echo "</form>";
+                            }
+                            ?>
+
+
+
+                        </div>
+
+                    </div>
+
+
+                    <!--
                     <a href="<?= LOGIN_URL ?>">
                         <div class="white-box analytics-info mt-4">
                             <h3 class="box-title">CALIDAD</h3>
@@ -89,6 +189,8 @@
                             </ul>
                         </div>
                     </a>
+                        -->
+
 
                 </div>
 

@@ -13,11 +13,13 @@ class Entries extends BaseController
 
 		$data['parts'] = $this->EntryModel->get_parts();
 		$data['plantas'] = $this->LocationModel->get_plants();
+		$data['production_users'] = $this->UserModel->get_users_production();
 
 		$this->form_validation->set_rules('part_no', 'Numero de parte', 'required');
 		$this->form_validation->set_rules('lot_no', 'Numero de lote', 'required');
 		$this->form_validation->set_rules('qty', 'Cantidad', 'required|callback_check_is_positive');
 		$this->form_validation->set_rules('plant', 'Planta', 'required');
+		$this->form_validation->set_rules('assigned_by', 'Supervisor o Guía', 'required');
 
 		if ($this->form_validation->run() === FALSE) {
 
@@ -25,6 +27,7 @@ class Entries extends BaseController
 			$data['old']['lot_no'] = $this->input->post('lot_no') == null ? '' : $this->input->post('lot_no');
 			$data['old']['qty'] = $this->input->post('qty') == null ? '' : $this->input->post('qty');
 			$data['old']['plant'] = $this->input->post('plant') == null ? '' : $this->input->post('plant');
+			$data['old']['assigned_by'] = $this->input->post('assigned_by') == null ? '' : $this->input->post('assigned_by');
 
 			$this->load->view('templates/header');
 			$this->load->view('entries/create', $data);
@@ -62,6 +65,7 @@ class Entries extends BaseController
 		$data['old']['lot_no'] = $entry_from['lot_no'];
 		$data['old']['plant'] = $entry_from['plant'];
 		$data['old']['qty'] = $entry_from['qty'];
+		$data['old']['assigned_by'] = $entry_from['assigned_by'];
 
 		$data['parcial'] = $entry_from['parcial'];
 		$data['reinspeccion'] = $entry_from['reinspeccion'];
@@ -267,6 +271,8 @@ class Entries extends BaseController
 		$data['locations'] = $this->LocationModel->get_locations();
 		$data['location'] = $this->LocationModel->get_location($data['entry']['location']);
 		$data['plants'] =  $this->LocationModel->get_plants();
+		$data['quality_users'] = $this->UserModel->get_users_quality();
+
 		$data['reload_route'] = 'reports/produccion';
 
 
@@ -339,6 +345,7 @@ class Entries extends BaseController
 			$data['locations'] = $this->LocationModel->get_locations();
 			$data['location'] = $this->LocationModel->get_location($data['entry']['location']);
 			$data['plants'] =  $this->LocationModel->get_plants();
+			$data['quality_users'] = $this->UserModel->get_users_quality();
 			$data['reload_route'] = 'reports/produccion';
 
 			$this->load->view('templates/header');
@@ -385,20 +392,19 @@ class Entries extends BaseController
 		}
 
 		if ($this->form_validation->run() === FALSE) {
-
-
-
 			$this->load->view('templates/header');
 			$this->load->view('entries/close', $data);
 			$this->load->view('templates/footer');
 		} else {
 
-			$this->EntryModel->close_entry();
-
-			//session message
-			$this->session->set_flashdata('cerrada', 'Se ha cerrado la entrada.');
-
-			redirect(base_url() . 'entries/close/' . $id);
+			if ($this->EntryModel->close_entry() == TRUE) {
+				//session message
+				$this->session->set_flashdata('cerrada', 'Se ha cerrado la entrada.');
+				redirect(base_url() . 'entries/close/' . $id);
+			} else {
+				$this->session->set_flashdata('cerrada y Aceptado', 'Se ha cerrado satisfactoriamente la orden.');
+				redirect(base_url() . 'reports/calidad');
+			}
 		}
 	}
 
@@ -505,6 +511,11 @@ class Entries extends BaseController
 		$empQuery = "SELECT id, created_at, part_no, lot_no, qty, plantas.planta_nombre as plant, progress, status, final_result,
 		TIMEDIFF(NOW(), created_at) as elapsed_time, asignada, has_urgency
 		FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+
+		$plant_id = $this->session->userdata(PLANT_ID);
+		if ($plant_id > 0) {
+			$empQuery .= " AND plant = " . $plant_id;
+		}
 
 		$empQuery .= " AND (";
 		$empQuery .= ' progress = ' . PROGRESS_NOT_ASSIGNED;
@@ -670,7 +681,12 @@ class Entries extends BaseController
 		TIMEDIFF(cerrada_date, created_at) as closed_elapsed_time, 
 		waiting_hours,
 		rejected_doc_hours,
-		progress, status, final_result, discrepancia_descr, razon_rechazo  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+		progress, status, final_result, discrepancia_descr, razon_rechazo  FROM entry_accepted INNER JOIN plantas ON entry_accepted.plant = plantas.planta_id WHERE  1 ";
+
+		$plant_id = $this->session->userdata(PLANT_ID);
+		if ($plant_id > 0) {
+			$empQuery .= " AND plant = " . $plant_id;
+		}
 
 		if (!($start_date == '' &&  $end_date == '')) {
 			$empQuery .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
@@ -748,7 +764,7 @@ class Entries extends BaseController
 				"assigned_elapsed_time" => convert_time_string_to_float($row['assigned_elapsed_time']),
 				"released_elapsed_time" =>  convert_time_string_to_float($row['released_elapsed_time']),
 				"closed_elapsed_time" =>  convert_time_string_to_float($row['closed_elapsed_time']),
-				"entry_id" => '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">Detalle</a></td>',
+				"entry_id" => '<td><a href="' . base_url() . 'reports/detail_accepted/' . $row['id'] . '" class="btn btn-primary">Detalle</a></td>',
 				"status" => "<h4><span class='badge rounded-pill $color'>$status</span></h4>",
 				"comments" => $comments,
 				"waiting_hours" => $row['waiting_hours'],
@@ -864,6 +880,12 @@ class Entries extends BaseController
 		$reload_route = $this->input->get('reload_route');
 
 		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, status  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+
+		$plant_id = $this->session->userdata(PLANT_ID);
+		if ($plant_id > 0) {
+			$empQuery .= " AND plant = " . $plant_id;
+		}
+
 		$empQuery .= ' AND ((progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_REJECTED_BY_PRODUCT . ') OR (progress = ' . PROGRESS_CLOSED . ' AND final_result = ' . FINAL_RESULT_REJECTED_BY_PRODUCT . ') )';
 		$empQuery .= ' AND to_rework = 0';
 
@@ -944,6 +966,12 @@ class Entries extends BaseController
 		$reload_route = $this->input->get('reload_route');
 
 		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, status  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+
+		$plant_id = $this->session->userdata(PLANT_ID);
+		if ($plant_id > 0) {
+			$empQuery .= " AND plant = " . $plant_id;
+		}
+
 		$empQuery .= ' AND ((progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_REJECTED_BY_DOCUMENTATION . ') OR (progress = ' . PROGRESS_CLOSED . ' AND final_result = ' . FINAL_RESULT_REJECTED_BY_DOCUMENTATION . ') )';
 		$empQuery .= ' AND to_rework = 0';
 
@@ -1023,7 +1051,174 @@ class Entries extends BaseController
 		$end_date_route = $this->input->get('end_date');
 		$reload_route = $this->input->get('reload_route');
 
+		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, status, 0 as accepted  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+		$plant_id = $this->session->userdata(PLANT_ID);
+		if ($plant_id > 0) {
+			$empQuery .= " AND plant = " . $plant_id;
+		}
+
+		if (!($start_date == '' &&  $end_date == '')) {
+			$empQuery .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
+		}
+
+		$empQuery .= " UNION ";
+
+		$empQuery .= "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, status, 1 as accepted FROM entry_accepted INNER JOIN plantas ON entry_accepted.plant = plantas.planta_id WHERE  1 ";
+		$plant_id = $this->session->userdata(PLANT_ID);
+		if ($plant_id > 0) {
+			$empQuery .= " AND plant = " . $plant_id;
+		}
+
+		if (!($start_date == '' &&  $end_date == '')) {
+			$empQuery .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
+		}
+
+		$empQuery .= " ORDER BY id";
+
+
+		$empRecords = $this->db->query($empQuery)->result_array();
+
+		$data = array();
+
+		foreach ($empRecords as $row) {
+
+			if ($row['progress'] == PROGRESS_NOT_ASSIGNED) {
+				//$btn_title = "Asignar";
+				//$link = "entries/assign/{$row['id']}";
+				$text =  "0/3 En espera";
+				//$color =  "bg-danger";
+			} elseif ($row['progress'] == PROGRESS_ASSIGNED) {
+				//$btn_title = "Liberar";
+				//$link = "entries/release/{$row['id']}";
+				$text =  "1/3 Asignado";
+				//$color =  "bg-warning";
+			} elseif ($row['progress'] == PROGRESS_RELEASED) {
+				//$btn_title = "Cerrar";
+				//$link = "entries/close/{$row['id']}";
+				$text =  "2/3 Liberado";
+				//$color =  "bg-primary";
+			} elseif ($row['progress'] == PROGRESS_CLOSED) {
+				//$btn_title = "Cerrar";
+				//$link = "entries/close/{$row['id']}";
+				$text =  "3/3 Orden Cerrada";
+				//$color =  "bg-success disabled";
+			}
+
+
+			$status = '';
+			$color = '';
+
+			if ($row['progress'] == PROGRESS_NOT_ASSIGNED) {
+				$status = 'Sin asignar';
+				$color =  "bg-secondary";
+			} else if ($row['progress'] == PROGRESS_ASSIGNED) {
+				$status = 'Asignado';
+				$color =  "bg-primary";
+			} else if ($row['progress'] == PROGRESS_RELEASED) {
+				if ($row['status'] == STATUS_ACCEPTED) {
+					$status = 'Aceptado';
+					$color =  "bg-success disabled";
+				} else if ($row['status'] == STATUS_REJECTED_BY_PRODUCT) {
+					$status = 'Rechazo x Prod';
+					$color =  "bg-danger";
+				} else if ($row['status'] == STATUS_REJECTED_BY_DOCUMENTATION) {
+					$status = 'Rechazo x Doctos';
+					$color =  "bg-danger";
+				} else if ($row['status'] == STATUS_WAITING) {
+					$status = 'En espera';
+					$color =  "bg-warning";
+				} else if ($row['status'] == STATUS_VERIFY) {
+					$status = 'Por Verificar';
+					$color =  "bg-danger";
+				}
+			} else if ($row['progress'] == PROGRESS_CLOSED) {
+				if ($row['final_result'] == FINAL_RESULT_CLOSED) {
+					$status = 'Aceptado';
+					$color =  "bg-success disabled";
+				} else if ($row['final_result'] == FINAL_RESULT_REJECTED_BY_PRODUCT) {
+					$status = 'Rechazo x Prod';
+					$color =  "bg-danger";
+				} else if ($row['final_result'] == FINAL_RESULT_REJECTED_BY_DOCUMENTATION) {
+					$status = 'Rechazo x Doctos';
+					$color =  "bg-danger";
+				} else if ($row['final_result'] == FINAL_RESULT_WAITING) {
+					$status = 'En espera';
+					$color =  "bg-warning";
+				} else if ($row['final_result'] == FINAL_RESULT_VERIFY) {
+					$status = 'Por Verificar';
+					$color =  "bg-danger";
+				}
+			}
+
+			$action = '';
+
+			if ($row['final_result'] == FINAL_RESULT_REJECTED_BY_DOCUMENTATION || $row['status'] == STATUS_REJECTED_BY_DOCUMENTATION) {
+				$action = '<td><a href="' . base_url() . 'entries/solved?from=' . $row['id'] . '&reload_route=' . $reload_route . '&start_date=' . $start_date_route . '&end_date=' . $end_date_route . '" class="btn btn-primary"> Resuelto </a></td>';
+			}
+
+			$detail =  '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">Detalle</a></td>';
+			if ($row['accepted'] == 1) {
+				$detail =  '<td><a href="' . base_url() . 'reports/detail_accepted/' . $row['id'] . '" class="btn btn-primary">Detalle</a></td>';
+			}
+
+			$id = '<a href="' . base_url() . 'reports/detail/' . $row['id'] . '" >' . $row['id'] . '</a>';
+			if ($row['accepted'] == 1) {
+				$id = '<a href="' . base_url() . 'reports/detail_accepted/' . $row['id'] . '" >' . $row['id'] . '</a>';
+			}
+
+			//	"progress" => "<h4><span class='badge $color'>$text</span></h4>",
+			$data[] = array(
+				"id" => $id,
+				"part_no" => $row['part_no'],
+				"lot_no" => $row['lot_no'],
+				"qty" => $row['qty'],
+				"plant" => $row['plant'],
+				"created_at" => date_format(new DateTime($row['created_at']), 'm/d/y g:i A'),
+				"progress" => "$text",
+				"razon_rechazo" => $row['razon_rechazo'],
+				"entry_id" => $detail,
+				"status" => "<h4><span class='badge rounded-pill $color'>$status</span></h4>",
+				"action" => $action
+			);
+		}
+
+		$response['data'] = $data;
+
+		echo json_encode($response);
+	}
+
+
+
+	function api_entries_quality_rejected()
+	{
+
+		$this->load->helper('time');
+
+		$start_date = $this->input->get('start_date');
+		if ($start_date != '') $start_date .= ' 00:00:00';
+
+		$end_date = $this->input->get('end_date');
+		if ($end_date != '') $end_date .= ' 23:59:59';
+
+		$start_date_route = $this->input->get('start_date');
+		$end_date_route = $this->input->get('end_date');
+		$reload_route = $this->input->get('reload_route');
+
 		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, status  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+
+		$plant_id = $this->session->userdata(PLANT_ID);
+		if ($plant_id > 0) {
+			$empQuery .= " AND plant = " . $plant_id;
+		}
+
+		//$empQuery .= " AND ((progress = " . PROGRESS_RELEASED . " AND ( status = " . STATUS_REJECTED_BY_PRODUCT . " OR status = "  . STATUS_REJECTED_BY_DOCUMENTATION . " )) OR (progress = " . PROGRESS_CLOSED . " AND ( final_result = " . FINAL_RESULT_REJECTED_BY_PRODUCT . " OR final_result = "  . FINAL_RESULT_REJECTED_BY_DOCUMENTATION . " )) ) ";
+
+		$empQuery .= " AND ( 
+		(progress = " . PROGRESS_RELEASED . " AND  status = " . STATUS_REJECTED_BY_PRODUCT . ")  
+		OR (progress = " . PROGRESS_RELEASED . " AND  status = " . STATUS_REJECTED_BY_DOCUMENTATION . ")
+		OR (progress = " . PROGRESS_CLOSED . " AND  final_result = " . FINAL_RESULT_REJECTED_BY_PRODUCT . ")
+		OR (progress = " . PROGRESS_CLOSED . " AND  final_result = " . FINAL_RESULT_REJECTED_BY_DOCUMENTATION . ")
+		)";
 
 		if (!($start_date == '' &&  $end_date == '')) {
 			$empQuery .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";

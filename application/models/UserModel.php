@@ -1,6 +1,7 @@
 <?php
 
-class UserModel extends CI_Model{
+class UserModel extends CI_Model
+{
 
 	public function __construct()
 	{
@@ -10,12 +11,12 @@ class UserModel extends CI_Model{
 	public function register($encrypted_pwd, $mail, $user_department_id, $user_martech_number, $user_level_id)
 	{
 		$data = array(
-			'user_name'=>$this->input->post('user_name'),
-			'user_email'=>$mail,
-			'user_lastname'=>" ",
-			'user_department_id'=>$user_department_id,
-			'user_password'=>$encrypted_pwd,
-			'user_martech_number'=>$user_martech_number,
+			'user_name' => $this->input->post('user_name'),
+			'user_email' => $mail,
+			'user_lastname' => " ",
+			'user_department_id' => $user_department_id,
+			'user_password' => $encrypted_pwd,
+			'user_martech_number' => $user_martech_number,
 			//'user_level_id'=>0
 		);
 
@@ -27,33 +28,28 @@ class UserModel extends CI_Model{
 	{
 		$id = $user_id;
 
-		if($uploaded== 0)
-		{
+		if ($uploaded == 0) {
 			$data = array(
-				'name'=>$this->input->post('name'),
-				'email'=>$this->input->post('email'),
-				'username'=>$this->input->post('username'),
-				'phone'=>$this->input->post('phone'),
-				'password'=>$encrypted_pwd,
-				'bio'=>$this->input->post('bio'),
+				'name' => $this->input->post('name'),
+				'email' => $this->input->post('email'),
+				'username' => $this->input->post('username'),
+				'phone' => $this->input->post('phone'),
+				'password' => $encrypted_pwd,
+				'bio' => $this->input->post('bio'),
 			);
-		}
-		else
-		{
+		} else {
 			$data = array(
-				'name'=>$this->input->post('name'),
-				'email'=>$this->input->post('email'),
-				'username'=>$this->input->post('username'),
-				'phone'=>$this->input->post('phone'),
-				'password'=>$encrypted_pwd,
-				'bio'=>$this->input->post('bio'),
-				'profile_image'=>$post_image,
+				'name' => $this->input->post('name'),
+				'email' => $this->input->post('email'),
+				'username' => $this->input->post('username'),
+				'phone' => $this->input->post('phone'),
+				'password' => $encrypted_pwd,
+				'bio' => $this->input->post('bio'),
+				'profile_image' => $post_image,
 			);
 		}
 
-		return $this->db->update('users', $data, array('id'=>$id));
-
-
+		return $this->db->update('users', $data, array('id' => $id));
 	}
 
 
@@ -75,12 +71,9 @@ class UserModel extends CI_Model{
 	{
 		$query = $this->db->get_where('users', array('user_name' => $username));
 
-		if(empty($query->row_array()))
-		{
+		if (empty($query->row_array())) {
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -90,12 +83,9 @@ class UserModel extends CI_Model{
 	{
 		$query = $this->db->get_where('users', array('user_email' => $email));
 
-		if(empty($query->row_array()))
-		{
+		if (empty($query->row_array())) {
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -104,7 +94,7 @@ class UserModel extends CI_Model{
 
 	public function get_user($id)
 	{
-		$query = $this->db->get_where('users', array('user_id'=>$id));
+		$query = $this->db->get_where('users', array('user_id' => $id));
 		return $query->row_array();
 	}
 
@@ -120,9 +110,15 @@ class UserModel extends CI_Model{
 	{
 		//otra db
 		$authdb = $this->load->database('authdb', TRUE);
-
-		$query = $authdb->get_where('users', array('user_department_id'=>3));
+		$query = $authdb->get_where('users', array('user_department_id' => 3));
 		return $query->result_array();
 	}
 
+	public function get_users_production()
+	{
+		//otra db
+		$authdb = $this->load->database('authdb', TRUE);
+		$query = $authdb->get_where('users', array('user_department_id' => 5));
+		return $query->result_array();
+	}
 }

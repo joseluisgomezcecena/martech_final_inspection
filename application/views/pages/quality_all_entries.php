@@ -29,13 +29,7 @@
 			</div>
 
 
-			<div class="col-lg-12">
-				<?php if ($user_type == PRODUCTION_USER) : ?>
-					<a href="<?php echo base_url() ?>entries/create" target="" class="btn btn-danger  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
-						Registrar una entrada
-					</a>
-				<?php endif; ?>
-			</div>
+
 
 		</div>
 		<!-- /.col-lg-12 -->
@@ -73,7 +67,7 @@
 							<th>Planta</th>
 							<th>Progreso</th>
 							<th>Status</th>
-							<th>Razón</th>
+							<th>Comentario</th>
 
 						</thead>
 						<tbody>
