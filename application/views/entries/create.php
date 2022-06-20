@@ -85,7 +85,7 @@
 
 							<div class="col-lg-4 col-md-6 col-sm-12 mt-5">
 								<label for="" class="text-primary">PLANTA</label>
-								<select class="form-control" name="plant" id="plant_id" required oninvalid="this.setCustomValidity('Elija la planta')" oninput="this.setCustomValidity('')" <?php if ($this->session->userdata(PLANT_ID) > 0) echo ' disabled' ?>>
+								<select class="form-control" name="plant" id="plant_id" required oninvalid="this.setCustomValidity('Elija la planta')" oninput="this.setCustomValidity('')" <?php if ($this->session->userdata(PLANT_ID) > 0) echo ' readonly' ?>>
 									<option value="">Seleccione una planta</option>
 									<?php
 									foreach ($plantas as $planta) {
