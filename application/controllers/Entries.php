@@ -355,8 +355,6 @@ class Entries extends BaseController
 
 			$this->EntryModel->release_entry();
 
-			//jauregui pending to test...
-
 			//session message
 			$this->session->set_flashdata('liberada', 'Se ha liberado la entrada.');
 
@@ -795,6 +793,12 @@ class Entries extends BaseController
 		$reload_route = $this->input->get('reload_route');
 
 		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+
+		$plant_id = $this->session->userdata(PLANT_ID);
+		if ($plant_id > 0) {
+			$empQuery .= " AND plant = " . $plant_id;
+		}
+
 		$empQuery .= ' AND ((progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_REJECTED_BY_PRODUCT . ') OR (progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_REJECTED_BY_DOCUMENTATION . ') OR (progress = ' . PROGRESS_CLOSED . ' AND final_result = ' . FINAL_RESULT_REJECTED_BY_PRODUCT . ') OR (progress = ' . PROGRESS_CLOSED . ' AND final_result = ' . FINAL_RESULT_REJECTED_BY_DOCUMENTATION . ') )';
 		$empQuery .= ' AND to_rework = 0';
 
