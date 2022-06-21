@@ -178,7 +178,7 @@
 							<li class="sidebar-item">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>production/rejected_by_document" aria-expanded="false">
 									<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-									<span class="hide-menu">Rechazos x Documentos</span>
+									<span class="hide-menu">Discrepancias</span>
 								</a>
 							</li>
 						<?php endif; ?>

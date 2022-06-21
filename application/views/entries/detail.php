@@ -184,8 +184,8 @@
 																						echo 'Sin asignar';
 																					} else if ($entry['status'] == STATUS_REJECTED_BY_PRODUCT) {
 																						echo 'Rechazado por Producto';
-																					} else if ($entry['status'] == STATUS_REJECTED_BY_DOCUMENTATION || $entry['status'] == STATUS_VERIFY) {
-																						echo 'Rechazado por Documentación';
+																					} else if ($entry['status'] == STATUS_DISCREPANCY || $entry['status'] == STATUS_VERIFY) {
+																						echo 'Discrepancia';
 																					} else if ($entry['status'] == STATUS_ACCEPTED) {
 																						echo 'Aceptado';
 																					} else if ($entry['status'] == STATUS_WAITING) {
@@ -263,7 +263,7 @@
 								</div>
 
 
-								<?php if ($entry['status'] == STATUS_REJECTED_BY_PRODUCT || $entry['status'] == STATUS_REJECTED_BY_DOCUMENTATION) : ?>
+								<?php if ($entry['status'] == STATUS_REJECTED_BY_PRODUCT || $entry['status'] == STATUS_DISCREPANCY) : ?>
 									<div class="col-lg-9">
 										<label for="">Discrepancia / Comentario</label>
 										<textarea class="form-control" list="part" name="razon_rechazo" readonly><?php echo $entry['razon_rechazo'] ?></textarea>
@@ -319,7 +319,7 @@
 																						} else if ($entry['final_result'] == FINAL_RESULT_REJECTED_BY_PRODUCT) {
 																							echo 'Rechazado por Producto';
 																						} else if ($entry['final_result'] == FINAL_RESULT_DISCREPANCY || $entry['final_result'] == FINAL_RESULT_VERIFY) {
-																							echo 'Rechazado por Documentación';
+																							echo 'Discrepancia';
 																						} else if ($entry['final_result'] == FINAL_RESULT_CLOSED) {
 																							echo 'Cerrado';
 																						} else if ($entry['final_result'] == FINAL_RESULT_WAITING) {

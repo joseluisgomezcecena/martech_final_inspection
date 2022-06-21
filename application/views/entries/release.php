@@ -167,7 +167,7 @@
 									<option value="">-- Seleccione Resultado --</option>
 									<option value="<?= STATUS_WAITING ?>" <?php if ($entry['status'] == STATUS_WAITING) echo ' selected'; ?>>En espera</option>
 									<option value="<?= STATUS_REJECTED_BY_PRODUCT ?>" <?php if ($entry['status'] == STATUS_REJECTED_BY_PRODUCT) echo ' selected'; ?>>Rechazado por Producto</option>
-									<option value="<?= STATUS_REJECTED_BY_DOCUMENTATION ?>" <?php if ($entry['status'] == STATUS_REJECTED_BY_DOCUMENTATION) echo ' selected'; ?>>Rechazado por Documentación</option>
+									<option value="<?= STATUS_DISCREPANCY ?>" <?php if ($entry['status'] == STATUS_DISCREPANCY) echo ' selected'; ?>>Discrepancia</option>
 									<option value="<?= STATUS_ACCEPTED ?>" <?php if ($entry['status'] == STATUS_ACCEPTED) echo ' selected'; ?>>Aceptado</option>
 								</select>
 								<small class="text-danger" ng-show="(validate_status && status == '') || (validate_status && status == null)">Seleccione el Resultado</small>
@@ -363,7 +363,7 @@
 				$scope.validate_razon_rechazo = true;
 				console.log('entering here' + $scope.status);
 
-			} else if ($scope.status == <?= STATUS_REJECTED_BY_DOCUMENTATION ?>) {
+			} else if ($scope.status == <?= STATUS_DISCREPANCY ?>) {
 				//No
 				$scope.validate_final_qty = true;
 				$scope.validate_location = true;

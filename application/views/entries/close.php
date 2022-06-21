@@ -176,7 +176,7 @@
 									<option value="">---Seleccione Resultado---</option>
 									<option value="<?= FINAL_RESULT_CLOSED ?>">Si</option>
 									<option value="<?= FINAL_RESULT_REJECTED_BY_PRODUCT ?>">Rechazar por Producto</option>
-									<option value="<?= FINAL_RESULT_DISCREPANCY ?>">Rechazar por Documentación</option>
+									<option value="<?= FINAL_RESULT_DISCREPANCY ?>">Discrepancia</option>
 									<option value="<?= FINAL_RESULT_WAITING ?>">En espera por cambio de prioridad</option>
 
 								</select>

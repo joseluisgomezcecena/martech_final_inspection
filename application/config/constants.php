@@ -122,7 +122,7 @@ defined('PROGRESS_CLOSED')      or define('PROGRESS_CLOSED', 3);
 //0 sin asignar, 1 rechazado, 2 aceptado, 3 en espera por cambio de prioridad
 defined('STATUS_NOT_ASSIGNED')      or define('STATUS_NOT_ASSIGNED', 0);
 defined('STATUS_REJECTED_BY_PRODUCT')      or define('STATUS_REJECTED_BY_PRODUCT', 1);
-defined('STATUS_REJECTED_BY_DOCUMENTATION')      or define('STATUS_REJECTED_BY_DOCUMENTATION', 4);
+defined('STATUS_DISCREPANCY')      or define('STATUS_DISCREPANCY', 4);
 defined('STATUS_ACCEPTED')      or define('STATUS_ACCEPTED', 2);
 defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 defined('STATUS_VERIFY')      or define('STATUS_VERIFY', 5);

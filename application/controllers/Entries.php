@@ -150,9 +150,9 @@ class Entries extends BaseController
 
 		$from = $this->input->get('from');
 		$data = $this->retrieve_data($from);
-		$data['title'] = "SOLUCION AL RECHAZO POR DOCUMENTACIÓN";
+		$data['title'] = "SOLUCION AL RECHAZO POR DISCREPANCIA";
 
-		$data['message'] = "Confirme que se ha solucionado la documentación que generó el rechazo de esta orden. Al confirmar la solución se turnara a calidad para que revise y libere la orden.";
+		$data['message'] = "Confirme que se ha solucionado el problema que generó el rechazo/discrepancia de esta orden. Al confirmar la solución se turnara a calidad para que revise y libere la orden.";
 
 		$this->load->view('templates/header');
 		$this->load->view('entries/solved', $data);
@@ -176,7 +176,7 @@ class Entries extends BaseController
 		if ($this->form_validation->run() === TRUE) {
 			$this->EntryModel->solve_entry();
 
-			$url =  $this->input->post('reload_route') . '?start_date=' . $this->input->post('start_date') . '&end_date=' . $this->input->post('end_date') . '&success_message=' . urldecode('Se removió de la lista de ordenes rechazadas por documentos y ahora pasa a las listas de calidad por trabajar.');
+			$url =  $this->input->post('reload_route') . '?start_date=' . $this->input->post('start_date') . '&end_date=' . $this->input->post('end_date') . '&success_message=' . urldecode('Se removió de la lista de ordenes rechazadas por discrepancias y ahora pasa a las listas de calidad por trabajar.');
 			//After 
 			redirect($url);
 		} else {
@@ -584,8 +584,8 @@ class Entries extends BaseController
 				} else if ($row['status'] == STATUS_REJECTED_BY_PRODUCT) {
 					$status = 'Rechazo x Prod';
 					$color =  "bg-danger";
-				} else if ($row['status'] == STATUS_REJECTED_BY_DOCUMENTATION) {
-					$status = 'Rechazo x Doctos';
+				} else if ($row['status'] == STATUS_DISCREPANCY) {
+					$status = 'Discrepancia';
 					$color =  "bg-danger";
 				} else if ($row['status'] == STATUS_WAITING) {
 					$status = 'En espera';
@@ -602,7 +602,7 @@ class Entries extends BaseController
 					$status = 'Rechazo x Prod';
 					$color =  "bg-danger";
 				} else if ($row['final_result'] == FINAL_RESULT_DISCREPANCY) {
-					$status = 'Rechazo x Doctos';
+					$status = 'Discrepancia';
 					$color =  "bg-danger";
 				} else if ($row['final_result'] == FINAL_RESULT_WAITING) {
 					$status = 'En espera';
@@ -725,8 +725,8 @@ class Entries extends BaseController
 				} else if ($row['status'] == STATUS_REJECTED_BY_PRODUCT) {
 					$status = 'Rechazo x Prod';
 					$color =  "bg-danger";
-				} else if ($row['status'] == STATUS_REJECTED_BY_DOCUMENTATION) {
-					$status = 'Rechazo x Doctos';
+				} else if ($row['status'] == STATUS_DISCREPANCY) {
+					$status = 'Discrepancia';
 					$color =  "bg-danger";
 				} else if ($row['status'] == STATUS_WAITING) {
 					$status = 'En espera';
@@ -741,7 +741,7 @@ class Entries extends BaseController
 					$status = 'Rechazo x Prod';
 					$color =  "bg-danger";
 				} else if ($row['final_result'] == FINAL_RESULT_DISCREPANCY) {
-					$status = 'Rechazo x Doctos';
+					$status = 'Discrepancia';
 					$color =  "bg-danger";
 				} else if ($row['final_result'] == FINAL_RESULT_WAITING) {
 					$status = 'En espera';
@@ -799,7 +799,7 @@ class Entries extends BaseController
 			$empQuery .= " AND plant = " . $plant_id;
 		}
 
-		$empQuery .= ' AND ((progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_REJECTED_BY_PRODUCT . ') OR (progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_REJECTED_BY_DOCUMENTATION . ') OR (progress = ' . PROGRESS_CLOSED . ' AND final_result = ' . FINAL_RESULT_REJECTED_BY_PRODUCT . ') OR (progress = ' . PROGRESS_CLOSED . ' AND final_result = ' . FINAL_RESULT_DISCREPANCY . ') )';
+		$empQuery .= ' AND ((progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_REJECTED_BY_PRODUCT . ') OR (progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_DISCREPANCY . ') OR (progress = ' . PROGRESS_CLOSED . ' AND final_result = ' . FINAL_RESULT_REJECTED_BY_PRODUCT . ') OR (progress = ' . PROGRESS_CLOSED . ' AND final_result = ' . FINAL_RESULT_DISCREPANCY . ') )';
 		$empQuery .= ' AND to_rework = 0';
 
 		if (!($start_date == '' &&  $end_date == '')) {
@@ -976,7 +976,7 @@ class Entries extends BaseController
 			$empQuery .= " AND plant = " . $plant_id;
 		}
 
-		$empQuery .= ' AND ((progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_REJECTED_BY_DOCUMENTATION . ') OR (progress = ' . PROGRESS_CLOSED . ' AND final_result = ' . FINAL_RESULT_DISCREPANCY . ') )';
+		$empQuery .= ' AND ((progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_DISCREPANCY . ') OR (progress = ' . PROGRESS_CLOSED . ' AND final_result = ' . FINAL_RESULT_DISCREPANCY . ') )';
 		$empQuery .= ' AND to_rework = 0';
 
 		if (!($start_date == '' &&  $end_date == '')) {
@@ -1014,7 +1014,7 @@ class Entries extends BaseController
 
 			$action = '';
 
-			if ($row['final_result'] == FINAL_RESULT_DISCREPANCY || $row['status'] == STATUS_REJECTED_BY_DOCUMENTATION) {
+			if ($row['final_result'] == FINAL_RESULT_DISCREPANCY || $row['status'] == STATUS_DISCREPANCY) {
 				$action = '<td><a href="' . base_url() . 'entries/solved?from=' . $row['id'] . '&reload_route=' . $reload_route . '&start_date=' . $start_date_route . '&end_date=' . $end_date_route . '" class="btn btn-primary"> Resuelto </a></td>';
 			}
 
@@ -1125,8 +1125,8 @@ class Entries extends BaseController
 				} else if ($row['status'] == STATUS_REJECTED_BY_PRODUCT) {
 					$status = 'Rechazo x Prod';
 					$color =  "bg-danger";
-				} else if ($row['status'] == STATUS_REJECTED_BY_DOCUMENTATION) {
-					$status = 'Rechazo x Doctos';
+				} else if ($row['status'] == STATUS_DISCREPANCY) {
+					$status = 'Discrepancia';
 					$color =  "bg-danger";
 				} else if ($row['status'] == STATUS_WAITING) {
 					$status = 'En espera';
@@ -1143,7 +1143,7 @@ class Entries extends BaseController
 					$status = 'Rechazo x Prod';
 					$color =  "bg-danger";
 				} else if ($row['final_result'] == FINAL_RESULT_DISCREPANCY) {
-					$status = 'Rechazo x Doctos';
+					$status = 'Discrepancia';
 					$color =  "bg-danger";
 				} else if ($row['final_result'] == FINAL_RESULT_WAITING) {
 					$status = 'En espera';
@@ -1156,7 +1156,7 @@ class Entries extends BaseController
 
 			$action = '';
 
-			if ($row['final_result'] == FINAL_RESULT_DISCREPANCY || $row['status'] == STATUS_REJECTED_BY_DOCUMENTATION) {
+			if ($row['final_result'] == FINAL_RESULT_DISCREPANCY || $row['status'] == STATUS_DISCREPANCY) {
 				$action = '<td><a href="' . base_url() . 'entries/solved?from=' . $row['id'] . '&reload_route=' . $reload_route . '&start_date=' . $start_date_route . '&end_date=' . $end_date_route . '" class="btn btn-primary"> Resuelto </a></td>';
 			}
 
@@ -1219,7 +1219,7 @@ class Entries extends BaseController
 
 		$empQuery .= " AND ( 
 		(progress = " . PROGRESS_RELEASED . " AND  status = " . STATUS_REJECTED_BY_PRODUCT . ")  
-		OR (progress = " . PROGRESS_RELEASED . " AND  status = " . STATUS_REJECTED_BY_DOCUMENTATION . ")
+		OR (progress = " . PROGRESS_RELEASED . " AND  status = " . STATUS_DISCREPANCY . ")
 		OR (progress = " . PROGRESS_CLOSED . " AND  final_result = " . FINAL_RESULT_REJECTED_BY_PRODUCT . ")
 		OR (progress = " . PROGRESS_CLOSED . " AND  final_result = " . FINAL_RESULT_DISCREPANCY . ")
 		)";
@@ -1274,8 +1274,8 @@ class Entries extends BaseController
 				} else if ($row['status'] == STATUS_REJECTED_BY_PRODUCT) {
 					$status = 'Rechazo x Prod';
 					$color =  "bg-danger";
-				} else if ($row['status'] == STATUS_REJECTED_BY_DOCUMENTATION) {
-					$status = 'Rechazo x Doctos';
+				} else if ($row['status'] == STATUS_DISCREPANCY) {
+					$status = 'Discrepancia';
 					$color =  "bg-danger";
 				} else if ($row['status'] == STATUS_WAITING) {
 					$status = 'En espera';
@@ -1292,7 +1292,7 @@ class Entries extends BaseController
 					$status = 'Rechazo x Prod';
 					$color =  "bg-danger";
 				} else if ($row['final_result'] == FINAL_RESULT_DISCREPANCY) {
-					$status = 'Rechazo x Doctos';
+					$status = 'Discrepancia';
 					$color =  "bg-danger";
 				} else if ($row['final_result'] == FINAL_RESULT_WAITING) {
 					$status = 'En espera';
@@ -1305,7 +1305,7 @@ class Entries extends BaseController
 
 			$action = '';
 
-			if ($row['final_result'] == FINAL_RESULT_DISCREPANCY || $row['status'] == STATUS_REJECTED_BY_DOCUMENTATION) {
+			if ($row['final_result'] == FINAL_RESULT_DISCREPANCY || $row['status'] == STATUS_DISCREPANCY) {
 				$action = '<td><a href="' . base_url() . 'entries/solved?from=' . $row['id'] . '&reload_route=' . $reload_route . '&start_date=' . $start_date_route . '&end_date=' . $end_date_route . '" class="btn btn-primary"> Resuelto </a></td>';
 			}
 

@@ -125,7 +125,7 @@ class Reports extends CI_Controller
 		$this->load->helper('time');
 
 
-		$data['title'] = 'RECHAZADAS POR DOCUMENTACION';
+		$data['title'] = 'DISCREPANCIAS';
 		$data['user_type'] = $this->session->userdata(USER_TYPE);
 
 		$data['start_date'] = $start_date;
