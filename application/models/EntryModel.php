@@ -137,7 +137,7 @@ class EntryModel extends CI_Model
 			$this->db->where('id', $from);
 			$entry_row = $this->db->get()->row_array();
 
-			if ($entry_row['final_result'] == FINAL_RESULT_REJECTED_BY_DOCUMENTATION && $status_to_set != FINAL_RESULT_REJECTED_BY_DOCUMENTATION) {
+			if ($entry_row['final_result'] == FINAL_RESULT_DISCREPANCY && $status_to_set != FINAL_RESULT_DISCREPANCY) {
 				//Si esta en el estatus de waiting y se va a cambiar a otro, vamos a sumar el tiempo de waiting y colocarlo
 				$rejected_doc_hours = floatval($entry_row['rejected_doc_hours']);
 				$rejected_doc_hours = $rejected_doc_hours +  convert_time_string_to_float($entry_row['rejected_doc_elapsed_time']);
@@ -306,7 +306,7 @@ class EntryModel extends CI_Model
 			$data['rejected_prod_start_time'] = $current_date_time->format(DATETIME_FORMAT);
 		}
 
-		if ($entry_row['final_result'] == FINAL_RESULT_NOT_DEFINED && $status_to_set == FINAL_RESULT_REJECTED_BY_DOCUMENTATION) {
+		if ($entry_row['final_result'] == FINAL_RESULT_NOT_DEFINED && $status_to_set == FINAL_RESULT_DISCREPANCY) {
 			//Save the waiting_rejected_time
 			$data['rejected_doc_start_time'] = $current_date_time->format(DATETIME_FORMAT);
 		}
@@ -326,7 +326,7 @@ class EntryModel extends CI_Model
 			$data['rejected_prod_hours'] = $rejected_prod_hours;
 		}
 
-		if ($entry_row['final_result'] == FINAL_RESULT_REJECTED_BY_DOCUMENTATION && $status_to_set != FINAL_RESULT_REJECTED_BY_DOCUMENTATION) {
+		if ($entry_row['final_result'] == FINAL_RESULT_DISCREPANCY && $status_to_set != FINAL_RESULT_DISCREPANCY) {
 			//Si esta en el estatus de waiting y se va a cambiar a otro, vamos a sumar el tiempo de waiting y colocarlo
 			$rejected_doc_hours = floatval($entry_row['rejected_doc_hours']);
 			$rejected_doc_hours = $rejected_doc_hours +  convert_time_string_to_float($entry_row['rejected_doc_elapsed_time']);

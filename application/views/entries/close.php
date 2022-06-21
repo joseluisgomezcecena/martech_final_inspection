@@ -176,7 +176,7 @@
 									<option value="">---Seleccione Resultado---</option>
 									<option value="<?= FINAL_RESULT_CLOSED ?>">Si</option>
 									<option value="<?= FINAL_RESULT_REJECTED_BY_PRODUCT ?>">Rechazar por Producto</option>
-									<option value="<?= FINAL_RESULT_REJECTED_BY_DOCUMENTATION ?>">Rechazar por Documentación</option>
+									<option value="<?= FINAL_RESULT_DISCREPANCY ?>">Rechazar por Documentación</option>
 									<option value="<?= FINAL_RESULT_WAITING ?>">En espera por cambio de prioridad</option>
 
 								</select>
@@ -262,7 +262,7 @@
 				$scope.validate_cerrada_por = true;
 				$scope.validate_rev_mapics = true;
 				$scope.validate_discrepancia_descr = true;
-			} else if ($scope.status == <?= FINAL_RESULT_REJECTED_BY_DOCUMENTATION ?>) {
+			} else if ($scope.status == <?= FINAL_RESULT_DISCREPANCY ?>) {
 				//No rechazar por documentacion
 				$scope.validate_cerrada_por = true;
 				$scope.validate_rev_mapics = true;

@@ -89,8 +89,8 @@ defined('EXIT__AUTO_MAX')      or define('EXIT__AUTO_MAX', 125); // highest auto
 /*
  * CONNFIGURE SERVER INSTALLATION...
 */
-//defined('SERVER_PATH_URL')      or define('SERVER_PATH_URL', 'http://localhost/');
-defined('SERVER_PATH_URL')      or define('SERVER_PATH_URL', 'http://mxmtsvrandon1/');
+defined('SERVER_PATH_URL')      or define('SERVER_PATH_URL', 'http://localhost/');
+//defined('SERVER_PATH_URL')      or define('SERVER_PATH_URL', 'http://mxmtsvrandon1/');
 
 
 defined('LOGIN_URL')      or define('LOGIN_URL',  SERVER_PATH_URL . 'authentication/index.php/login?from=' . SERVER_PATH_URL . 'martech_final_inspection');
@@ -131,7 +131,7 @@ defined('STATUS_VERIFY')      or define('STATUS_VERIFY', 5);
 defined('FINAL_RESULT_NOT_DEFINED')      or define('FINAL_RESULT_NOT_DEFINED', 0);
 defined('FINAL_RESULT_CLOSED')      or define('FINAL_RESULT_CLOSED', 2);
 defined('FINAL_RESULT_REJECTED_BY_PRODUCT')      or define('FINAL_RESULT_REJECTED_BY_PRODUCT', 1);
-defined('FINAL_RESULT_REJECTED_BY_DOCUMENTATION')      or define('FINAL_RESULT_REJECTED_BY_DOCUMENTATION', 4);
+defined('FINAL_RESULT_DISCREPANCY')      or define('FINAL_RESULT_DISCREPANCY', 4);
 defined('FINAL_RESULT_WAITING')      or define('FINAL_RESULT_WAITING', 3);
 defined('FINAL_RESULT_VERIFY')      or define('FINAL_RESULT_VERIFY', 5);
 

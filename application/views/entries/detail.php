@@ -318,7 +318,7 @@
 																							echo 'N/A';
 																						} else if ($entry['final_result'] == FINAL_RESULT_REJECTED_BY_PRODUCT) {
 																							echo 'Rechazado por Producto';
-																						} else if ($entry['final_result'] == FINAL_RESULT_REJECTED_BY_DOCUMENTATION || $entry['final_result'] == FINAL_RESULT_VERIFY) {
+																						} else if ($entry['final_result'] == FINAL_RESULT_DISCREPANCY || $entry['final_result'] == FINAL_RESULT_VERIFY) {
 																							echo 'Rechazado por Documentación';
 																						} else if ($entry['final_result'] == FINAL_RESULT_CLOSED) {
 																							echo 'Cerrado';
@@ -339,7 +339,7 @@
 									<input class="form-control" name="asignada" value="<?php echo $entry['rev_mapics'] ?>" readonly>
 								</div>
 
-								<?php if ($entry['final_result'] == FINAL_RESULT_REJECTED_BY_PRODUCT || $entry['final_result'] == FINAL_RESULT_REJECTED_BY_DOCUMENTATION) : ?>
+								<?php if ($entry['final_result'] == FINAL_RESULT_REJECTED_BY_PRODUCT || $entry['final_result'] == FINAL_RESULT_DISCREPANCY) : ?>
 									<div class="col-lg-6 mt-3">
 										<label for="">Comentario</label>
 										<textarea class="form-control" list="part" name="discrepancia_descr" readonly><?php echo $entry['discrepancia_descr'] ?></textarea>
