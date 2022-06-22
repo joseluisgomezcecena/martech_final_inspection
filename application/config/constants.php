@@ -89,8 +89,8 @@ defined('EXIT__AUTO_MAX')      or define('EXIT__AUTO_MAX', 125); // highest auto
 /*
  * CONNFIGURE SERVER INSTALLATION...
 */
-defined('SERVER_PATH_URL')      or define('SERVER_PATH_URL', 'http://localhost/');
-//defined('SERVER_PATH_URL')      or define('SERVER_PATH_URL', 'http://mxmtsvrandon1/');
+//defined('SERVER_PATH_URL')      or define('SERVER_PATH_URL', 'http://localhost/');
+defined('SERVER_PATH_URL')      or define('SERVER_PATH_URL', 'http://mxmtsvrandon1/');
 
 
 defined('LOGIN_URL')      or define('LOGIN_URL',  SERVER_PATH_URL . 'authentication/index.php/login?from=' . SERVER_PATH_URL . 'martech_final_inspection');
