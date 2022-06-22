@@ -174,7 +174,7 @@
 							</div>
 
 
-							<div class="col-lg-6">
+							<div class="col-lg-6" ng-show="validate_final_qty">
 								<label for="" class="text-primary">CANTIDAD FINAL</label>
 								<input type="number" id="qty" class="form-control" name="final_qty" ng-model="final_qty">
 								<small class="text-danger" ng-show="(validate_final_qty && final_qty == '')">Elija la cantidad final de la parte</small>
@@ -183,25 +183,23 @@
 						</div>
 
 						<div class="row mt-3">
-							<div class=" col-lg-6">
+
+							<div class=" col-lg-6" ng-show="validate_location">
 								<label for="location" class="text-primary">LOCACIÓN</label>
-								<select name="location" id="location" class="form-control" ng-model="location">
-									<option value="">Seleccione Locacion</option>
-									<?php foreach ($locations as $location) {
-										$str = '';
+								<input name="location" list="list_locations" id="location" class="form-control" ng-model="location" />
 
-										if ($location['location_id'] == $entry['location'])
-											$str = ' selected';
+								<datalist id="list_locations">
+									<?php foreach ($locations as $location) : ?>
+										<option value="<?php echo $location['location_name'] ?>">
+										<?php endforeach; ?>
+								</datalist>
 
-										echo '<option value="' . $location['location_id'] . '"' . $str . '>' . $location['location_name'] . '</option>';
-									}
-									?>
-								</select>
+
 								<small class=" text-danger" ng-show="(validate_location && location == '')">Seleccione la locación</small>
 							</div>
 
 
-							<div class=" col-lg-6">
+							<div class=" col-lg-6" ng-show="validate_wo_escaneadas">
 								<label for="" class="text-primary">WO ESCANEADAS</label>
 								<input type="text" id="wo_escaneadas" class="form-control" name="wo_escaneadas" ng-model="wo_escaneadas">
 								<small class=" text-danger" ng-show="(validate_wo_escaneadas && wo_escaneadas == '')">Esciba las work orders escaneadas</small>
@@ -210,7 +208,7 @@
 
 
 						<div class="row mt-3">
-							<div class=" col-lg-6">
+							<div class="col-lg-6" ng-show="validate_has_exp_date">
 								<label for="" class="text-primary">TIENE FECHA DE EXPIRACIÓN?</label>
 								<select class="form-control" name="has_fecha_exp" id="has_exp_date" ng-model="has_exp_date" ng-change="select_fecha_exp()">
 									<option value="">-- Seleccione --</option>
@@ -220,7 +218,7 @@
 								<small class=" text-danger" ng-show="(validate_has_exp_date && has_exp_date == '')">Seleccione si existe fecha de expiracion</small>
 							</div>
 
-							<div class=" col-lg-6" id="fecha_exp">
+							<div class="col-lg-6" id="fecha_exp" ng-show="validate_fecha_exp">
 								<label for="" class="text-primary">FECHA DE EXPIRACIÓN</label>
 								<input type="date" class="form-control" name="fecha_exp" ng-model="fecha_exp" ng-disabled="has_exp_date != 1">
 								<small class=" text-danger" ng-show="(validate_fecha_exp && fecha_exp == '')">Establezca la fecha de expiracion</small>
@@ -230,14 +228,14 @@
 
 						<div class="row mt-3">
 
-							<div class=" col-lg-6">
+							<div class="col-lg-6" ng-show="validate_rev_dibujo">
 								<label for="" class="text-primary">REVISIÓN DE DIBUJO</label>
 								<input type="text" class="form-control" id="rev_dibujo" name="rev_dibujo" ng-model="rev_dibujo">
 								<small class=" text-danger" ng-show="(validate_rev_dibujo && rev_dibujo == '')">Escriba la revisión del dibujo</small>
 							</div>
 
 
-							<div class=" col-lg-6">
+							<div class="col-lg-6" ng-show="validate_empaque">
 								<label for="" class="text-primary">EMPAQUE DEL MATERIAL (PSF)</label>
 								<input type="text" class="form-control" id="empaque" name="empaque" ng-model="empaque">
 								<small class=" text-danger" ng-show="(validate_empaque && empaque == '')">Escriba la revisión del dibujo</small>
@@ -245,12 +243,9 @@
 						</div>
 
 						<div class="row mt-3">
-							<div class=" col-lg-6">
+							<div class=" col-lg-6" ng-show="validate_documentos_rev">
 								<label for="documentos_rev" class="text-primary">DOCUMENTOS REVISADOS POR</label>
 
-								<!--
-								<input type="text" class="form-control" id="documentos_rev" name="documentos_rev" ng-model="documentos_rev">
-								-->
 								<input class="form-control" list="list_documentos_rev" id="input_documentos_rev" name="documentos_rev" ng-model="documentos_rev">
 								<datalist id="list_documentos_rev">
 									<?php foreach ($quality_users as $user) : ?>
@@ -263,7 +258,7 @@
 							</div>
 
 
-							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo">
+							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo" ng-show="validate_razon_rechazo">
 								<label for="" class="text-primary">RAZÓN DE RECHAZO / COMENTARIO </label>
 								<textarea class="form-control" name="razon_rechazo" rows="8" ng-model="razon_rechazo"></textarea>
 								<small class="text-danger" ng-show="(validate_razon_rechazo && razon_rechazo == '')">Indique la razon del rechazo</small>
@@ -354,11 +349,10 @@
 				//No
 				$scope.validate_final_qty = true;
 				$scope.validate_location = true;
-				$scope.validate_wo_escaneadas = true;
-				$scope.validate_has_exp_date = true;
-				//$scope.validate_fecha_exp = false;
-				$scope.validate_rev_dibujo = true;
-				$scope.validate_empaque = true;
+				$scope.validate_wo_escaneadas = false;
+				$scope.validate_has_exp_date = false;
+				$scope.validate_rev_dibujo = false;
+				$scope.validate_empaque = false;
 				$scope.validate_documentos_rev = true;
 				$scope.validate_razon_rechazo = true;
 				console.log('entering here' + $scope.status);
@@ -367,11 +361,10 @@
 				//No
 				$scope.validate_final_qty = true;
 				$scope.validate_location = true;
-				$scope.validate_wo_escaneadas = true;
-				$scope.validate_has_exp_date = true;
-				//$scope.validate_fecha_exp = false;
-				$scope.validate_rev_dibujo = true;
-				$scope.validate_empaque = true;
+				$scope.validate_wo_escaneadas = false;
+				$scope.validate_has_exp_date = false;
+				$scope.validate_rev_dibujo = false;
+				$scope.validate_empaque = false;
 				$scope.validate_documentos_rev = true;
 				$scope.validate_razon_rechazo = true;
 				console.log('entering here' + $scope.status);

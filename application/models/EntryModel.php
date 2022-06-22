@@ -54,14 +54,14 @@ class EntryModel extends CI_Model
 		$parcial = $this->input->post('parcial');
 		$reinspeccion = $this->input->post('reinspeccion');
 		$ficticio = $this->input->post('ficticio');
-		$discrepancia = $this->input->post('discrepancia');
+		$rm = $this->input->post('rm');
 		$from = $this->input->post('from');
 		$has_urgency = $this->input->post('has_urgency');
 
 		$parcial = (isset($parcial) ? 1 : 0);
 		$reinspeccion = (isset($reinspeccion) ? 1 : 0);
 		$ficticio = (isset($ficticio) ? 1 : 0);
-		$discrepancia = (isset($discrepancia) ? 1 : 0);
+		$rm = (isset($rm) ? 1 : 0);
 		$substitutes_to = (isset($from) ? $from : NULL);
 		$has_urgency = (isset($has_urgency) ? 1 : 0);
 
@@ -75,7 +75,7 @@ class EntryModel extends CI_Model
 			'parcial' => $parcial,
 			'reinspeccion' => $reinspeccion,
 			'ficticio' => $ficticio,
-			'discrepancia' => $discrepancia,
+			'rm' => $rm,
 			'substitutes_to' => $substitutes_to,
 			'has_urgency' => $has_urgency,
 			'assigned_by' => $this->input->post('assigned_by'),
@@ -91,23 +91,24 @@ class EntryModel extends CI_Model
 
 		$progress = $this->input->post('progress');
 
-		$parcial = $this->input->post('parcial');
+		/*$parcial = $this->input->post('parcial');
 		$reinspeccion = $this->input->post('reinspeccion');
 		$ficticio = $this->input->post('ficticio');
-		$discrepancia = $this->input->post('discrepancia');
+		$discrepancia = $this->input->post('discrepancia');*/
 		$from = $this->input->post('from');
 
-		$parcial = (isset($parcial) ? 1 : 0);
+		/*$parcial = (isset($parcial) ? 1 : 0);
 		$reinspeccion = (isset($reinspeccion) ? 1 : 0);
 		$ficticio = (isset($ficticio) ? 1 : 0);
 		$discrepancia = (isset($discrepancia) ? 1 : 0);
-
+*/
 		$data = array(
+			/*
 			'parcial' => $parcial,
 			'reinspeccion' => $reinspeccion,
 			'ficticio' => $ficticio,
 			'discrepancia' => $discrepancia,
-		);
+			*/);
 
 		$current_date_time = new DateTime();
 
@@ -209,9 +210,11 @@ class EntryModel extends CI_Model
 			'empaque' => $this->input->post('empaque'),
 			'documentos_rev' => $this->input->post('documentos_rev'),
 			'razon_rechazo' => $this->input->post('razon_rechazo'),
-
 		);
 
+		if ($status_to_set == STATUS_DISCREPANCY) {
+			$data['discrepancia'] = 1;
+		}
 
 		/* CODIGO PARA GRABAR LOS TIEMPOS*/
 		//TIMEDIFF('2014-02-17 12:10:08', '2014-02-16 12:10:08')
@@ -258,8 +261,6 @@ class EntryModel extends CI_Model
 			$data['rejected_doc_hours'] = $rejected_doc_hours;
 		}
 
-
-
 		return $this->db->update('entry', $data, array("id" => $id));
 	}
 
@@ -281,10 +282,13 @@ class EntryModel extends CI_Model
 			'progress' => PROGRESS_CLOSED,
 			'final_result' => $final_result,
 			'rev_mapics' => $this->input->post('rev_mapics'),
-			'cerrada_por' => $this->input->post('cerrada_por'),
 			'cerrada_date' => $cerrada_date,
 			'discrepancia_descr' => $discrepancia_descr,
 		);
+
+		if ($status_to_set == FINAL_RESULT_DISCREPANCY) {
+			$data['discrepancia'] = 1;
+		}
 
 
 		/* CODIGO PARA GRABAR LOS TIEMPOS*/

@@ -184,10 +184,10 @@
 							</div>
 
 
-							<div class=" col-lg-3">
-								<label for="" class="text-primary">CERRADA POR</label>
-								<input class="form-control" list="part" name="cerrada_por" id="cerrada_por" ng-model="cerrada_por">
-								<small class="text-danger" ng-show="validate_cerrada_por && cerrada_por == ''">Colocar persona que la orden.</small>
+							<div class=" col-lg-9">
+								<label for="" class="text-primary">REVISIÓN DE ORDEN VS MAPICS Y CERRADA POR</label>
+								<input type="text" class="form-control" list="part" name="rev_mapics" id="rev_mapics" ng-model="rev_mapics" value="<?php echo $entry['rev_mapics']; ?>">
+								<small class="text-danger" ng-show="validate_rev_mapics && rev_mapics == ''">Se requiere la Revisión contra mapics</small>
 
 
 								<datalist id="part">
@@ -195,13 +195,6 @@
 										<option value="<?php echo $user['user_martech_sign'] ?>">
 										<?php endforeach; ?>
 								</datalist>
-							</div>
-
-
-							<div class=" col-lg-3">
-								<label for="" class="text-primary">REVISIÓN VS MAPICS</label>
-								<input type="text" class="form-control" list="part" name="rev_mapics" id="rev_mapics" ng-model="rev_mapics" value="<?php echo $entry['rev_mapics']; ?>">
-								<small class="text-danger" ng-show="validate_rev_mapics && rev_mapics == ''">Se requiere la Revisión contra mapics</small>
 							</div>
 
 
@@ -217,7 +210,6 @@
 						<div class="form-group mt-5">
 							<input style="width: 100%" type="submit" name="save_close" class="btn btn-primary text-white btn-lg" value="Cerrar Orden" ng-disabled="!( 
 								(  validate_status == false ? true : (validate_status && status != '')) && 
-								( validate_cerrada_por == false ? true : (validate_cerrada_por && cerrada_por != '')) && 
 								( validate_rev_mapics == false ? true : (validate_rev_mapics && rev_mapics != '')) && 
 								( validate_discrepancia_descr == false ? true : (validate_discrepancia_descr && discrepancia_descr != ''))  )">
 						</div>
@@ -241,12 +233,12 @@
 
 
 		$scope.status = '';
-		$scope.cerrada_por = '<?php echo $entry['cerrada_por']; ?>';
+
 		$scope.rev_mapics = '<?php echo $entry['rev_mapics']; ?>';
 		$scope.discrepancia_descr = '<?php echo $entry['discrepancia_descr']; ?>';
 
 		$scope.validate_status = true;
-		$scope.validate_cerrada_por = false;
+
 		$scope.validate_rev_mapics = false;
 		$scope.validate_discrepancia_descr = true;
 
@@ -254,31 +246,26 @@
 		$scope.select_status = function() {
 
 			if ($scope.status == '') {
-				$scope.validate_cerrada_por = true;
+
 				$scope.validate_rev_mapics = true;
 				$scope.validate_discrepancia_descr = true;
 			} else if ($scope.status == <?= FINAL_RESULT_REJECTED_BY_PRODUCT ?>) {
 				//No rechazar por producto
-				$scope.validate_cerrada_por = true;
 				$scope.validate_rev_mapics = true;
 				$scope.validate_discrepancia_descr = true;
 			} else if ($scope.status == <?= FINAL_RESULT_DISCREPANCY ?>) {
 				//No rechazar por documentacion
-				$scope.validate_cerrada_por = true;
 				$scope.validate_rev_mapics = true;
 				$scope.validate_discrepancia_descr = true;
 			} else if ($scope.status == <?= FINAL_RESULT_CLOSED ?>) {
 				//Si
-				$scope.validate_cerrada_por = true;
 				$scope.validate_rev_mapics = true;
 				$scope.validate_discrepancia_descr = false;
 			} else if ($scope.status == <?= FINAL_RESULT_WAITING ?>) {
 				//En espera
-				$scope.validate_cerrada_por = false;
 				$scope.validate_rev_mapics = false;
 				$scope.validate_discrepancia_descr = false;
 			} else {
-				$scope.validate_cerrada_por = false;
 				$scope.validate_rev_mapics = false;
 				$scope.validate_discrepancia_descr = false;
 			}

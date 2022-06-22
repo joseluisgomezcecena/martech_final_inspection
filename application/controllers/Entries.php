@@ -293,10 +293,14 @@ class Entries extends BaseController
 		if ($this->input->post('status') == STATUS_WAITING) {
 			$this->form_validation->set_rules('id', 'ID o Folio', 'required');
 			$this->form_validation->set_rules('status', 'Status', 'required');
+		} else if ($this->input->post('status') == STATUS_REJECTED_BY_PRODUCT || $this->input->post('status') == STATUS_DISCREPANCY) {
 
-			//Si trae la cantidad validarla
-			if ($this->input->post('final_qty') != null)
-				$this->form_validation->set_rules('final_qty', 'Cantidad final', 'required|callback_check_is_positive');
+			$this->form_validation->set_rules('id', 'ID o Folio', 'required');
+			$this->form_validation->set_rules('status', 'Status', 'required');
+			$this->form_validation->set_rules('final_qty', 'Cantidad final', 'required|callback_check_is_positive');
+			$this->form_validation->set_rules('location', 'Locacion', 'required');
+			$this->form_validation->set_rules('documentos_rev', 'Documentos revisados', 'required');
+			$this->form_validation->set_rules('razon_rechazo', 'Razon del rechazo.', 'required');
 		} else {
 			$this->form_validation->set_rules('id', 'ID o Folio', 'required');
 			$this->form_validation->set_rules('status', 'Status', 'required');
@@ -310,23 +314,20 @@ class Entries extends BaseController
 		}
 
 
-		if ($this->input->post('status') == 1) {
-			$this->form_validation->set_rules('razon_rechazo', 'Razon del rechazo.', 'required');
-		}
-
 		if ($this->input->post('has_fecha_exp') == 1) {
 			$this->form_validation->set_rules('fecha_exp', 'Fecha de expiracion', 'required');
 		}
 
-		$data['entry'] = $this->EntryModel->get_single_entry($id);
-		$quantity = $data['entry']['qty'];
-		$final_qty = $this->input->post('final_qty');
 
-
-		$error_message = NULL;
-		if ($final_qty > $quantity) {
-			$error_message = 'La cantidad final no puede ser mayor a la cantidad enviada, por favor verifique la informacion';
-			$data['error_message'] = $error_message;
+		if ($this->input->post('status') != STATUS_WAITING) {
+			$data['entry'] = $this->EntryModel->get_single_entry($id);
+			$quantity = $data['entry']['qty'];
+			$final_qty = $this->input->post('final_qty');
+			$error_message = NULL;
+			if ($final_qty > $quantity) {
+				$error_message = 'La cantidad final no puede ser mayor a la cantidad enviada, por favor verifique la informacion';
+				$data['error_message'] = $error_message;
+			}
 		}
 
 
@@ -385,8 +386,7 @@ class Entries extends BaseController
 		} else {
 			$this->form_validation->set_rules('id', 'ID o Folio', 'required');
 			$this->form_validation->set_rules('final_result', 'Resultado', 'required');
-			$this->form_validation->set_rules('cerrada_por', 'Cerrada por', 'required');
-			$this->form_validation->set_rules('rev_mapics', 'Revision contra Mapics', 'required');
+			$this->form_validation->set_rules('rev_mapics', 'Revision contra Mapics y Cerrada Por', 'required');
 		}
 
 		if ($this->form_validation->run() === FALSE) {
@@ -552,8 +552,7 @@ class Entries extends BaseController
 			} elseif ($row['progress'] == PROGRESS_RELEASED) {
 
 				$text =  "2/3 Liberado";
-
-				if ($row['status'] == STATUS_WAITING) {
+				if ($row['status'] == STATUS_WAITING || $row['status'] == STATUS_VERIFY) {
 					$btn_title = "Liberar";
 					$link = "entries/release/{$row['id']}";
 				} else {

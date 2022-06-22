@@ -127,8 +127,8 @@
 										<label class="form-check-label" for="inlineCheckbox2">Reinspeccion</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="discrepancia" value="1">
-										<label class="form-check-label" for="inlineCheckbox3">Discrepancia</label>
+										<input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="rm" value="1">
+										<label class="form-check-label" for="inlineCheckbox3">RM</label>
 									</div>
 									<div class="form-check form-check-inline">
 										<input class="form-check-input" type="checkbox" id="inlineCheckbox4" name="ficticio" value="1">

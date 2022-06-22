@@ -32,7 +32,7 @@ if (!function_exists('readable_elapsed_time')) {
     function convert_time_string_to_float($time_str)
     {
         if ($time_str == null)
-            return '';
+            return 0;
 
         //$time_str example 09:01:26
         $time_parts = explode(":", $time_str);

@@ -51,8 +51,8 @@
 						<input type="text" hidden class="form-control" name="start_date" value="<?= $start_date ?>">
 						<input type="text" hidden class="form-control" name="end_date" value="<?= $end_date ?>">
 
-						<div class="row">
-							<div class=" col-lg-3">
+						<div class="row mb-3">
+							<div class=" col-lg-6">
 								<label for="browser">Numero de parte:</label>
 								<input class="form-control" list="part" name="part_no" value="<?= $old["part_no"] ?>" id="part_no" required oninvalid="this.setCustomValidity('Escriba el no. de Parte')" oninput="this.setCustomValidity('')" readonly>
 
@@ -64,37 +64,12 @@
 							</div>
 
 
-							<div class=" col-lg-3">
+							<div class=" col-lg-6">
 								<label for="">Numero de lote</label>
 								<input type="text" class="form-control" name="lot_no" value="<?= $old["lot_no"] ?>" required oninvalid="this.setCustomValidity('Escriba el no. de Lote')" oninput="this.setCustomValidity('')" readonly>
 							</div>
 
-
-
-							<div class="col-lg-6 mb-5">
-								<p>Modificar propiedades de la orden</p>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="parcial" <?php if ($parcial == '1') echo 'checked'; ?>>
-									<label class="form-check-label" for="inlineCheckbox1">Parcial</label>
-								</div>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="reinspeccion" <?php if ($reinspeccion == '1') echo 'checked'; ?>>
-									<label class="form-check-label" for="inlineCheckbox2">Reinspeccion</label>
-								</div>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox3" name="discrepancia" <?php if ($progress == PROGRESS_CLOSED) echo 'checked'; ?>>
-									<label class="form-check-label" for="inlineCheckbox3">Discrepancia</label>
-								</div>
-								<div class="form-check form-check-inline">
-									<input class="form-check-input" type="checkbox" id="inlineCheckbox4" name="ficticio" <?php if ($ficticio == '1') echo 'checked'; ?>>
-									<label class="form-check-label" for="inlineCheckbox4">Ficticio</label>
-								</div>
-
-							</div>
-
-
 						</div>
-
 
 
 

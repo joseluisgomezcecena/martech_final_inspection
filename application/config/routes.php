@@ -44,7 +44,7 @@ $route['entries/solved']['get'] = 'entries/solved';
 $route['entries/solved']['post'] = 'entries/solved_save';
 
 //calidad
-$route['entries/release/(:any)']['get'] = 'entries/release/$1';
+$route['entries/releavisu/(:any)']['get'] = 'entries/release/$1';
 $route['entries/release/(:any)']['post'] = 'entries/release_save/$1';
 
 

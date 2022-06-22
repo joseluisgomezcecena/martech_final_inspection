@@ -80,12 +80,17 @@
 										<label for="inlineCheckbox2">Reinspeccion</label>
 									</div>
 									<div class="form-check form-check-inline mr-2">
-										<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="discrepancia" <?php if ($entry['ficticio'] == 1) echo "checked" ?> disabled>
-										<label for="inlineCheckbox2">Discrepancia</label>
+										<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="rm" <?php if ($entry['rm'] == 1) echo "checked" ?> disabled>
+										<label for="inlineCheckbox2">RM</label>
 									</div>
 									<div class="form-check form-check-inline">
-										<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="ficticio" <?php if ($entry['discrepancia'] == 1) echo "checked" ?> disabled>
+										<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="ficticio" <?php if ($entry['ficticio'] == 1) echo "checked" ?> disabled>
 										<label for="inlineCheckbox2">Ficticio</label>
+									</div>
+
+									<div class="form-check form-check-inline mr-2">
+										<input class="form-check-input" type="checkbox" id="inlineCheckbox2" name="discrepancia" <?php if ($entry['discrepancia'] == 1) echo "checked" ?> disabled>
+										<label for="inlineCheckbox2">Discrepancia</label>
 									</div>
 								</div>
 							</div>
@@ -203,23 +208,7 @@
 
 								<div class=" col-lg-3">
 									<label for="">Location</label>
-									<input type="text" class="form-control" value="<?php
-
-																					if ($entry['location'] == LOCATION_MOQC) {
-																						echo LOCATION_MOQC_STR;
-																					} else if ($entry['location'] == LOCATION_ASQC) {
-																						echo LOCATION_ASQC_STR;
-																					} else if ($entry['location'] == LOCATION_MPQC) {
-																						echo LOCATION_MPQC_STR;
-																					} else if ($entry['location'] == LOCATION_MPQCWH) {
-																						echo LOCATION_MPQCWH_STR;
-																					} else if ($entry['location'] == LOCATION_INGE3S) {
-																						echo LOCATION_INGE3S_STR;
-																					} else if ($entry['location'] == LOCATION_INGE) {
-																						echo LOCATION_INGE_STR;
-																					}
-
-																					?>" readonly>
+									<input type="text" class="form-control" value="<?php echo $entry['location'] ?>" readonly>
 								</div>
 							</div>
 
@@ -329,13 +318,8 @@
 								</div>
 
 
-								<div class=" col-lg-3">
-									<label for="">Cerrada por</label>
-									<input class="form-control" name="asignada" value="<?php echo $entry['cerrada_por'] ?>" readonly>
-								</div>
-
-								<div class=" col-lg-3">
-									<label for="">Revisión vs Mapics</label>
+								<div class=" col-lg-6">
+									<label for="">Revisión vs Mapics y Cerrada Por</label>
 									<input class="form-control" name="asignada" value="<?php echo $entry['rev_mapics'] ?>" readonly>
 								</div>
 
