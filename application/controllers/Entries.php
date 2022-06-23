@@ -357,14 +357,37 @@ class Entries extends BaseController
 			$this->EntryModel->release_entry();
 
 			//session message
-			$this->session->set_flashdata('liberada', 'Se ha liberado la entrada.');
+			$this->session->set_flashdata('liberada', $this->getSaveMessage());
 
 			redirect(base_url() . 'entries/release/' . $id);
 		}
 	}
 
 
+	public function getSaveMessage()
+	{
+		$message = "";
+		$status = $this->input->post('status');
 
+		/*
+		defined('STATUS_REJECTED_BY_PRODUCT')      or define('STATUS_REJECTED_BY_PRODUCT', 1);
+defined('STATUS_DISCREPANCY')      or define('STATUS_DISCREPANCY', 4);
+defined('STATUS_ACCEPTED')      or define('STATUS_ACCEPTED', 2);
+defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
+
+		*/
+		if ($status == STATUS_DISCREPANCY) {
+			$message = "Existen discrepancias por subsanar, ahora mismo producción ya ha sido notificado a través del sistema";
+		} else if ($status == STATUS_REJECTED_BY_PRODUCT) {
+			$message = "El producto ha sizo rechazado y es necesario que producción formule una nueva orden";
+		} else if ($status == STATUS_WAITING) {
+			$message = "Se colocó en espera esta orden, retomela lo mas pronto posible en cuanto tenga oportunidad";
+		} else if ($status == STATUS_ACCEPTED) {
+			$message = "Se ha liberado la orden y esta esperando para ser Cerrada";
+		}
+
+		return $message;
+	}
 
 
 
@@ -397,7 +420,7 @@ class Entries extends BaseController
 
 			if ($this->EntryModel->close_entry() == TRUE) {
 				//session message
-				$this->session->set_flashdata('cerrada', 'Se ha cerrado la entrada.');
+				$this->session->set_flashdata('cerrada', $this->getSaveCloseMessage());
 				redirect(base_url() . 'entries/close/' . $id);
 			} else {
 				$this->session->set_flashdata('cerrada y Aceptado', 'Se ha cerrado satisfactoriamente la orden.');
@@ -406,6 +429,24 @@ class Entries extends BaseController
 		}
 	}
 
+
+	public function getSaveCloseMessage()
+	{
+		$message = "";
+		$final_result = $this->input->post('final_result');
+
+		if ($final_result == FINAL_RESULT_DISCREPANCY) {
+			$message = "Existen discrepancias por subsanar, ahora mismo producción ya ha sido notificado a través del sistema";
+		} else if ($final_result == FINAL_RESULT_REJECTED_BY_PRODUCT) {
+			$message = "El producto ha sizo rechazado y es necesario que producción formule una nueva orden";
+		} else if ($final_result == FINAL_RESULT_WAITING) {
+			$message = "Se colocó en espera esta orden, retomela lo mas pronto posible en cuanto tenga oportunidad";
+		} else if ($final_result == FINAL_RESULT_CLOSED) {
+			$message = "Se ha cerrado la orden con éxito";
+		}
+
+		return $message;
+	}
 
 
 
@@ -424,73 +465,64 @@ class Entries extends BaseController
 	}
 
 
-	/*function api_get_entries($apply_filter_not_closed = FALSE)
+	function getActionName($progress, $status)
 	{
-		$this->load->helper('time');
+		$btn_title = "";
 
-		$start_date = $this->input->get('start_date');
-		if ($start_date != '') $start_date .= ' 00:00:00';
-
-		$end_date = $this->input->get('end_date');
-		if ($end_date != '') $end_date .= ' 23:59:59';
-
-		## Fetch records
-		//$empQuery = "SELECT * FROM entry
-		//	WHERE  1  " . $searchQuery . " ORDER BY " . $columnName . "  " . $columnSortOrder . " LIMIT " . $row . " , " . $rowperpage;
-		$empQuery = "SELECT id, created_at, part_no, lot_no, qty, plantas.planta_nombre as plant, progress FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
-		if ($apply_filter_not_closed == TRUE) {
-			$empQuery .= ' AND (progress < ' . PROGRESS_CLOSED . ') ';
-		}
-		$empQuery .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
-		//$empQuery .=  $searchQuery . " ORDER BY " . $columnName . "  " . $columnSortOrder . " LIMIT " . $row . " , " . $rowperpage;
-
-		$empRecords = $this->db->query($empQuery)->result_array();
-
-		$data = array();
-
-		foreach ($empRecords as $row) {
-
-			//progress
-			if ($row['progress'] == PROGRESS_NOT_ASSIGNED) {
-				$btn_title = "Asignar";
-				$link = "entries/assign/{$row['id']}";
-				$text =  "0/3 En espera";
-				$color =  "bg-danger";
-			} elseif ($row['progress'] == PROGRESS_ASSIGNED) {
-				$btn_title = "Liberar";
-				$link = "entries/release/{$row['id']}";
-				$text =  "1/3 Asignado en espera a Liberar";
-				$color =  "bg-warning";
-			} elseif ($row['progress'] == PROGRESS_RELEASED) {
-				$btn_title = "Cerrar";
-				$link = "entries/close/{$row['id']}";
-				$text =  "2/3 Liberado en espera a Cerrar";
-				$color =  "bg-primary";
-			} elseif ($row['progress'] == PROGRESS_CLOSED) {
-				$btn_title = "Cerrar";
-				$link = "entries/close/{$row['id']}";
-				$text =  "3/3 Orden Cerrada";
-				$color =  "bg-success disabled";
+		if ($progress == PROGRESS_NOT_ASSIGNED) {
+			$btn_title = "Asignar";
+		} elseif ($progress == PROGRESS_ASSIGNED) {
+			$btn_title = "Resultado de la Inspección";
+		} elseif ($progress == PROGRESS_RELEASED) {
+			if ($status == STATUS_WAITING || $status == STATUS_VERIFY) {
+				$btn_title = "Resultado de la Inspección";
+			} else {
+				$btn_title = "Resultado del Cierre";
 			}
+		} elseif ($progress == PROGRESS_CLOSED) {
+			$btn_title = "Resultado del Cierre";
+		}
+		return $btn_title;
+	}
 
-			$link = base_url() . $link;
 
-			$data[] = array(
-				"id" => '<a href="' . base_url() . 'reports/detail/' . $row['id'] . '" >' . $row['id'] . '</a>',
-				"created_at" => date_format(new DateTime($row['created_at']), 'm/d/y g:i A'),
-				"part_no" => $row['part_no'],
-				"lot_no" => $row['lot_no'],
-				"qty" => $row['qty'],
-				"planta" => $row['plant'],
-				"progress" => "<h4><span class='badge $color'>$text</span></h4>",
-				"btn_id" => "<a href='$link' class='btn btn-primary'>$btn_title</a>"
-			);
+	function getActionLink($progress, $status, $id)
+	{
+		$link = "";
+
+		if ($progress == PROGRESS_NOT_ASSIGNED) {
+			$link = "entries/assign/{$id}";
+		} elseif ($progress == PROGRESS_ASSIGNED) {
+			$link = "entries/release/{$id}";
+		} elseif ($progress == PROGRESS_RELEASED) {
+			if ($status == STATUS_WAITING || $status == STATUS_VERIFY) {
+				$link = "entries/release/{$id}";
+			} else {
+				$link = "entries/close/{$id}";
+			}
+		} elseif ($progress == PROGRESS_CLOSED) {
+			$link = "entries/close/{$id}";
 		}
 
-		## Response
-		$response['data'] = $data;
-		echo json_encode($response);
-	}*/
+		return $link;
+	}
+
+	function getActionColor($progress)
+	{
+		$color =  "";
+
+		if ($progress == PROGRESS_NOT_ASSIGNED) {
+			$color =  "bg-danger";
+		} elseif ($progress == PROGRESS_ASSIGNED) {
+			$color =  "bg-warning";
+		} elseif ($progress == PROGRESS_RELEASED) {
+			$color =  "bg-primary";
+		} elseif ($progress == PROGRESS_CLOSED) {
+			$color =  "bg-success disabled";
+		}
+
+		return $color;
+	}
 
 
 	function api_entries_opened()
@@ -540,77 +572,16 @@ class Entries extends BaseController
 
 		foreach ($empRecords as $row) {
 
-			//progress
-			if ($row['progress'] == PROGRESS_NOT_ASSIGNED) {
-				$btn_title = "Asignar";
-				$link = "entries/assign/{$row['id']}";
-				$text =  "0/3 En espera";
-			} elseif ($row['progress'] == PROGRESS_ASSIGNED) {
-				$btn_title = "Liberar";
-				$link = "entries/release/{$row['id']}";
-				$text =  "1/3 Asignado";
-			} elseif ($row['progress'] == PROGRESS_RELEASED) {
-
-				$text =  "2/3 Liberado";
-				if ($row['status'] == STATUS_WAITING || $row['status'] == STATUS_VERIFY) {
-					$btn_title = "Liberar";
-					$link = "entries/release/{$row['id']}";
-				} else {
-					$btn_title = "Cerrar";
-					$link = "entries/close/{$row['id']}";
-				}
-			} elseif ($row['progress'] == PROGRESS_CLOSED) {
-
-				$text =  "3/3 Orden Cerrada";
-				$btn_title = "Cerrar";
-				$link = "entries/close/{$row['id']}";
-			}
 
 
-			$status = '';
-			$color = '';
+			$btn_title = $this->getActionName($row['progress'], $row['status']);
+			$link = $this->getActionLink($row['progress'], $row['status'], $row['id']);
 
-			if ($row['progress'] == PROGRESS_NOT_ASSIGNED) {
-				$status = 'Sin asignar';
-				$color =  "bg-secondary";
-			} else if ($row['progress'] == PROGRESS_ASSIGNED) {
-				$status = 'Asignado';
-				$color =  "bg-primary";
-			} else if ($row['progress'] == PROGRESS_RELEASED) {
-				if ($row['status'] == STATUS_ACCEPTED) {
-					$status = 'Aceptado';
-					$color =  "bg-success disabled";
-				} else if ($row['status'] == STATUS_REJECTED_BY_PRODUCT) {
-					$status = 'Rechazo x Prod';
-					$color =  "bg-danger";
-				} else if ($row['status'] == STATUS_DISCREPANCY) {
-					$status = 'Discrepancia';
-					$color =  "bg-danger";
-				} else if ($row['status'] == STATUS_WAITING) {
-					$status = 'En espera';
-					$color =  "bg-warning";
-				} else if ($row['status'] == STATUS_VERIFY) {
-					$status = 'Por Verificar';
-					$color =  "bg-danger";
-				}
-			} else if ($row['progress'] == PROGRESS_CLOSED) {
-				if ($row['final_result'] == FINAL_RESULT_CLOSED) {
-					$status = 'Aceptado';
-					$color =  "bg-success disabled";
-				} else if ($row['final_result'] == FINAL_RESULT_REJECTED_BY_PRODUCT) {
-					$status = 'Rechazo x Prod';
-					$color =  "bg-danger";
-				} else if ($row['final_result'] == FINAL_RESULT_DISCREPANCY) {
-					$status = 'Discrepancia';
-					$color =  "bg-danger";
-				} else if ($row['final_result'] == FINAL_RESULT_WAITING) {
-					$status = 'En espera';
-					$color =  "bg-warning";
-				} else if ($row['final_result'] == FINAL_RESULT_VERIFY) {
-					$status = 'Por Verificar';
-					$color =  "bg-danger";
-				}
-			}
+			$text = $this->getProgressName($row['progress']);
+			$status = $this->getStatusText($row['progress'], $row['status'], $row['final_result']);
+			$color = $this->getStatusColor($row['progress'], $row['status'], $row['final_result']);
+
+
 
 			$link = base_url() . $link;
 
@@ -708,44 +679,12 @@ class Entries extends BaseController
 
 		foreach ($empRecords as $row) {
 
-			$status = '';
-			$color = '';
+			$status = $this->getStatusText($row['progress'], $row['status'], $row['final_result']);
+			$color = $this->getStatusColor($row['progress'], $row['status'], $row['final_result']);
 
-			if ($row['progress'] == PROGRESS_NOT_ASSIGNED) {
-				$status = 'Sin asignar';
-				$color =  "bg-secondary";
-			} else if ($row['progress'] == PROGRESS_ASSIGNED) {
-				$status = 'Asignado';
-				$color =  "bg-primary";
-			} else if ($row['progress'] == PROGRESS_RELEASED) {
-				if ($row['status'] == STATUS_ACCEPTED) {
-					$status = 'Aceptado';
-					$color =  "bg-success disabled";
-				} else if ($row['status'] == STATUS_REJECTED_BY_PRODUCT) {
-					$status = 'Rechazo x Prod';
-					$color =  "bg-danger";
-				} else if ($row['status'] == STATUS_DISCREPANCY) {
-					$status = 'Discrepancia';
-					$color =  "bg-danger";
-				} else if ($row['status'] == STATUS_WAITING) {
-					$status = 'En espera';
-					$color =  "bg-warning";
-				}
+			if ($row['progress'] == PROGRESS_RELEASED) {
 				$comments = $row['razon_rechazo'];
 			} else if ($row['progress'] == PROGRESS_CLOSED) {
-				if ($row['final_result'] == FINAL_RESULT_CLOSED) {
-					$status = 'Aceptado';
-					$color =  "bg-success disabled";
-				} else if ($row['final_result'] == FINAL_RESULT_REJECTED_BY_PRODUCT) {
-					$status = 'Rechazo x Prod';
-					$color =  "bg-danger";
-				} else if ($row['final_result'] == FINAL_RESULT_DISCREPANCY) {
-					$status = 'Discrepancia';
-					$color =  "bg-danger";
-				} else if ($row['final_result'] == FINAL_RESULT_WAITING) {
-					$status = 'En espera';
-					$color =  "bg-warning";
-				}
 				$comments = $row['discrepancia_descr'];
 			}
 
@@ -775,6 +714,95 @@ class Entries extends BaseController
 		echo json_encode($response);
 	}
 
+
+	function getProgressName($progress)
+	{
+		$text = '';
+		if ($progress == PROGRESS_NOT_ASSIGNED) {
+			$text =  "0/3 En espera";
+		} elseif ($progress == PROGRESS_ASSIGNED) {
+			$text =  "1/3 Asignado";
+		} elseif ($progress == PROGRESS_RELEASED) {
+			$text =  "2/3 En Liberación";
+		} elseif ($progress == PROGRESS_CLOSED) {
+			$text =  "3/3 En Cierre";
+		}
+		return $text;
+	}
+
+	function getStatusText($progress, $status, $final_result)
+	{
+		$status_str = '';
+
+		if ($progress == PROGRESS_NOT_ASSIGNED) {
+			$status_str = 'Sin asignar';
+		} else if ($progress == PROGRESS_ASSIGNED) {
+			$status_str = 'Asignado';
+		} else if ($progress == PROGRESS_RELEASED) {
+			if ($status == STATUS_ACCEPTED) {
+				$status_str = 'Aceptado';
+			} else if ($status == STATUS_REJECTED_BY_PRODUCT) {
+				$status_str = 'Rechazo x Prod';
+			} else if ($status == STATUS_DISCREPANCY) {
+				$status_str = 'Discrepancia';
+			} else if ($status == STATUS_WAITING) {
+				$status_str = 'En espera';
+			} else if ($status == STATUS_VERIFY) {
+				$status_str = 'Inspeccionar Discrepancia';
+			}
+		} else if ($progress == PROGRESS_CLOSED) {
+			if ($final_result == FINAL_RESULT_CLOSED) {
+				$status_str = 'Cerrado';
+			} else if ($final_result == FINAL_RESULT_REJECTED_BY_PRODUCT) {
+				$status_str = 'Rechazo x Prod';
+			} else if ($final_result == FINAL_RESULT_DISCREPANCY) {
+				$status_str = 'Discrepancia';
+			} else if ($final_result == FINAL_RESULT_WAITING) {
+				$status_str = 'En espera';
+			} else if ($final_result == FINAL_RESULT_VERIFY) {
+				$status_str = 'Inspeccionar Discrepancia';
+			}
+		}
+
+		return $status_str;
+	}
+
+	function getStatusColor($progress, $status, $final_result)
+	{
+		$color = '';
+
+		if ($progress == PROGRESS_NOT_ASSIGNED) {
+			$color =  "bg-secondary";
+		} else if ($progress == PROGRESS_ASSIGNED) {
+			$color =  "bg-primary";
+		} else if ($progress == PROGRESS_RELEASED) {
+			if ($status == STATUS_ACCEPTED) {
+				$color =  "bg-success disabled";
+			} else if ($status == STATUS_REJECTED_BY_PRODUCT) {
+				$color =  "bg-danger";
+			} else if ($status == STATUS_DISCREPANCY) {
+				$color =  "bg-danger";
+			} else if ($status == STATUS_WAITING) {
+				$color =  "bg-warning";
+			} else if ($status == STATUS_VERIFY) {
+				$color =  "bg-danger";
+			}
+		} else if ($progress == PROGRESS_CLOSED) {
+			if ($final_result == FINAL_RESULT_CLOSED) {
+				$color =  "bg-success disabled";
+			} else if ($final_result == FINAL_RESULT_REJECTED_BY_PRODUCT) {
+				$color =  "bg-danger";
+			} else if ($final_result == FINAL_RESULT_DISCREPANCY) {
+				$color =  "bg-danger";
+			} else if ($final_result == FINAL_RESULT_WAITING) {
+				$color =  "bg-warning";
+			} else if ($final_result == FINAL_RESULT_VERIFY) {
+				$color =  "bg-danger";
+			}
+		}
+
+		return $color;
+	}
 
 	function api_entries_rejected()
 	{
@@ -812,28 +840,12 @@ class Entries extends BaseController
 
 		foreach ($empRecords as $row) {
 
-			if ($row['progress'] == PROGRESS_NOT_ASSIGNED) {
-				$btn_title = "Asignar";
-				$link = "entries/assign/{$row['id']}";
-				$text =  "0/3 En espera";
-				$color =  "bg-danger";
-			} elseif ($row['progress'] == PROGRESS_ASSIGNED) {
-				$btn_title = "Liberar";
-				$link = "entries/release/{$row['id']}";
-				$text =  "1/3 Asignado";
-				$color =  "bg-warning";
-			} elseif ($row['progress'] == PROGRESS_RELEASED) {
-				$btn_title = "Cerrar";
-				$link = "entries/close/{$row['id']}";
-				$text =  "2/3 Liberado";
-				$color =  "bg-primary";
-			} elseif ($row['progress'] == PROGRESS_CLOSED) {
-				$btn_title = "Cerrar";
-				$link = "entries/close/{$row['id']}";
-				$text =  "3/3 Orden Cerrada";
-				$color =  "bg-success disabled";
-			}
+			$btn_title = $this->getActionName($row['progress'], $row['status']);
+			$link = $this->getActionLink($row['progress'], $row['status'], $row['id']);
+			$color = $this->getActionColor($row['progress']);
 
+
+			$text = $this->getProgressName($row['progress']);
 
 			$action = '';
 
@@ -903,27 +915,7 @@ class Entries extends BaseController
 
 		foreach ($empRecords as $row) {
 
-			if ($row['progress'] == PROGRESS_NOT_ASSIGNED) {
-				//$btn_title = "Asignar";
-				//$link = "entries/assign/{$row['id']}";
-				$text =  "0/3 En espera";
-				//$color =  "bg-danger";
-			} elseif ($row['progress'] == PROGRESS_ASSIGNED) {
-				//$btn_title = "Liberar";
-				//$link = "entries/release/{$row['id']}";
-				$text =  "1/3 Asignado";
-				//$color =  "bg-warning";
-			} elseif ($row['progress'] == PROGRESS_RELEASED) {
-				//$btn_title = "Cerrar";
-				//$link = "entries/close/{$row['id']}";
-				$text =  "2/3 Liberado";
-				//$color =  "bg-primary";
-			} elseif ($row['progress'] == PROGRESS_CLOSED) {
-				//$btn_title = "Cerrar";
-				//$link = "entries/close/{$row['id']}";
-				$text =  "3/3 Orden Cerrada";
-				//$color =  "bg-success disabled";
-			}
+			$text = $this->getProgressName($row['progress']);
 
 			$action = '';
 
@@ -989,27 +981,7 @@ class Entries extends BaseController
 
 		foreach ($empRecords as $row) {
 
-			if ($row['progress'] == PROGRESS_NOT_ASSIGNED) {
-				//$btn_title = "Asignar";
-				//$link = "entries/assign/{$row['id']}";
-				$text =  "0/3 En espera";
-				//$color =  "bg-danger";
-			} elseif ($row['progress'] == PROGRESS_ASSIGNED) {
-				//$btn_title = "Liberar";
-				//$link = "entries/release/{$row['id']}";
-				$text =  "1/3 Asignado";
-				//$color =  "bg-warning";
-			} elseif ($row['progress'] == PROGRESS_RELEASED) {
-				//$btn_title = "Cerrar";
-				//$link = "entries/close/{$row['id']}";
-				$text =  "2/3 Liberado";
-				//$color =  "bg-primary";
-			} elseif ($row['progress'] == PROGRESS_CLOSED) {
-				//$btn_title = "Cerrar";
-				//$link = "entries/close/{$row['id']}";
-				$text =  "3/3 Orden Cerrada";
-				//$color =  "bg-success disabled";
-			}
+			$text = $this->getProgressName($row['progress']);
 
 			$action = '';
 
@@ -1085,73 +1057,11 @@ class Entries extends BaseController
 
 		foreach ($empRecords as $row) {
 
-			if ($row['progress'] == PROGRESS_NOT_ASSIGNED) {
-				//$btn_title = "Asignar";
-				//$link = "entries/assign/{$row['id']}";
-				$text =  "0/3 En espera";
-				//$color =  "bg-danger";
-			} elseif ($row['progress'] == PROGRESS_ASSIGNED) {
-				//$btn_title = "Liberar";
-				//$link = "entries/release/{$row['id']}";
-				$text =  "1/3 Asignado";
-				//$color =  "bg-warning";
-			} elseif ($row['progress'] == PROGRESS_RELEASED) {
-				//$btn_title = "Cerrar";
-				//$link = "entries/close/{$row['id']}";
-				$text =  "2/3 Liberado";
-				//$color =  "bg-primary";
-			} elseif ($row['progress'] == PROGRESS_CLOSED) {
-				//$btn_title = "Cerrar";
-				//$link = "entries/close/{$row['id']}";
-				$text =  "3/3 Orden Cerrada";
-				//$color =  "bg-success disabled";
-			}
 
+			$text = $this->getProgressName($row['progress']);
+			$status = $this->getStatusText($row['progress'], $row['status'], $row['final_result']);
+			$color = $this->getStatusColor($row['progress'], $row['status'], $row['final_result']);
 
-			$status = '';
-			$color = '';
-
-			if ($row['progress'] == PROGRESS_NOT_ASSIGNED) {
-				$status = 'Sin asignar';
-				$color =  "bg-secondary";
-			} else if ($row['progress'] == PROGRESS_ASSIGNED) {
-				$status = 'Asignado';
-				$color =  "bg-primary";
-			} else if ($row['progress'] == PROGRESS_RELEASED) {
-				if ($row['status'] == STATUS_ACCEPTED) {
-					$status = 'Aceptado';
-					$color =  "bg-success disabled";
-				} else if ($row['status'] == STATUS_REJECTED_BY_PRODUCT) {
-					$status = 'Rechazo x Prod';
-					$color =  "bg-danger";
-				} else if ($row['status'] == STATUS_DISCREPANCY) {
-					$status = 'Discrepancia';
-					$color =  "bg-danger";
-				} else if ($row['status'] == STATUS_WAITING) {
-					$status = 'En espera';
-					$color =  "bg-warning";
-				} else if ($row['status'] == STATUS_VERIFY) {
-					$status = 'Por Verificar';
-					$color =  "bg-danger";
-				}
-			} else if ($row['progress'] == PROGRESS_CLOSED) {
-				if ($row['final_result'] == FINAL_RESULT_CLOSED) {
-					$status = 'Aceptado';
-					$color =  "bg-success disabled";
-				} else if ($row['final_result'] == FINAL_RESULT_REJECTED_BY_PRODUCT) {
-					$status = 'Rechazo x Prod';
-					$color =  "bg-danger";
-				} else if ($row['final_result'] == FINAL_RESULT_DISCREPANCY) {
-					$status = 'Discrepancia';
-					$color =  "bg-danger";
-				} else if ($row['final_result'] == FINAL_RESULT_WAITING) {
-					$status = 'En espera';
-					$color =  "bg-warning";
-				} else if ($row['final_result'] == FINAL_RESULT_VERIFY) {
-					$status = 'Por Verificar';
-					$color =  "bg-danger";
-				}
-			}
 
 			$action = '';
 
@@ -1234,74 +1144,10 @@ class Entries extends BaseController
 
 		foreach ($empRecords as $row) {
 
-			if ($row['progress'] == PROGRESS_NOT_ASSIGNED) {
-				//$btn_title = "Asignar";
-				//$link = "entries/assign/{$row['id']}";
-				$text =  "0/3 En espera";
-				//$color =  "bg-danger";
-			} elseif ($row['progress'] == PROGRESS_ASSIGNED) {
-				//$btn_title = "Liberar";
-				//$link = "entries/release/{$row['id']}";
-				$text =  "1/3 Asignado";
-				//$color =  "bg-warning";
-			} elseif ($row['progress'] == PROGRESS_RELEASED) {
-				//$btn_title = "Cerrar";
-				//$link = "entries/close/{$row['id']}";
-				$text =  "2/3 Liberado";
-				//$color =  "bg-primary";
-			} elseif ($row['progress'] == PROGRESS_CLOSED) {
-				//$btn_title = "Cerrar";
-				//$link = "entries/close/{$row['id']}";
-				$text =  "3/3 Orden Cerrada";
-				//$color =  "bg-success disabled";
-			}
 
-
-			$status = '';
-			$color = '';
-
-			if ($row['progress'] == PROGRESS_NOT_ASSIGNED) {
-				$status = 'Sin asignar';
-				$color =  "bg-secondary";
-			} else if ($row['progress'] == PROGRESS_ASSIGNED) {
-				$status = 'Asignado';
-				$color =  "bg-primary";
-			} else if ($row['progress'] == PROGRESS_RELEASED) {
-				if ($row['status'] == STATUS_ACCEPTED) {
-					$status = 'Aceptado';
-					$color =  "bg-success disabled";
-				} else if ($row['status'] == STATUS_REJECTED_BY_PRODUCT) {
-					$status = 'Rechazo x Prod';
-					$color =  "bg-danger";
-				} else if ($row['status'] == STATUS_DISCREPANCY) {
-					$status = 'Discrepancia';
-					$color =  "bg-danger";
-				} else if ($row['status'] == STATUS_WAITING) {
-					$status = 'En espera';
-					$color =  "bg-warning";
-				} else if ($row['status'] == STATUS_VERIFY) {
-					$status = 'Por Verificar';
-					$color =  "bg-danger";
-				}
-			} else if ($row['progress'] == PROGRESS_CLOSED) {
-				if ($row['final_result'] == FINAL_RESULT_CLOSED) {
-					$status = 'Aceptado';
-					$color =  "bg-success disabled";
-				} else if ($row['final_result'] == FINAL_RESULT_REJECTED_BY_PRODUCT) {
-					$status = 'Rechazo x Prod';
-					$color =  "bg-danger";
-				} else if ($row['final_result'] == FINAL_RESULT_DISCREPANCY) {
-					$status = 'Discrepancia';
-					$color =  "bg-danger";
-				} else if ($row['final_result'] == FINAL_RESULT_WAITING) {
-					$status = 'En espera';
-					$color =  "bg-warning";
-				} else if ($row['final_result'] == FINAL_RESULT_VERIFY) {
-					$status = 'Por Verificar';
-					$color =  "bg-danger";
-				}
-			}
-
+			$text = $this->getProgressName($row['progress']);
+			$status = $this->getStatusText($row['progress'], $row['status'], $row['final_result']);
+			$color = $this->getStatusColor($row['progress'], $row['status'], $row['final_result']);
 			$action = '';
 
 			if ($row['final_result'] == FINAL_RESULT_DISCREPANCY || $row['status'] == STATUS_DISCREPANCY) {

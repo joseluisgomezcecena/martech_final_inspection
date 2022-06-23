@@ -33,10 +33,10 @@
 			<?php if ($this->session->flashdata('liberada')) : ?>
 
 				<div class="alert alert-success alert-dismissible fade show" role="alert">
-					<strong class="uppercase"><bdi>Liberada</bdi></strong>
-					Se ha liberadao la orden y esta esperando a ser cerrada.
+					<strong class="uppercase"><bdi>Cambios guardados</bdi></strong>
+					<?php echo $this->session->flashdata('liberada'); ?>.
 					Haz click <a href="<?php echo  base_url() ?>">Aqui</a> para regresar
-					o cierra este mensaje para cambiar los datos de esta liberación.
+					o edite ese formulario para modificar los datos de esta inspección.
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
 				</div>
@@ -268,7 +268,7 @@
 
 
 						<div class="form-group mt-5">
-							<input style="width: 100%" type="submit" name="save_release" class="btn btn-primary text-white btn-lg" value="Liberar Entrada" ng-disabled="!( 
+							<input style="width: 100%" type="submit" name="save_release" class="btn btn-primary text-white btn-lg" value="{{btn_save_title}}" ng-disabled="!( 
 								(  validate_status && status != '') && 
 								( validate_final_qty == false ? true : (validate_final_qty && final_qty != '')) && 
 								( validate_location == false ? true : (validate_location && location != '')) && 
@@ -299,6 +299,7 @@
 	var app = angular.module('myApp', []);
 	app.controller('myCtrl', function($scope) {
 
+		$scope.btn_save_title = 'Liberar Entrada';
 
 		$scope.status = '';
 		$scope.validate_status = true;
@@ -356,7 +357,7 @@
 				$scope.validate_documentos_rev = true;
 				$scope.validate_razon_rechazo = true;
 				console.log('entering here' + $scope.status);
-
+				$scope.btn_save_title = 'Rechazar Producto';
 			} else if ($scope.status == <?= STATUS_DISCREPANCY ?>) {
 				//No
 				$scope.validate_final_qty = true;
@@ -368,7 +369,7 @@
 				$scope.validate_documentos_rev = true;
 				$scope.validate_razon_rechazo = true;
 				console.log('entering here' + $scope.status);
-
+				$scope.btn_save_title = 'Guardar Discrepancia';
 			} else if ($scope.status == <?= STATUS_ACCEPTED ?>) {
 				//Si
 				$scope.validate_final_qty = true;
@@ -380,6 +381,8 @@
 				$scope.validate_empaque = true;
 				$scope.validate_documentos_rev = true;
 				$scope.validate_razon_rechazo = false;
+				$scope.btn_save_title = 'Liberar Producto';
+
 			} else if ($scope.status == <?= STATUS_WAITING ?>) {
 				$scope.validate_final_qty = false;
 				$scope.validate_location = false;
@@ -390,6 +393,7 @@
 				$scope.validate_empaque = false;
 				$scope.validate_documentos_rev = false;
 				$scope.validate_razon_rechazo = false;
+				$scope.btn_save_title = 'Colocar en Espera';
 			}
 
 		}

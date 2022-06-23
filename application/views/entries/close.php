@@ -35,8 +35,8 @@
 				<?php if ($this->session->flashdata('cerrada')) : ?>
 
 					<div class="alert alert-success alert-dismissible fade show" role="alert">
-						<strong class="uppercase"><bdi>Cerrada</bdi></strong>
-						La orden ha sido cerrada.
+						<strong class="uppercase"><bdi>Cambios Guardados</bdi></strong>
+						<?php echo $this->session->flashdata('cerrada'); ?>.
 						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
 					</div>
@@ -208,7 +208,7 @@
 
 
 						<div class="form-group mt-5">
-							<input style="width: 100%" type="submit" name="save_close" class="btn btn-primary text-white btn-lg" value="Cerrar Orden" ng-disabled="!( 
+							<input style="width: 100%" type="submit" name="save_close" class="btn btn-primary text-white btn-lg" value="{{btn_save_title}}" ng-disabled="!( 
 								(  validate_status == false ? true : (validate_status && status != '')) && 
 								( validate_rev_mapics == false ? true : (validate_rev_mapics && rev_mapics != '')) && 
 								( validate_discrepancia_descr == false ? true : (validate_discrepancia_descr && discrepancia_descr != ''))  )">
@@ -233,6 +233,7 @@
 
 
 		$scope.status = '';
+		$scope.btn_save_title = 'Cerrar Orden';
 
 		$scope.rev_mapics = '<?php echo $entry['rev_mapics']; ?>';
 		$scope.discrepancia_descr = '<?php echo $entry['discrepancia_descr']; ?>';
@@ -246,28 +247,32 @@
 		$scope.select_status = function() {
 
 			if ($scope.status == '') {
-
 				$scope.validate_rev_mapics = true;
 				$scope.validate_discrepancia_descr = true;
 			} else if ($scope.status == <?= FINAL_RESULT_REJECTED_BY_PRODUCT ?>) {
 				//No rechazar por producto
 				$scope.validate_rev_mapics = true;
 				$scope.validate_discrepancia_descr = true;
+				$scope.btn_save_title = 'Rechazar Producto';
 			} else if ($scope.status == <?= FINAL_RESULT_DISCREPANCY ?>) {
 				//No rechazar por documentacion
 				$scope.validate_rev_mapics = true;
 				$scope.validate_discrepancia_descr = true;
+				$scope.btn_save_title = 'Notificar Discrepancia';
 			} else if ($scope.status == <?= FINAL_RESULT_CLOSED ?>) {
 				//Si
 				$scope.validate_rev_mapics = true;
 				$scope.validate_discrepancia_descr = false;
+				$scope.btn_save_title = 'Cerrar Orden';
 			} else if ($scope.status == <?= FINAL_RESULT_WAITING ?>) {
 				//En espera
 				$scope.validate_rev_mapics = false;
 				$scope.validate_discrepancia_descr = false;
+				$scope.btn_save_title = 'Colocar en Espera';
 			} else {
 				$scope.validate_rev_mapics = false;
 				$scope.validate_discrepancia_descr = false;
+				$scope.btn_save_title = 'Cerrar Orden';
 			}
 
 		}
