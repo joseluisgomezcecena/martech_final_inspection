@@ -1,4 +1,4 @@
-<div class="page-breadcrumb bg-white">
+<div class="page-breadcrumb bg-white" ng-app="myApp" ng-controller="myCtrl">
 	<div class="row align-items-center">
 		<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
 			<h4 class="page-title">Detalle de la Orden</h4>
@@ -6,6 +6,11 @@
 		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 			<div class="d-md-flex">
 				<ol class="breadcrumb ms-auto">
+
+					<a target="" class="btn btn-light  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white" ng-click="action_delete()">
+						<i class="fa fa-trash" style="color:#000;" aria-hidden="true"></i>
+					</a>
+
 					<a href="javascript:history.back()" target="" class="btn btn-light  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
 						<i class="fa fa-arrow-left" style="color:#000;" aria-hidden="true"></i>
 					</a>
@@ -349,6 +354,7 @@
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="<?php echo base_url() ?>assets/sweetalert2/sweetalert2.all.min.js"></script>
 
 <script>
 	$(document).ready(function() {
@@ -364,5 +370,51 @@
 				$('#razon_rechazo').hide();
 			}
 		});
+	});
+
+
+	var app = angular.module('myApp', []);
+	app.controller('myCtrl', function($scope, $http, $httpParamSerializerJQLike) {
+
+		$scope.action_delete = function() {
+			Swal.fire({
+				title: 'Estas seguro de borrar estre registro?',
+				showCancelButton: true,
+				confirmButtonText: 'Confirm Deletion',
+			}).then((result) => {
+				/* Read more about isConfirmed, isDenied below */
+				if (result.isConfirmed) {
+
+					var data = {
+						table_for_deletion: '<?= $table_for_deletion ?>',
+						id: <?= $entry['id'] ?>,
+
+					};
+					$http({
+						url: '<?= base_url() ?>reports/delete_entry',
+						method: 'POST',
+						data: $httpParamSerializerJQLike(data), // Make sure to inject the service you choose to the controller
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded' // Note the appropriate header
+						}
+					}).then(function(response) {
+						console.log(response.data);
+						Swal.fire('Registro Eliminado!', '', 'success').then((result) => {
+							javascript: history.back();
+						});
+
+					}).catch((error) => {
+						console.log(error);
+					});
+
+
+
+
+				} else if (result.isDenied) {
+					Swal.fire('Los cambios no fueron guardados', '', 'info')
+				}
+			})
+		}
+
 	});
 </script>

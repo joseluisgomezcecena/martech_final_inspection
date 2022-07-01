@@ -45,11 +45,11 @@
 
 
 
-        <div class="page-wrapper">
+        <div class="page-wrapper" style="height: 100vh;">
 
 
             <div class="row justify-content-center">
-                <div class="col-lg-2">
+                <div class="col text-center">
                     <img lass="img-fluid" src="<?php echo base_url() ?>assets/img/logo.png" />
                 </div>
 

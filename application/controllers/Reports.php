@@ -27,7 +27,7 @@ class Reports extends CI_Controller
 			$end_date = $current_date->format("Y-m-d");
 
 			//$current_date = $current_date->modify('-1 months');
-			$start_date = $current_date->format("Y-m-d");
+			$start_date = $current_date->format("Y-m-01");
 		}
 
 		$this->load->helper('time');
@@ -53,7 +53,7 @@ class Reports extends CI_Controller
 			$end_date = $current_date->format("Y-m-d");
 
 			//$current_date = $current_date->modify('-1 months');
-			$start_date = $current_date->format("Y-m-d");
+			$start_date = $current_date->format("Y-m-01");
 		}
 
 		$this->load->helper('time');
@@ -86,7 +86,7 @@ class Reports extends CI_Controller
 			$end_date = $current_date->format("Y-m-d");
 
 			//$current_date = $current_date->modify('-1 months');
-			$start_date = $current_date->format("Y-m-d");
+			$start_date = $current_date->format("Y-m-01");
 		}
 
 		$this->load->helper('time');
@@ -119,7 +119,7 @@ class Reports extends CI_Controller
 			$end_date = $current_date->format("Y-m-d");
 
 			//$current_date = $current_date->modify('-1 months');
-			$start_date = $current_date->format("Y-m-d");
+			$start_date = $current_date->format("Y-m-01");
 		}
 
 		$this->load->helper('time');
@@ -150,7 +150,7 @@ class Reports extends CI_Controller
 
 			$current_date = new DateTime();
 			$end_date = $current_date->format("Y-m-d");
-			$start_date = $current_date->format("Y-m-d");
+			$start_date = $current_date->format("Y-m-01");
 		}
 
 		$this->load->helper('time');
@@ -183,7 +183,7 @@ class Reports extends CI_Controller
 
 			$current_date = new DateTime();
 			$end_date = $current_date->format("Y-m-d");
-			$start_date = $current_date->format("Y-m-d");
+			$start_date = $current_date->format("Y-m-01");
 		}
 
 		$this->load->helper('time');
@@ -213,6 +213,7 @@ class Reports extends CI_Controller
 		$this->db->where('id', $id);
 		$this->db->join('plantas', 'entry.plant = plantas.planta_id');
 		$data['entry'] = $this->db->get()->result_array()[0];
+		$data['table_for_deletion'] = 'entry';
 
 		$this->load->view('templates/header');
 		$this->load->view('entries/detail', $data); //loading page and data
@@ -226,9 +227,23 @@ class Reports extends CI_Controller
 		$this->db->where('id', $id);
 		$this->db->join('plantas', 'entry_accepted.plant = plantas.planta_id');
 		$data['entry'] = $this->db->get()->result_array()[0];
+		$data['table_for_deletion'] = 'entry_accepted';
 
 		$this->load->view('templates/header');
 		$this->load->view('entries/detail', $data); //loading page and data
 		$this->load->view('templates/footer');
+	}
+
+
+	public function delete_entry()
+	{
+		$table = $this->input->post('table_for_deletion');
+		$id = $this->input->post('id');
+
+		$this->db->where('id', $id);
+		$this->db->delete($table);
+
+		$data['result'] = 'ok';
+		echo json_encode($data);
 	}
 }
