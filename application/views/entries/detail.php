@@ -380,7 +380,8 @@
 			Swal.fire({
 				title: 'Estas seguro de borrar estre registro?',
 				showCancelButton: true,
-				confirmButtonText: 'Confirm Deletion',
+				confirmButtonText: 'Confirmar',
+				cancelButtonText: 'Cancelar'
 			}).then((result) => {
 				/* Read more about isConfirmed, isDenied below */
 				if (result.isConfirmed) {
