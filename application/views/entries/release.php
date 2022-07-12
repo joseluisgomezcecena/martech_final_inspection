@@ -329,7 +329,7 @@
 		$scope.documentos_rev = '<?php echo $entry['documentos_rev'] ?>';
 		$scope.validate_documentos_rev = false;
 
-		$scope.razon_rechazo = '<?php echo $entry['razon_rechazo'] ?>';
+		$scope.razon_rechazo = <?php echo json_encode($entry['razon_rechazo']); ?>;
 		$scope.validate_razon_rechazo = false;
 
 		$scope.select_status = function() {
