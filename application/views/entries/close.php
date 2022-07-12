@@ -200,7 +200,7 @@
 
 							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo">
 								<label for="" class="text-primary">DISCREPANCIA / COMENTARIO</label>
-								<textarea class="form-control" name="discrepancia_descr" ng-model="discrepancia_descr" rows="8" id="discrepancia_descr">value="<?php echo $entry['discrepancia_descr']; ?>"</textarea>
+								<textarea class="form-control" name="discrepancia_descr" ng-model="discrepancia_descr" rows="8" id="discrepancia_descr"></textarea>
 								<small class="text-danger" ng-show="validate_discrepancia_descr && discrepancia_descr == ''">Se requiere la Revisión contra mapics</small>
 							</div>
 
