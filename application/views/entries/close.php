@@ -232,11 +232,14 @@
 	app.controller('myCtrl', function($scope) {
 
 
-		$scope.status = '';
-		$scope.btn_save_title = 'Cerrar Orden';
+		$scope.status = "";
+		$scope.btn_save_title = "Cerrar Orden";
 
-		$scope.rev_mapics = '<?php echo $entry['rev_mapics']; ?>';
-		$scope.discrepancia_descr = '<?php echo $entry['discrepancia_descr']; ?>';
+
+		$scope.rev_mapics = "<?php echo $entry['rev_mapics']; ?>";
+
+		$scope.discrepancia_descr = <?php echo json_encode($entry['discrepancia_descr']); ?>;
+
 
 		$scope.validate_status = true;
 

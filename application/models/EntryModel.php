@@ -270,6 +270,8 @@ class EntryModel extends CI_Model
 
 	public function close_entry()
 	{
+		$this->load->helper('time');
+
 		$id = $this->input->post('id');
 		$cerrada_date = date("Y-m-d H:i:s");
 		$discrepancia_descr = $this->input->post('discrepancia_descr');
