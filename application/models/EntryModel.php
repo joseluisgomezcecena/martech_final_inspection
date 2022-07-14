@@ -68,8 +68,8 @@ class EntryModel extends CI_Model
 
 
 		$data = array(
-			'part_no' => $this->input->post('part_no'),
-			'lot_no' => $this->input->post('lot_no'),
+			'part_no' =>  strtoupper($this->input->post('part_no')),
+			'lot_no' => strtoupper($this->input->post('lot_no')),
 			'qty' => $this->input->post('qty'),
 			'plant' => $this->input->post('plant'),
 			'parcial' => $parcial,
@@ -78,7 +78,7 @@ class EntryModel extends CI_Model
 			'rm' => $rm,
 			'substitutes_to' => $substitutes_to,
 			'has_urgency' => $has_urgency,
-			'assigned_by' => $this->input->post('assigned_by'),
+			'assigned_by' => strtoupper($this->input->post('assigned_by')),
 		);
 
 		return $this->db->insert('entry', $data);

@@ -146,7 +146,7 @@
 							<li class="sidebar-item">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/produccion" aria-expanded="false">
 									<i class="fa fa-play" aria-hidden="true"></i>
-									<span class="hide-menu">Ordenes Por Trabajar</span>
+									<span class="hide-menu">ORDENES POR TRABAJAR</span>
 								</a>
 							</li>
 						<?php else : ?>
@@ -157,28 +157,28 @@
 							<li class="sidebar-item">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/produccion" aria-expanded="false">
 									<i class="fa fa-play" aria-hidden="true"></i>
-									<span class="hide-menu">Ordenes Abiertas</span>
+									<span class="hide-menu">ORDENES ABIERTAS</span>
 								</a>
 							</li>
 
 							<li class="sidebar-item">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>entries/create" aria-expanded="false">
 									<i class="fa fa-plus aria-hidden=" true"></i>
-									<span class="hide-menu">Crear Nueva Orden</span>
+									<span class="hide-menu">CREAR NUEVA ORDEN</span>
 								</a>
 							</li>
 
 							<li class="sidebar-item">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>production/rejected_by_product" aria-expanded="false">
 									<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-									<span class="hide-menu">Rechazos x Producto</span>
+									<span class="hide-menu">RECHAZOS</span>
 								</a>
 							</li>
 
 							<li class="sidebar-item">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>production/rejected_by_document" aria-expanded="false">
 									<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
-									<span class="hide-menu">Discrepancias</span>
+									<span class="hide-menu">DISCREPANCIAS</span>
 								</a>
 							</li>
 						<?php endif; ?>
@@ -187,7 +187,7 @@
 						<li class="sidebar-item">
 							<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>reports/calidad" aria-expanded="false">
 								<i class="fa fa-check" aria-hidden="true"></i>
-								<span class="hide-menu">Cerradas y Aceptadas</span>
+								<span class="hide-menu">CERRADAS Y ACEPTADAS</span>
 							</a>
 						</li>
 
@@ -196,14 +196,14 @@
 							<li class="sidebar-item pt-2">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>production/all_rejected" aria-expanded="false">
 									<i class="far fa-times-circle" aria-hidden="true"></i>
-									<span class="hide-menu">Rechazadas</span>
+									<span class="hide-menu">RECHAZADAS</span>
 								</a>
 							</li>
 
 							<li class="sidebar-item pt-2">
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>production/all_entries" aria-expanded="false">
 									<i class="far fa-folder" aria-hidden="true"></i>
-									<span class="hide-menu">Todas las Ordenes</span>
+									<span class="hide-menu">TODAS LAS ORDENES</span>
 								</a>
 							</li>
 
@@ -222,7 +222,7 @@
 						<li class="sidebar-item">
 							<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>logout" aria-expanded="false">
 								<i class="fa fa-window-close" aria-hidden="true"></i>
-								<span class="hide-menu">Salir</span>
+								<span class="hide-menu">SALIR</span>
 							</a>
 						</li>
 						<!--

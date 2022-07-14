@@ -154,7 +154,7 @@
 						<li class="sidebar-item">
 							<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>logout" aria-expanded="false">
 								<i class="fa fa-window-close" aria-hidden="true"></i>
-								<span class="hide-menu">Salir</span>
+								<span class="hide-menu">SALIR</span>
 							</a>
 						</li>
 						<!--

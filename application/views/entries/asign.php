@@ -157,15 +157,15 @@
 						<div class="row">
 							<div class=" col-lg-12">
 								<label for="">Asignar orden</label>
-								<input class="form-control" list="part" name="asignada" value="<?php if (isset($entry['asignada'])) {
-																									echo $entry['asignada'];
-																								} else {
-																									echo "";
-																								} ?>" id="part_no" required oninvalid="this.setCustomValidity('Elija al inspector encargado')" oninput="this.setCustomValidity('')">
+								<input class="form-control" list="part" name="asignada" style="text-transform: uppercase;" value="<?php if (isset($entry['asignada'])) {
+																																		echo $entry['asignada'];
+																																	} else {
+																																		echo "";
+																																	} ?>" id="part_no" required oninvalid="this.setCustomValidity('Elija al inspector encargado')" oninput="this.setCustomValidity('')">
 
 								<datalist id="part">
 									<?php foreach ($users as $user) : ?>
-										<option value="<?php echo $user['user_martech_sign'] ?>">
+										<option value="<?php echo strtoupper($user['user_martech_sign']); ?>">
 										<?php endforeach; ?>
 								</datalist>
 								<small>El usuario asignado sera responsable de liberar la orden.</small>
@@ -190,7 +190,7 @@
 </div>
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="<?= base_url() ?>assets/jquery/jquery-3.5.1.js"></script>
 
 <script>
 	$(document).ready(function() {

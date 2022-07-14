@@ -21,7 +21,7 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text" for="inputEndDate">Hasta</span>
                                 <input type="date" class="form-control" id="inputEndDate" name="end_date" value="<?= $end_date ?>" aria-describedby="Fecha Final">
-                                <button type="submit" class="btn btn-primary">Ver Periodo</button>
+                                <button type="submit" class="btn btn-primary">VER PERIODO</button>
                             </div>
                         </li>
                     </ol>

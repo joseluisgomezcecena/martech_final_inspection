@@ -21,7 +21,7 @@
 							<div class="input-group mb-3">
 								<span class="input-group-text" for="inputEndDate">Hasta</span>
 								<input type="date" class="form-control" id="inputEndDate" name="end_date" value="<?= $end_date ?>" aria-describedby="Fecha Final">
-								<button type="submit" class="btn btn-primary">Ver Periodo</button>
+								<button type="submit" class="btn btn-primary">VER PERIODO</button>
 							</div>
 						</li>
 					</ol>
@@ -74,7 +74,7 @@
 
 
 				<?php if ($user_type == PRODUCTION_USER) : ?>
-					<h3 class="text-center text-primary">Ordenes Abiertas </h3>
+					<h3 class="text-center text-primary">ORDENES ABIERTAS </h3>
 				<?php endif; ?>
 
 				<div class="table-responsive">
@@ -128,19 +128,19 @@ $this->load->view('templates/datatables');
 		},
 		buttons: [{
 			extend: 'copy',
-			title: 'Listado de Ordenes Abiertas',
+			title: 'LISTADO DE ORDENES ABIERTAS',
 			text: '<i class="fa fa-copy"></i> Copiar'
 		}, {
 			extend: 'excelHtml5',
-			title: 'Listado de Ordenes Abiertas',
+			title: 'LISTADO DE ORDENES ABIERTAS',
 			text: '<i class="fa fa-file-excel-o"></i> Excel'
 		}, {
 			extend: 'pdfHtml5',
-			title: 'Listado de Ordenes Abiertas',
+			title: 'LISTADO DE ORDENES ABIERTAS',
 			text: '<i class="fa fa-file-pdf-o"></i> Pdf'
 		}, {
 			extend: 'print',
-			title: 'Listado de Ordenes Abiertas',
+			title: 'LISTADO DE ORDENES ABIERTAS',
 			text: '<i class="fa fa-print"></i> Impr'
 		}],
 		'columns': [{

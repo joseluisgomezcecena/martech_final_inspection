@@ -470,17 +470,17 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		$btn_title = "";
 
 		if ($progress == PROGRESS_NOT_ASSIGNED) {
-			$btn_title = "Asignar";
+			$btn_title = "ASIGNAR";
 		} elseif ($progress == PROGRESS_ASSIGNED) {
-			$btn_title = "Resultado de la Inspección";
+			$btn_title = "RESULTADO DE INSPECCION";
 		} elseif ($progress == PROGRESS_RELEASED) {
 			if ($status == STATUS_WAITING || $status == STATUS_VERIFY) {
-				$btn_title = "Resultado de la Inspección";
+				$btn_title = "RESULTADO DE INSPECCION";
 			} else {
-				$btn_title = "Resultado del Cierre";
+				$btn_title = "RESULTADO DEL CIERRE";
 			}
 		} elseif ($progress == PROGRESS_CLOSED) {
-			$btn_title = "Resultado del Cierre";
+			$btn_title = "RESULTADO DEL CIERRE";
 		}
 		return $btn_title;
 	}
@@ -605,21 +605,21 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 			$urgency = '';
 
 			if ($row['has_urgency'] == 1) {
-				$urgency = "<span class='badge rounded-pill bg-danger'>Urgente</span>";
+				$urgency = "<span class='badge rounded-pill bg-danger'>URGENTE</span>";
 			} else {
-				$urgency = "<span class='badge rounded-pill bg-primary'>Normal</span>";
+				$urgency = "<span class='badge rounded-pill bg-primary'>NORMAL</span>";
 			}
 
 			$data[] = array(
 				"id" => '<a href="' . base_url() . 'reports/detail/' . $row['id'] . '" >' . $row['id'] . '</a>',
 				"created_at" => date_format(new DateTime($row['created_at']), 'm/d/y g:i A'),
 				"elapsed_time" => convert_time_string_to_float($row['elapsed_time']),
-				"part_no" => $row['part_no'],
-				"lot_no" => $row['lot_no'],
+				"part_no" => strtoupper($row['part_no']),
+				"lot_no" => strtoupper($row['lot_no']),
 				"qty" => $row['qty'],
 				"asignada" => $asignada,
-				"planta" => $row['plant'],
-				"progress" => "$text",
+				"planta" => strtoupper($row['plant']),
+				"progress" => strtoupper("$text"),
 				"status" => "<h4><span class='badge rounded-pill $color'>$status</span></h4>",
 				"btn_id" => $actions,
 				"has_urgency" => $urgency,
@@ -719,13 +719,13 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 	{
 		$text = '';
 		if ($progress == PROGRESS_NOT_ASSIGNED) {
-			$text =  "0/3 En espera";
+			$text =  "0/3 EN ESPERA";
 		} elseif ($progress == PROGRESS_ASSIGNED) {
-			$text =  "1/3 Asignado";
+			$text =  "1/3 ASGINADO";
 		} elseif ($progress == PROGRESS_RELEASED) {
-			$text =  "2/3 En Liberación";
+			$text =  "2/3 EN LIBERACION";
 		} elseif ($progress == PROGRESS_CLOSED) {
-			$text =  "3/3 En Cierre";
+			$text =  "3/3 EN CIERRE";
 		}
 		return $text;
 	}
@@ -735,32 +735,32 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		$status_str = '';
 
 		if ($progress == PROGRESS_NOT_ASSIGNED) {
-			$status_str = 'Sin asignar';
+			$status_str = 'SIN ASIGNAR';
 		} else if ($progress == PROGRESS_ASSIGNED) {
-			$status_str = 'Asignado';
+			$status_str = 'ASIGNADO';
 		} else if ($progress == PROGRESS_RELEASED) {
 			if ($status == STATUS_ACCEPTED) {
-				$status_str = 'Aceptado';
+				$status_str = 'ACEPTADO';
 			} else if ($status == STATUS_REJECTED_BY_PRODUCT) {
-				$status_str = 'Rechazo x Prod';
+				$status_str = 'RECHAZO X PROD';
 			} else if ($status == STATUS_DISCREPANCY) {
-				$status_str = 'Discrepancia';
+				$status_str = 'DISCREPANCIA';
 			} else if ($status == STATUS_WAITING) {
-				$status_str = 'En espera';
+				$status_str = 'EN ESPERA';
 			} else if ($status == STATUS_VERIFY) {
-				$status_str = 'Inspeccionar Discrepancia';
+				$status_str = 'INSPECCIONAR DISCREPANCIA';
 			}
 		} else if ($progress == PROGRESS_CLOSED) {
 			if ($final_result == FINAL_RESULT_CLOSED) {
-				$status_str = 'Cerrado';
+				$status_str = 'CERRADO';
 			} else if ($final_result == FINAL_RESULT_REJECTED_BY_PRODUCT) {
-				$status_str = 'Rechazo x Prod';
+				$status_str = 'RECHAZO X PROD';
 			} else if ($final_result == FINAL_RESULT_DISCREPANCY) {
-				$status_str = 'Discrepancia';
+				$status_str = 'DISCREPANCIA';
 			} else if ($final_result == FINAL_RESULT_WAITING) {
-				$status_str = 'En espera';
+				$status_str = 'EN ESPERA';
 			} else if ($final_result == FINAL_RESULT_VERIFY) {
-				$status_str = 'Inspeccionar Discrepancia';
+				$status_str = 'INSPECCIONAR DISCREPANCIA';
 			}
 		}
 

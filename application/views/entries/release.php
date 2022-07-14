@@ -165,10 +165,10 @@
 								<label for="status" class="text-primary">RESULTADO DE LA INSPECCIÓN</label>
 								<select name="status" id="status" class="form-control" ng-model="status" ng-change="select_status()">
 									<option value="">-- Seleccione Resultado --</option>
-									<option value="<?= STATUS_WAITING ?>" <?php if ($entry['status'] == STATUS_WAITING) echo ' selected'; ?>>En espera</option>
-									<option value="<?= STATUS_REJECTED_BY_PRODUCT ?>" <?php if ($entry['status'] == STATUS_REJECTED_BY_PRODUCT) echo ' selected'; ?>>Rechazado por Producto</option>
-									<option value="<?= STATUS_DISCREPANCY ?>" <?php if ($entry['status'] == STATUS_DISCREPANCY) echo ' selected'; ?>>Discrepancia</option>
-									<option value="<?= STATUS_ACCEPTED ?>" <?php if ($entry['status'] == STATUS_ACCEPTED) echo ' selected'; ?>>Aceptado</option>
+									<option value="<?= STATUS_WAITING ?>" <?php if ($entry['status'] == STATUS_WAITING) echo ' selected'; ?>>EN ESPERA</option>
+									<option value="<?= STATUS_REJECTED_BY_PRODUCT ?>" <?php if ($entry['status'] == STATUS_REJECTED_BY_PRODUCT) echo ' selected'; ?>>RECHAZADO POR PRODUCTO</option>
+									<option value="<?= STATUS_DISCREPANCY ?>" <?php if ($entry['status'] == STATUS_DISCREPANCY) echo ' selected'; ?>>DISCREPANCIA</option>
+									<option value="<?= STATUS_ACCEPTED ?>" <?php if ($entry['status'] == STATUS_ACCEPTED) echo ' selected'; ?>>ACEPTADO</option>
 								</select>
 								<small class="text-danger" ng-show="(validate_status && status == '') || (validate_status && status == null)">Seleccione el Resultado</small>
 							</div>
@@ -186,7 +186,7 @@
 
 							<div class=" col-lg-6" ng-show="validate_location">
 								<label for="location" class="text-primary">LOCACIÓN</label>
-								<input name="location" list="list_locations" id="location" class="form-control" ng-model="location" />
+								<input name="location" list="list_locations" id="location" class="form-control" ng-model="location" style="text-transform: uppercase;" />
 
 								<datalist id="list_locations">
 									<?php foreach ($locations as $location) : ?>
@@ -201,7 +201,7 @@
 
 							<div class=" col-lg-6" ng-show="validate_wo_escaneadas">
 								<label for="" class="text-primary">WO ESCANEADAS</label>
-								<input type="text" id="wo_escaneadas" class="form-control" name="wo_escaneadas" ng-model="wo_escaneadas">
+								<input type="text" id="wo_escaneadas" class="form-control" name="wo_escaneadas" ng-model="wo_escaneadas" style="text-transform: uppercase;">
 								<small class=" text-danger" ng-show="(validate_wo_escaneadas && wo_escaneadas == '')">Esciba las work orders escaneadas</small>
 							</div>
 						</div>
@@ -212,8 +212,8 @@
 								<label for="" class="text-primary">TIENE FECHA DE EXPIRACIÓN?</label>
 								<select class="form-control" name="has_fecha_exp" id="has_exp_date" ng-model="has_exp_date" ng-change="select_fecha_exp()">
 									<option value="">-- Seleccione --</option>
-									<option value="1">Si</option>
-									<option value="0">No</option>
+									<option value="1">SI</option>
+									<option value="0">NO</option>
 								</select>
 								<small class=" text-danger" ng-show="(validate_has_exp_date && has_exp_date == '')">Seleccione si existe fecha de expiracion</small>
 							</div>
@@ -230,14 +230,14 @@
 
 							<div class="col-lg-6" ng-show="validate_rev_dibujo">
 								<label for="" class="text-primary">REVISIÓN DE DIBUJO</label>
-								<input type="text" class="form-control" id="rev_dibujo" name="rev_dibujo" ng-model="rev_dibujo">
+								<input type="text" class="form-control" id="rev_dibujo" name="rev_dibujo" ng-model="rev_dibujo" style="text-transform: uppercase;">
 								<small class=" text-danger" ng-show="(validate_rev_dibujo && rev_dibujo == '')">Escriba la revisión del dibujo</small>
 							</div>
 
 
 							<div class="col-lg-6" ng-show="validate_empaque">
 								<label for="" class="text-primary">EMPAQUE DEL MATERIAL (PSF)</label>
-								<input type="text" class="form-control" id="empaque" name="empaque" ng-model="empaque">
+								<input type="text" class="form-control" id="empaque" name="empaque" ng-model="empaque" style="text-transform: uppercase;">
 								<small class=" text-danger" ng-show="(validate_empaque && empaque == '')">Escriba la revisión del dibujo</small>
 							</div>
 						</div>
@@ -246,10 +246,10 @@
 							<div class=" col-lg-6" ng-show="validate_documentos_rev">
 								<label for="documentos_rev" class="text-primary">DOCUMENTOS REVISADOS POR</label>
 
-								<input class="form-control" list="list_documentos_rev" id="input_documentos_rev" name="documentos_rev" ng-model="documentos_rev">
+								<input class="form-control" list="list_documentos_rev" id="input_documentos_rev" name="documentos_rev" ng-model="documentos_rev" style="text-transform: uppercase;">
 								<datalist id="list_documentos_rev">
 									<?php foreach ($quality_users as $user) : ?>
-										<option value="<?php echo $user['user_martech_sign'] ?>">
+										<option value="<?php echo strtoupper($user['user_martech_sign']); ?>">
 										<?php endforeach; ?>
 								</datalist>
 
@@ -260,7 +260,7 @@
 
 							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo" ng-show="validate_razon_rechazo">
 								<label for="" class="text-primary">RAZÓN DE RECHAZO / COMENTARIO </label>
-								<textarea class="form-control" name="razon_rechazo" rows="8" ng-model="razon_rechazo"></textarea>
+								<textarea class="form-control" name="razon_rechazo" rows="8" ng-model="razon_rechazo" style="text-transform: uppercase;"></textarea>
 								<small class="text-danger" ng-show="(validate_razon_rechazo && razon_rechazo == '')">Indique la razon del rechazo</small>
 							</div>
 
@@ -293,7 +293,7 @@
 </div>
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="<?= base_url() ?>assets/jquery/jquery-3.5.1.js"></script>
 
 <script>
 	var app = angular.module('myApp', []);

@@ -24,7 +24,7 @@
 	<div class="row justify-content-center">
 		<div class="col-lg-12 col-md-12">
 
-			<?php if($this->session->flashdata('tiempo')): ?>
+			<?php if ($this->session->flashdata('tiempo')) : ?>
 
 				<div class="alert alert-warning alert-dismissible fade show" role="alert">
 					<strong class="uppercase"><bdi>Success</bdi></strong>
@@ -35,7 +35,7 @@
 
 			<?php endif; ?>
 
-			<?php if($this->session->flashdata('asistencia')): ?>
+			<?php if ($this->session->flashdata('asistencia')) : ?>
 
 				<div class="alert alert-warning alert-dismissible fade show" role="alert">
 					<strong class="uppercase"><bdi>Success</bdi></strong>
@@ -45,7 +45,7 @@
 
 			<?php endif; ?>
 
-			<?php if($this->session->flashdata('movimiento')): ?>
+			<?php if ($this->session->flashdata('movimiento')) : ?>
 
 				<div class="alert alert-warning alert-dismissible fade show" role="alert">
 					<strong class="uppercase"><bdi>Success</bdi></strong>
@@ -78,16 +78,16 @@
 							<select class="form-control" name="asistencia_turno" required>
 								<option value="">Seleccione</option>
 								<option>1er</option>
-								<option >2do</option>
-								<option >3er</option>
-								<option >3X4 A</option>
-								<option >3X4 B</option>
-								<option >3X4 C</option>
-								<option >3X4 D</option>
-								<option >Fin de Sem.Mat</option>
-								<option >Fin de Sem.Vesp</option>
-								<option >T.E. Sabado</option>
-								<option >T.E. Domingo</option>
+								<option>2do</option>
+								<option>3er</option>
+								<option>3X4 A</option>
+								<option>3X4 B</option>
+								<option>3X4 C</option>
+								<option>3X4 D</option>
+								<option>Fin de Sem.Mat</option>
+								<option>Fin de Sem.Vesp</option>
+								<option>T.E. Sabado</option>
+								<option>T.E. Domingo</option>
 							</select>
 						</div>
 
@@ -96,8 +96,8 @@
 							<select class="form-control" name="asistencia_planta" id="plant_id" required>
 								<option value="">Seleccione una planta</option>
 								<?php
-								foreach ($plantas as $planta):
-									?>
+								foreach ($plantas as $planta) :
+								?>
 									<option value="<?php echo $planta['planta_id'] ?>"><?php echo $planta['planta_nombre'] ?></option>
 								<?php endforeach; ?>
 							</select>
@@ -142,16 +142,16 @@
 							<select class="form-control" name="movimiento_turno" required>
 								<option value="">Seleccione</option>
 								<option>1er</option>
-								<option >2do</option>
-								<option >3er</option>
-								<option >3X4 A</option>
-								<option >3X4 B</option>
-								<option >3X4 C</option>
-								<option >3X4 D</option>
-								<option >Fin de Sem.Mat</option>
-								<option >Fin de Sem.Vesp</option>
-								<option >T.E. Sabado</option>
-								<option >T.E. Domingo</option>
+								<option>2do</option>
+								<option>3er</option>
+								<option>3X4 A</option>
+								<option>3X4 B</option>
+								<option>3X4 C</option>
+								<option>3X4 D</option>
+								<option>Fin de Sem.Mat</option>
+								<option>Fin de Sem.Vesp</option>
+								<option>T.E. Sabado</option>
+								<option>T.E. Domingo</option>
 							</select>
 						</div>
 
@@ -160,9 +160,9 @@
 							<select class="form-control" name="movimiento_planta_origen" id="plant_id_one" required>
 								<option value="">Seleccione una planta</option>
 								<?php
-								foreach ($plantas as $planta):
+								foreach ($plantas as $planta) :
 								?>
-									<option value="<?php echo $planta['planta_id'];?>"><?php echo $planta['planta_nombre'] ?></option>
+									<option value="<?php echo $planta['planta_id']; ?>"><?php echo $planta['planta_nombre'] ?></option>
 								<?php endforeach; ?>
 							</select>
 						</div>
@@ -172,9 +172,9 @@
 							<select class="form-control" name="movimiento_planta_destino" id="plant_id_two" required>
 								<option value="">Seleccione una planta</option>
 								<?php
-								foreach ($plantas as $planta):
-									?>
-									<option value="<?php echo $planta['planta_id'];?>"><?php echo $planta['planta_nombre'] ?></option>
+								foreach ($plantas as $planta) :
+								?>
+									<option value="<?php echo $planta['planta_id']; ?>"><?php echo $planta['planta_nombre'] ?></option>
 								<?php endforeach; ?>
 							</select>
 						</div>
@@ -208,7 +208,7 @@
 						</div>
 
 						<div class="form-group">
-							<input style="width: 100%"  type="submit" name="save_movimiento" class="btn btn-danger text-white btn-lg" value="Guardar Movimientos">
+							<input style="width: 100%" type="submit" name="save_movimiento" class="btn btn-danger text-white btn-lg" value="Guardar Movimientos">
 						</div>
 						<?php echo form_close() ?>
 					</div>
@@ -232,16 +232,16 @@
 							<select class="form-control" name="te_turno" required>
 								<option value="">Seleccione</option>
 								<option>1er</option>
-								<option >2do</option>
-								<option >3er</option>
-								<option >3X4 A</option>
-								<option >3X4 B</option>
-								<option >3X4 C</option>
-								<option >3X4 D</option>
-								<option >Fin de Sem.Mat</option>
-								<option >Fin de Sem.Vesp</option>
-								<option >T.E. Sabado</option>
-								<option >T.E. Domingo</option>
+								<option>2do</option>
+								<option>3er</option>
+								<option>3X4 A</option>
+								<option>3X4 B</option>
+								<option>3X4 C</option>
+								<option>3X4 D</option>
+								<option>Fin de Sem.Mat</option>
+								<option>Fin de Sem.Vesp</option>
+								<option>T.E. Sabado</option>
+								<option>T.E. Domingo</option>
 							</select>
 						</div>
 
@@ -250,9 +250,9 @@
 							<select class="form-control" name="te_planta" id="te_planta" required>
 								<option value="">Seleccione una planta</option>
 								<?php
-								foreach ($plantas as $planta):
-									?>
-									<option value="<?php echo $planta['planta_id'];?>"><?php echo $planta['planta_nombre'] ?></option>
+								foreach ($plantas as $planta) :
+								?>
+									<option value="<?php echo $planta['planta_id']; ?>"><?php echo $planta['planta_nombre'] ?></option>
 								<?php endforeach; ?>
 							</select>
 						</div>
@@ -294,16 +294,16 @@
 </div>
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="<?= base_url() ?>assets/jquery/jquery-3.5.1.js"></script>
 
 <script type='text/javascript'>
 	// baseURL variable
-	var baseURL= "<?php echo base_url();?>";
+	var baseURL = "<?php echo base_url(); ?>";
 
 	//Asistencia
 	$(document).ready(function() {
 		// Plant change
-		$('#plant_id').change(function () {
+		$('#plant_id').change(function() {
 
 			console.log("Cambio");
 
@@ -311,15 +311,17 @@
 
 			// Ajax request
 			$.ajax({
-				url: '<?=base_url()?>index.php/Forms/get_sites',
+				url: '<?= base_url() ?>index.php/Forms/get_sites',
 				method: 'post',
-				data: {plant_id: plant_id},
+				data: {
+					plant_id: plant_id
+				},
 				dataType: 'json',
-				success: function (response) {
+				success: function(response) {
 
 					$('#linea_id').find('option').remove();
 					// fill select
-					$.each(response, function (index, data) {
+					$.each(response, function(index, data) {
 						$('#linea_id').append('<option value="' + data['linea_id'] + '">' + data['linea_nombre'] + '</option>');
 					});
 				}
@@ -330,7 +332,7 @@
 		//Movimientos
 
 
-		$('#plant_id_one').change(function () {
+		$('#plant_id_one').change(function() {
 
 			console.log("Cambio");
 
@@ -338,15 +340,17 @@
 
 			// Ajax request
 			$.ajax({
-				url: '<?=base_url()?>index.php/Forms/get_sites',
+				url: '<?= base_url() ?>index.php/Forms/get_sites',
 				method: 'post',
-				data: {plant_id: plant_id_one},
+				data: {
+					plant_id: plant_id_one
+				},
 				dataType: 'json',
-				success: function (response) {
+				success: function(response) {
 
 					$('#line_id_one').find('option').remove();
 					// fill select
-					$.each(response, function (index, data) {
+					$.each(response, function(index, data) {
 						$('#line_id_one').append('<option value="' + data['linea_id'] + '">' + data['linea_nombre'] + '</option>');
 					});
 				}
@@ -355,7 +359,7 @@
 
 
 
-		$('#plant_id_two').change(function () {
+		$('#plant_id_two').change(function() {
 
 			console.log("Cambio");
 
@@ -363,15 +367,17 @@
 
 			// Ajax request
 			$.ajax({
-				url: '<?=base_url()?>index.php/Forms/get_sites',
+				url: '<?= base_url() ?>index.php/Forms/get_sites',
 				method: 'post',
-				data: {plant_id: plant_id_two},
+				data: {
+					plant_id: plant_id_two
+				},
 				dataType: 'json',
-				success: function (response) {
+				success: function(response) {
 
 					$('#line_id_two').find('option').remove();
 					// fill select
-					$.each(response, function (index, data) {
+					$.each(response, function(index, data) {
 						$('#line_id_two').append('<option value="' + data['linea_id'] + '">' + data['linea_nombre'] + '</option>');
 					});
 				}
@@ -384,7 +390,7 @@
 		//tiempo extra
 
 
-		$('#te_planta').change(function () {
+		$('#te_planta').change(function() {
 
 			console.log("Cambio");
 
@@ -392,22 +398,22 @@
 
 			// Ajax request
 			$.ajax({
-				url: '<?=base_url()?>index.php/Forms/get_sites',
+				url: '<?= base_url() ?>index.php/Forms/get_sites',
 				method: 'post',
-				data: {plant_id: plant_te},
+				data: {
+					plant_id: plant_te
+				},
 				dataType: 'json',
-				success: function (response) {
+				success: function(response) {
 
 					$('#te_linea').find('option').remove();
 					// fill select
-					$.each(response, function (index, data) {
+					$.each(response, function(index, data) {
 						$('#te_linea').append('<option value="' + data['linea_id'] + '">' + data['linea_nombre'] + '</option>');
 					});
 				}
 			});
 		});
 
-	});//end document ready.
+	}); //end document ready.
 </script>
-
-
