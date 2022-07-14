@@ -58,15 +58,15 @@
 				<div class="table-responsive">
 					<table style="width: 100%" id="entries-rejected-list" class="table table-striped">
 						<thead>
-							<th>Folio</th>
-							<th>Fecha Registro</th>
-							<th>Parte</th>
-							<th>Lote</th>
-							<th>Cantidad</th>
-							<th>Planta</th>
-							<th>Progreso</th>
-							<th>Comentario</th>
-							<th>Acción</th>
+							<th>FOLIO</th>
+							<th>FECHA DE REGISTRO</th>
+							<th>PARTE</th>
+							<th>LOTE</th>
+							<th>CANTIDAD</th>
+							<th>PLANTA</th>
+							<th>PROGRESAO</th>
+							<th>COMENTARIO</th>
+							<th>ACCIÓN</th>
 						</thead>
 						<tbody>
 						</tbody>

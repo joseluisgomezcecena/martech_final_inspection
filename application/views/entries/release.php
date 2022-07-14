@@ -33,10 +33,10 @@
 			<?php if ($this->session->flashdata('liberada')) : ?>
 
 				<div class="alert alert-success alert-dismissible fade show" role="alert">
-					<strong class="uppercase"><bdi>Cambios guardados</bdi></strong>
+					<strong class="uppercase"><bdi>CAMBIOS GUARDADOS</bdi></strong>
 					<?php echo $this->session->flashdata('liberada'); ?>.
-					Haz click <a href="<?php echo  base_url() ?>">Aqui</a> para regresar
-					o edite ese formulario para modificar los datos de esta inspección.
+					HAZ CLICK <a href="<?php echo  base_url() ?>">AQUI</a> PARA REGRESAR
+					O EDITE ESTE FORMULARIO PARA MODIFICAR LOS DATOS DE ESTA INSPECCION.
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
 				</div>
@@ -235,7 +235,11 @@
 							</div>
 
 
-							<div class="col-lg-6" ng-show="validate_empaque">
+
+						</div>
+
+						<div class="row mt-3">
+							<div class="col-lg-12" ng-show="validate_empaque">
 								<label for="" class="text-primary">EMPAQUE DEL MATERIAL (PSF)</label>
 								<input type="text" class="form-control" id="empaque" name="empaque" ng-model="empaque" style="text-transform: uppercase;">
 								<small class=" text-danger" ng-show="(validate_empaque && empaque == '')">Escriba la revisión del dibujo</small>
@@ -254,6 +258,20 @@
 								</datalist>
 
 								<small class=" text-danger" ng-show="(validate_documentos_rev && documentos_rev == '')">Indique los documentos revisados</small>
+
+							</div>
+
+							<div class=" col-lg-6" ng-show="validate_label_zebra_rev">
+								<label for="input_label_zebra_rev" class="text-primary">REVISION ETIQUETA MATERIAL ZEBRA</label>
+
+								<input class="form-control" list="list_label_zebra_rev" id="input_label_zebra_rev" name="label_zebra_rev" ng-model="label_zebra_rev" style="text-transform: uppercase;">
+								<datalist id="list_label_zebra_rev">
+									<?php foreach ($quality_users as $user) : ?>
+										<option value="<?php echo strtoupper($user['user_martech_sign']); ?>">
+										<?php endforeach; ?>
+								</datalist>
+
+
 
 							</div>
 
@@ -329,6 +347,10 @@
 		$scope.documentos_rev = '<?php echo $entry['documentos_rev'] ?>';
 		$scope.validate_documentos_rev = false;
 
+		$scope.label_zebra_rev = '<?php echo $entry['label_zebra_rev'] ?>';
+		$scope.validate_label_zebra_rev = false;
+
+
 		$scope.razon_rechazo = <?php echo json_encode($entry['razon_rechazo']); ?>;
 		$scope.validate_razon_rechazo = false;
 
@@ -345,6 +367,7 @@
 				$scope.validate_rev_dibujo = true;
 				$scope.validate_empaque = true;
 				$scope.validate_documentos_rev = true;
+				$scope.validate_label_zebra_rev = true;
 				$scope.validate_razon_rechazo = false;
 			} else if ($scope.status == <?= STATUS_REJECTED_BY_PRODUCT ?>) {
 				//No
@@ -355,6 +378,7 @@
 				$scope.validate_rev_dibujo = false;
 				$scope.validate_empaque = false;
 				$scope.validate_documentos_rev = true;
+				$scope.validate_label_zebra_rev = false;
 				$scope.validate_razon_rechazo = true;
 				console.log('entering here' + $scope.status);
 				$scope.btn_save_title = 'Rechazar Producto';
@@ -367,6 +391,7 @@
 				$scope.validate_rev_dibujo = false;
 				$scope.validate_empaque = false;
 				$scope.validate_documentos_rev = true;
+				$scope.validate_label_zebra_rev = false;
 				$scope.validate_razon_rechazo = true;
 				console.log('entering here' + $scope.status);
 				$scope.btn_save_title = 'Guardar Discrepancia';
@@ -380,6 +405,7 @@
 				$scope.validate_rev_dibujo = true;
 				$scope.validate_empaque = true;
 				$scope.validate_documentos_rev = true;
+				$scope.validate_label_zebra_rev = true;
 				$scope.validate_razon_rechazo = false;
 				$scope.btn_save_title = 'Liberar Producto';
 
@@ -392,6 +418,7 @@
 				$scope.validate_rev_dibujo = false;
 				$scope.validate_empaque = false;
 				$scope.validate_documentos_rev = false;
+				$scope.validate_label_zebra_rev = false;
 				$scope.validate_razon_rechazo = false;
 				$scope.btn_save_title = 'Colocar en Espera';
 			}

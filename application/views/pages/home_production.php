@@ -80,19 +80,19 @@
 				<div class="table-responsive">
 					<table style="width: 100%" id="entries-list" class="table table-striped">
 						<thead>
-							<th>Folio</th>
-							<th>Prioridad</th>
-							<th>Fecha Registro</th>
-							<th>Tiempo Transcurrido</th>
-							<th>Parte</th>
-							<th>Lote</th>
-							<th>Cantidad</th>
-							<th>Asignado a:</th>
-							<th>Planta</th>
-							<th>Progreso</th>
-							<th>Status</th>
+							<th>FOLIO</th>
+							<th>PRIORIDAD</th>
+							<th>FECHA DE REGISTRO</th>
+							<th>TIEMPO TRANS.</th>
+							<th>PARTE</th>
+							<th>LOTE</th>
+							<th>CANTIDAD</th>
+							<th>ASIGNADO A</th>
+							<th>PLANTA</th>
+							<th>PROGRESO</th>
+							<th>STATUS</th>
 							<?php if ($user_type == QUALITY_USER) : ?>
-								<th>Accion</th>
+								<th>ACCION</th>
 							<?php endif; ?>
 
 

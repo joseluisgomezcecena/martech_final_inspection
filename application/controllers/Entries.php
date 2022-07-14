@@ -23,11 +23,11 @@ class Entries extends BaseController
 
 		if ($this->form_validation->run() === FALSE) {
 
-			$data['old']['part_no'] = $this->input->post('part_no') == null ? '' : $this->input->post('part_no');
-			$data['old']['lot_no'] = $this->input->post('lot_no') == null ? '' : $this->input->post('lot_no');
+			$data['old']['part_no'] = $this->input->post('part_no') == null ? '' : strtoupper($this->input->post('part_no'));
+			$data['old']['lot_no'] = $this->input->post('lot_no') == null ? '' :   strtoupper($this->input->post('lot_no'));
 			$data['old']['qty'] = $this->input->post('qty') == null ? '' : $this->input->post('qty');
 			$data['old']['plant'] = $this->input->post('plant') == null ? '' : $this->input->post('plant');
-			$data['old']['assigned_by'] = $this->input->post('assigned_by') == null ? '' : $this->input->post('assigned_by');
+			$data['old']['assigned_by'] = $this->input->post('assigned_by') == null ? '' : strtoupper($this->input->post('assigned_by'));
 
 			$this->load->view('templates/header');
 			$this->load->view('entries/create', $data);
@@ -61,11 +61,11 @@ class Entries extends BaseController
 		$data['message'] = $message;
 
 		$data['from'] = $from;
-		$data['old']['part_no'] = $entry_from['part_no'];
-		$data['old']['lot_no'] = $entry_from['lot_no'];
+		$data['old']['part_no'] = strtoupper($entry_from['part_no']);
+		$data['old']['lot_no'] = strtoupper($entry_from['lot_no']);
 		$data['old']['plant'] = $entry_from['plant'];
 		$data['old']['qty'] = $entry_from['qty'];
-		$data['old']['assigned_by'] = $entry_from['assigned_by'];
+		$data['old']['assigned_by'] = strtoupper($entry_from['assigned_by']);
 
 		$data['parcial'] = $entry_from['parcial'];
 		$data['reinspeccion'] = $entry_from['reinspeccion'];
@@ -127,7 +127,7 @@ class Entries extends BaseController
 
 			$this->EntryModel->create_entry();
 
-			$url =  $this->input->post('reload_route') . '?start_date=' . $this->input->post('start_date') . '&end_date=' . $this->input->post('end_date') . '&success_message=' . urldecode('Se removió de la lista la orden rechazada y se configuró una Nueva');
+			$url =  $this->input->post('reload_route') . '?start_date=' . $this->input->post('start_date') . '&end_date=' . $this->input->post('end_date') . '&success_message=' . urldecode('SE HA REMOVIDO DE LA LISTA LA ORDEN RECHAZADA Y SE HA CONFIGURADO UNA NUEVA');
 			//After 
 			redirect($url);
 		} else {
@@ -144,7 +144,7 @@ class Entries extends BaseController
 
 	public function solved()
 	{
-		if (!($this->is_logged_in() && $this->is_production())) {
+		if (!$this->is_logged_in()) {
 			redirect('/');
 		}
 
@@ -152,7 +152,10 @@ class Entries extends BaseController
 		$data = $this->retrieve_data($from);
 		$data['title'] = "SOLUCION AL RECHAZO POR DISCREPANCIA";
 
-		$data['message'] = "Confirme que se ha solucionado el problema que generó el rechazo/discrepancia de esta orden. Al confirmar la solución se turnara a calidad para que revise y libere la orden.";
+		if ($this->is_production())
+			$data['message'] = "CONFIRME QUE SE HA SOLUCIONADO EL PROBLEMA QUE HA GENERADO EL RECHAZO/DISCREPANCIA DE ESTA ORDEN. AL CONFIRMAR LA SOLUCION SE TURNARÁ A CALIDAD PARA QUE REVISE Y LIBERE LA ORDEN.";
+		else
+			$data['message'] = "CONFIRME QUE SE HA SOLUCIONADO EL PROBLEMA QUE HA GENERADO EL RECHAZO/DISCREPANCIA DE ESTA ORDEN. AL CONFIRMAR LA SOLUCION SE PUEDE PASAR LIBERAR O CERRAR.";
 
 		$this->load->view('templates/header');
 		$this->load->view('entries/solved', $data);
@@ -176,7 +179,7 @@ class Entries extends BaseController
 		if ($this->form_validation->run() === TRUE) {
 			$this->EntryModel->solve_entry();
 
-			$url =  $this->input->post('reload_route') . '?start_date=' . $this->input->post('start_date') . '&end_date=' . $this->input->post('end_date') . '&success_message=' . urldecode('Se removió de la lista de ordenes rechazadas por discrepancias y ahora pasa a las listas de calidad por trabajar.');
+			$url =  $this->input->post('reload_route') . '?start_date=' . $this->input->post('start_date') . '&end_date=' . $this->input->post('end_date') . '&success_message=' . urldecode('SE HA REMOVIDO DE LA LISTA DE ORDENES RECHAZADAS POR DISCREPANCIAS Y AHORA PASA A LAS LISTAS DE CALIDAD POR TRABAJAR.');
 			//After 
 			redirect($url);
 		} else {
@@ -325,7 +328,7 @@ class Entries extends BaseController
 			$final_qty = $this->input->post('final_qty');
 			$error_message = NULL;
 			if ($final_qty > $quantity) {
-				$error_message = 'La cantidad final no puede ser mayor a la cantidad enviada, por favor verifique la informacion';
+				$error_message = strtoupper('La cantidad final no puede ser mayor a la cantidad enviada, por favor verifique la informacion');
 				$data['error_message'] = $error_message;
 			}
 		}
@@ -334,14 +337,15 @@ class Entries extends BaseController
 		if ($this->form_validation->run() === FALSE || $error_message != NULL) {
 			$data['entry']['status'] = $this->input->post('status');
 			$data['entry']['final_qty'] = $this->input->post('final_qty');
-			$data['entry']['location'] = $this->input->post('location');
-			$data['entry']['wo_escaneadas'] = $this->input->post('wo_escaneadas');
+			$data['entry']['location'] = strtoupper($this->input->post('location'));
+			$data['entry']['wo_escaneadas'] = strtoupper($this->input->post('wo_escaneadas'));
 			$data['entry']['has_fecha_exp'] = $this->input->post('has_fecha_exp');
 			$data['entry']['fecha_exp'] = $this->input->post('fecha_exp');
-			$data['entry']['rev_dibujo'] = $this->input->post('rev_dibujo');
-			$data['entry']['empaque'] = $this->input->post('empaque');
-			$data['entry']['documentos_rev'] = $this->input->post('documentos_rev');
-			$data['entry']['razon_rechazo'] = $this->input->post('razon_rechazo');
+			$data['entry']['rev_dibujo'] = strtoupper($this->input->post('rev_dibujo'));
+			$data['entry']['empaque'] = strtoupper($this->input->post('empaque'));
+			$data['entry']['documentos_rev'] = strtoupper($this->input->post('documentos_rev'));
+			$data['entry']['label_zebra_rev'] = strtoupper($this->input->post('label_zebra_rev'));
+			$data['entry']['razon_rechazo'] = strtoupper($this->input->post('razon_rechazo'));
 
 			$data['locations'] = $this->LocationModel->get_locations();
 			$data['location'] = $this->LocationModel->get_location($data['entry']['location']);
@@ -377,13 +381,13 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 
 		*/
 		if ($status == STATUS_DISCREPANCY) {
-			$message = "Existen discrepancias por subsanar, ahora mismo producción ya ha sido notificado a través del sistema";
+			$message = strtoupper("Existen discrepancias por subsanar, ahora mismo producción ya ha sido notificado a través del sistema");
 		} else if ($status == STATUS_REJECTED_BY_PRODUCT) {
-			$message = "El producto ha sizo rechazado y es necesario que producción formule una nueva orden";
+			$message = strtoupper("El producto ha sizo rechazado y es necesario que producción formule una nueva orden");
 		} else if ($status == STATUS_WAITING) {
-			$message = "Se colocó en espera esta orden, retomela lo mas pronto posible en cuanto tenga oportunidad";
+			$message = strtoupper("Se colocó en espera esta orden, retomela lo mas pronto posible en cuanto tenga oportunidad");
 		} else if ($status == STATUS_ACCEPTED) {
-			$message = "Se ha liberado la orden y esta esperando para ser Cerrada";
+			$message = strtoupper("Se ha liberado la orden y esta esperando para ser Cerrada");
 		}
 
 		return $message;
@@ -436,13 +440,13 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		$final_result = $this->input->post('final_result');
 
 		if ($final_result == FINAL_RESULT_DISCREPANCY) {
-			$message = "Existen discrepancias por subsanar, ahora mismo producción ya ha sido notificado a través del sistema";
+			$message = strtoupper("Existen discrepancias por subsanar, ahora mismo producción ya ha sido notificado a través del sistema");
 		} else if ($final_result == FINAL_RESULT_REJECTED_BY_PRODUCT) {
-			$message = "El producto ha sizo rechazado y es necesario que producción formule una nueva orden";
+			$message = strtoupper("El producto ha sizo rechazado y es necesario que producción formule una nueva orden");
 		} else if ($final_result == FINAL_RESULT_WAITING) {
-			$message = "Se colocó en espera esta orden, retomela lo mas pronto posible en cuanto tenga oportunidad";
+			$message = strtoupper("Se colocó en espera esta orden, retomela lo mas pronto posible en cuanto tenga oportunidad");
 		} else if ($final_result == FINAL_RESULT_CLOSED) {
-			$message = "Se ha cerrado la orden con éxito";
+			$message = strtoupper("Se ha cerrado la orden con éxito");
 		}
 
 		return $message;
@@ -692,15 +696,15 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 
 			$data[] = array(
 				"id" => $row['id'],
-				"part_no" => $row['part_no'],
-				"lot_no" => $row['lot_no'],
+				"part_no" => strtoupper($row['part_no']),
+				"lot_no" => strtoupper($row['lot_no']),
 				"qty" => $row['qty'],
-				"plant" => $row['plant'],
+				"plant" => strtoupper($row['plant']),
 				"created_at" => date_format(new DateTime($row['created_at']), 'm/d/y g:i A'),
 				"assigned_elapsed_time" => convert_time_string_to_float($row['assigned_elapsed_time']),
 				"released_elapsed_time" =>  convert_time_string_to_float($row['released_elapsed_time']),
 				"closed_elapsed_time" =>  convert_time_string_to_float($row['closed_elapsed_time']),
-				"entry_id" => '<td><a href="' . base_url() . 'reports/detail_accepted/' . $row['id'] . '" class="btn btn-primary">Detalle</a></td>',
+				"entry_id" => '<td><a href="' . base_url() . 'reports/detail_accepted/' . $row['id'] . '" class="btn btn-primary">DETALLE</a></td>',
 				"status" => "<h4><span class='badge rounded-pill $color'>$status</span></h4>",
 				"comments" => $comments,
 				"waiting_hours" => $row['waiting_hours'],
@@ -858,14 +862,14 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 			//	"progress" => "<h4><span class='badge $color'>$text</span></h4>",
 			$data[] = array(
 				"id" => '<a href="' . base_url() . 'reports/detail/' . $row['id'] . '" >' . $row['id'] . '</a>',
-				"part_no" => $row['part_no'],
-				"lot_no" => $row['lot_no'],
+				"part_no" => strtoupper($row['part_no']),
+				"lot_no" => strtoupper($row['lot_no']),
 				"qty" => $row['qty'],
-				"plant" => $row['plant'],
+				"plant" => strtoupper($row['plant']),
 				"created_at" => date_format(new DateTime($row['created_at']), 'm/d/y g:i A'),
-				"progress" => "$text",
-				"razon_rechazo" => $row['razon_rechazo'],
-				"entry_id" => '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">Detalle</a></td>',
+				"progress" => strtoupper("$text"),
+				"razon_rechazo" => strtoupper($row['razon_rechazo']),
+				"entry_id" => '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">DETALLE</a></td>',
 				"action" => $action
 			);
 		}
@@ -926,14 +930,14 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 			//	"progress" => "<h4><span class='badge $color'>$text</span></h4>",
 			$data[] = array(
 				"id" => '<a href="' . base_url() . 'reports/detail/' . $row['id'] . '" >' . $row['id'] . '</a>',
-				"part_no" => $row['part_no'],
-				"lot_no" => $row['lot_no'],
+				"part_no" => strtoupper($row['part_no']),
+				"lot_no" => strtoupper($row['lot_no']),
 				"qty" => $row['qty'],
-				"plant" => $row['plant'],
+				"plant" => strtoupper($row['plant']),
 				"created_at" => date_format(new DateTime($row['created_at']), 'm/d/y g:i A'),
-				"progress" => "$text",
-				"razon_rechazo" => $row['razon_rechazo'],
-				"entry_id" => '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">Detalle</a></td>',
+				"progress" => strtoupper("$text"),
+				"razon_rechazo" => strtoupper($row['razon_rechazo']),
+				"entry_id" => '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">DETALLE</a></td>',
 				"action" => $action
 			);
 		}
@@ -986,20 +990,20 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 			$action = '';
 
 			if ($row['final_result'] == FINAL_RESULT_DISCREPANCY || $row['status'] == STATUS_DISCREPANCY) {
-				$action = '<td><a href="' . base_url() . 'entries/solved?from=' . $row['id'] . '&reload_route=' . $reload_route . '&start_date=' . $start_date_route . '&end_date=' . $end_date_route . '" class="btn btn-primary"> Resuelto </a></td>';
+				$action = '<td><a href="' . base_url() . 'entries/solved?from=' . $row['id'] . '&reload_route=' . $reload_route . '&start_date=' . $start_date_route . '&end_date=' . $end_date_route . '" class="btn btn-primary"> RESUELTO </a></td>';
 			}
 
 			//	"progress" => "<h4><span class='badge $color'>$text</span></h4>",
 			$data[] = array(
 				"id" => '<a href="' . base_url() . 'reports/detail/' . $row['id'] . '" >' . $row['id'] . '</a>',
-				"part_no" => $row['part_no'],
-				"lot_no" => $row['lot_no'],
-				"qty" => $row['qty'],
-				"plant" => $row['plant'],
+				"part_no" => strtoupper($row['part_no']),
+				"lot_no" => strtoupper($row['lot_no']),
+				"qty" => strtoupper($row['qty']),
+				"plant" => strtoupper($row['plant']),
 				"created_at" => date_format(new DateTime($row['created_at']), 'm/d/y g:i A'),
-				"progress" => "$text",
-				"razon_rechazo" => $row['razon_rechazo'],
-				"entry_id" => '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">Detalle</a></td>',
+				"progress" => strtoupper("$text"),
+				"razon_rechazo" => strtoupper($row['razon_rechazo']),
+				"entry_id" => '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">DETALLE</a></td>',
 				"action" => $action
 			);
 		}
@@ -1066,12 +1070,12 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 			$action = '';
 
 			if ($row['final_result'] == FINAL_RESULT_DISCREPANCY || $row['status'] == STATUS_DISCREPANCY) {
-				$action = '<td><a href="' . base_url() . 'entries/solved?from=' . $row['id'] . '&reload_route=' . $reload_route . '&start_date=' . $start_date_route . '&end_date=' . $end_date_route . '" class="btn btn-primary"> Resuelto </a></td>';
+				$action = '<td><a href="' . base_url() . 'entries/solved?from=' . $row['id'] . '&reload_route=' . $reload_route . '&start_date=' . $start_date_route . '&end_date=' . $end_date_route . '" class="btn btn-primary"> RESUELTO </a></td>';
 			}
 
-			$detail =  '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">Detalle</a></td>';
+			$detail =  '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">DETALLE</a></td>';
 			if ($row['accepted'] == 1) {
-				$detail =  '<td><a href="' . base_url() . 'reports/detail_accepted/' . $row['id'] . '" class="btn btn-primary">Detalle</a></td>';
+				$detail =  '<td><a href="' . base_url() . 'reports/detail_accepted/' . $row['id'] . '" class="btn btn-primary">DETALLE</a></td>';
 			}
 
 			$id = '<a href="' . base_url() . 'reports/detail/' . $row['id'] . '" >' . $row['id'] . '</a>';
@@ -1082,13 +1086,13 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 			//	"progress" => "<h4><span class='badge $color'>$text</span></h4>",
 			$data[] = array(
 				"id" => $id,
-				"part_no" => $row['part_no'],
-				"lot_no" => $row['lot_no'],
+				"part_no" => strtoupper($row['part_no']),
+				"lot_no" => strtoupper($row['lot_no']),
 				"qty" => $row['qty'],
-				"plant" => $row['plant'],
+				"plant" => strtoupper($row['plant']),
 				"created_at" => date_format(new DateTime($row['created_at']), 'm/d/y g:i A'),
-				"progress" => "$text",
-				"razon_rechazo" => $row['razon_rechazo'],
+				"progress" => strtoupper("$text"),
+				"razon_rechazo" => strtoupper($row['razon_rechazo']),
 				"entry_id" => $detail,
 				"status" => "<h4><span class='badge rounded-pill $color'>$status</span></h4>",
 				"action" => $action
@@ -1125,13 +1129,20 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		}
 
 
-
+		/*
 		$empQuery .= " AND ( 
 		(progress = " . PROGRESS_RELEASED . " AND  status = " . STATUS_REJECTED_BY_PRODUCT . ")  
 		OR (progress = " . PROGRESS_RELEASED . " AND  status = " . STATUS_DISCREPANCY . ")
 		OR (progress = " . PROGRESS_CLOSED . " AND  final_result = " . FINAL_RESULT_REJECTED_BY_PRODUCT . ")
 		OR (progress = " . PROGRESS_CLOSED . " AND  final_result = " . FINAL_RESULT_DISCREPANCY . ")
 		)";
+			*/
+
+		$empQuery .= " AND ( 
+			(progress = " . PROGRESS_RELEASED . " AND  status = " . STATUS_REJECTED_BY_PRODUCT . ")  	
+			OR (progress = " . PROGRESS_CLOSED . " AND  final_result = " . FINAL_RESULT_REJECTED_BY_PRODUCT . ")
+			)";
+
 
 		if (!($start_date == '' &&  $end_date == '')) {
 			$empQuery .= " AND created_at BETWEEN '" . $start_date . "' AND '" . $end_date . "'";
@@ -1151,20 +1162,20 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 			$action = '';
 
 			if ($row['final_result'] == FINAL_RESULT_DISCREPANCY || $row['status'] == STATUS_DISCREPANCY) {
-				$action = '<td><a href="' . base_url() . 'entries/solved?from=' . $row['id'] . '&reload_route=' . $reload_route . '&start_date=' . $start_date_route . '&end_date=' . $end_date_route . '" class="btn btn-primary"> Resuelto </a></td>';
+				$action = '<td><a href="' . base_url() . 'entries/solved?from=' . $row['id'] . '&reload_route=' . $reload_route . '&start_date=' . $start_date_route . '&end_date=' . $end_date_route . '" class="btn btn-primary"> RESUELTO </a></td>';
 			}
 
 			//	"progress" => "<h4><span class='badge $color'>$text</span></h4>",
 			$data[] = array(
 				"id" => '<a href="' . base_url() . 'reports/detail/' . $row['id'] . '" >' . $row['id'] . '</a>',
-				"part_no" => $row['part_no'],
-				"lot_no" => $row['lot_no'],
+				"part_no" =>  strtoupper($row['part_no']),
+				"lot_no" => strtoupper($row['lot_no']),
 				"qty" => $row['qty'],
-				"plant" => $row['plant'],
+				"plant" => strtoupper($row['plant']),
 				"created_at" => date_format(new DateTime($row['created_at']), 'm/d/y g:i A'),
-				"progress" => "$text",
-				"razon_rechazo" => $row['razon_rechazo'],
-				"entry_id" => '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">Detalle</a></td>',
+				"progress" => strtoupper("$text"),
+				"razon_rechazo" => strtoupper($row['razon_rechazo']),
+				"entry_id" => '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">DETALLE</a></td>',
 				"status" => "<h4><span class='badge rounded-pill $color'>$status</span></h4>",
 				"action" => $action
 			);

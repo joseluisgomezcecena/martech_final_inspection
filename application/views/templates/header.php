@@ -99,6 +99,7 @@
 					<!-- ============================================================== -->
 					<ul class="navbar-nav ms-auto d-flex align-items-center">
 						<h3 class="text-light me-3"><?php echo $this->session->userdata(PLANT_NAME); ?> </h3>
+
 						<!--
 						<li class=" in">
 							<form role="search" class="app-search d-none d-md-block me-3">
@@ -197,6 +198,13 @@
 								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>production/all_rejected" aria-expanded="false">
 									<i class="far fa-times-circle" aria-hidden="true"></i>
 									<span class="hide-menu">RECHAZADAS</span>
+								</a>
+							</li>
+
+							<li class="sidebar-item">
+								<a class="sidebar-link waves-effect waves-dark sidebar-link" href="<?php echo base_url() ?>quality/rejected_by_document" aria-expanded="false">
+									<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+									<span class="hide-menu">DISCREPANCIAS</span>
 								</a>
 							</li>
 

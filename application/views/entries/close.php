@@ -35,7 +35,7 @@
 				<?php if ($this->session->flashdata('cerrada')) : ?>
 
 					<div class="alert alert-success alert-dismissible fade show" role="alert">
-						<strong class="uppercase"><bdi>Cambios Guardados</bdi></strong>
+						<strong class="uppercase"><bdi>CAMBIOS GUARDADOS</bdi></strong>
 						<?php echo $this->session->flashdata('cerrada'); ?>.
 						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
@@ -174,10 +174,10 @@
 								<select name="final_result" id="status" ng-model="status" ng-change="select_status()" class="form-control">
 
 									<option value="">---Seleccione Resultado---</option>
-									<option value="<?= FINAL_RESULT_CLOSED ?>">Si</option>
-									<option value="<?= FINAL_RESULT_REJECTED_BY_PRODUCT ?>">Rechazar por Producto</option>
-									<option value="<?= FINAL_RESULT_DISCREPANCY ?>">Discrepancia</option>
-									<option value="<?= FINAL_RESULT_WAITING ?>">En espera por cambio de prioridad</option>
+									<option value="<?= FINAL_RESULT_CLOSED ?>">SI</option>
+									<option value="<?= FINAL_RESULT_REJECTED_BY_PRODUCT ?>">RECHAZAR POR PRODUCTO</option>
+									<option value="<?= FINAL_RESULT_DISCREPANCY ?>">DISCREPANCIA</option>
+									<option value="<?= FINAL_RESULT_WAITING ?>">EN ESPERA</option>
 
 								</select>
 								<small class="text-danger" ng-show="(validate_status && status == '') || (validate_status && status == null)">Seleccione el Resultado</small>
@@ -186,13 +186,13 @@
 
 							<div class=" col-lg-9">
 								<label for="" class="text-primary">REVISIÓN DE ORDEN VS MAPICS Y CERRADA POR</label>
-								<input type="text" class="form-control" list="part" name="rev_mapics" id="rev_mapics" ng-model="rev_mapics" value="<?php echo $entry['rev_mapics']; ?>">
+								<input type="text" class="form-control" list="part" name="rev_mapics" style="text-transform: uppercase;" id="rev_mapics" ng-model="rev_mapics" value="<?php echo $entry['rev_mapics']; ?>">
 								<small class="text-danger" ng-show="validate_rev_mapics && rev_mapics == ''">Se requiere la Revisión contra mapics</small>
 
 
 								<datalist id="part">
 									<?php foreach ($users as $user) : ?>
-										<option value="<?php echo $user['user_martech_sign'] ?>">
+										<option value="<?php echo  strtoupper($user['user_martech_sign'])  ?>">
 										<?php endforeach; ?>
 								</datalist>
 							</div>
@@ -200,7 +200,7 @@
 
 							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo">
 								<label for="" class="text-primary">DISCREPANCIA / COMENTARIO</label>
-								<textarea class="form-control" name="discrepancia_descr" ng-model="discrepancia_descr" rows="8" id="discrepancia_descr"></textarea>
+								<textarea class="form-control" name="discrepancia_descr" ng-model="discrepancia_descr" rows="8" id="discrepancia_descr" style="text-transform: uppercase;"></textarea>
 								<small class="text-danger" ng-show="validate_discrepancia_descr && discrepancia_descr == ''">Se requiere la Revisión contra mapics</small>
 							</div>
 

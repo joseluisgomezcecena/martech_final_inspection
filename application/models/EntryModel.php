@@ -192,9 +192,6 @@ class EntryModel extends CI_Model
 		$release_date = date("Y-m-d H:i:s");
 		$current_date_time = new DateTime();
 
-
-
-
 		//echo json_encode($entry_row);
 		$status_to_set = $this->input->post('status');
 		$data = array(
@@ -202,14 +199,15 @@ class EntryModel extends CI_Model
 			'liberada_date' => $release_date,
 			'status' => $status_to_set,
 			'final_qty' => $this->input->post('final_qty'),
-			'location' => $this->input->post('location'),
-			'wo_escaneadas' => $this->input->post('wo_escaneadas'),
+			'location' => strtoupper($this->input->post('location')),
+			'wo_escaneadas' => strtoupper($this->input->post('wo_escaneadas')),
 			'has_fecha_exp' => $this->input->post('has_fecha_exp'),
 			'fecha_exp' => $this->input->post('fecha_exp'),
-			'rev_dibujo' => $this->input->post('rev_dibujo'),
-			'empaque' => $this->input->post('empaque'),
-			'documentos_rev' => $this->input->post('documentos_rev'),
-			'razon_rechazo' => $this->input->post('razon_rechazo'),
+			'rev_dibujo' => strtoupper($this->input->post('rev_dibujo')),
+			'empaque' => strtoupper($this->input->post('empaque')),
+			'documentos_rev' => strtoupper($this->input->post('documentos_rev')),
+			'label_zebra_rev' => strtoupper($this->input->post('label_zebra_rev')),
+			'razon_rechazo' => strtoupper($this->input->post('razon_rechazo')),
 		);
 
 		if ($status_to_set == STATUS_DISCREPANCY) {
@@ -274,7 +272,7 @@ class EntryModel extends CI_Model
 
 		$id = $this->input->post('id');
 		$cerrada_date = date("Y-m-d H:i:s");
-		$discrepancia_descr = $this->input->post('discrepancia_descr');
+		$discrepancia_descr = strtoupper($this->input->post('discrepancia_descr'));
 		$status_to_set = $this->input->post('final_result');
 
 		$final_result = $this->input->post('final_result');
@@ -283,9 +281,9 @@ class EntryModel extends CI_Model
 		$data = array(
 			'progress' => PROGRESS_CLOSED,
 			'final_result' => $final_result,
-			'rev_mapics' => $this->input->post('rev_mapics'),
+			'rev_mapics' => strtoupper($this->input->post('rev_mapics')),
 			'cerrada_date' => $cerrada_date,
-			'discrepancia_descr' => $discrepancia_descr,
+			'discrepancia_descr' =>  $discrepancia_descr,
 		);
 
 		if ($status_to_set == FINAL_RESULT_DISCREPANCY) {

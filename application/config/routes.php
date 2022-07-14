@@ -32,6 +32,10 @@ $route['production/rejected_by_document'] = 'reports/rejected_by_document';
 $route['production/all_entries'] = 'reports/all_entries';
 $route['production/all_rejected'] = 'reports/all_rejected';
 
+
+$route['quality/rejected_by_document'] = 'reports/rejected_by_document';
+
+
 $route['reports/detail/(:any)'] = 'reports/detail/$1';
 $route['reports/detail_accepted/(:any)'] = 'reports/detail_accepted/$1';
 $route['reports/delete_entry']['post'] = 'reports/delete_entry';

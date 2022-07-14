@@ -35,8 +35,8 @@
 
 				<div class="alert alert-success alert-dismissible fade show" role="alert">
 					<strong class="uppercase"><bdi>Asignada</bdi></strong>
-					La orden ha sido reasignada. Haga Click <a href="<?php echo base_url() ?>"> Aqui </a> para regresar o
-					cierre este mensaje para cambiar el inspector asignado.
+					LA ORDEN HA SIDO REASIGNADA. HAGA CLICK <a href="<?php echo base_url() ?>"> AQUI </a> PARA REGRESAR O CIERRE
+					ESTE MENSAJE PARA CAMBIAR EL INSPECTOR ASIGNADO.
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
 				</div>

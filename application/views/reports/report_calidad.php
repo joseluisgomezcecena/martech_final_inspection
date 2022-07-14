@@ -49,25 +49,25 @@
 					<table style="width: 100%" id="entries-list" class="table table-striped">
 						<thead>
 							<tr>
-								<th class="border-top-0">Folio</th>
-								<th class="border-top-0">Parte</th>
-								<th class="border-top-0">Lote</th>
-								<th class="border-top-0">Cantidad</th>
-								<th class="border-top-0">Planta</th>
-								<th class="border-top-0">Inicio</th>
-								<th class="border-top-0">Hrs en Asignar</th>
-								<th class="border-top-0">Hrs en Liberar</th>
-								<th class="border-top-0">Hrs en Cerrar</th>
+								<th class="border-top-0">FOLIO</th>
+								<th class="border-top-0">PARTE</th>
+								<th class="border-top-0">LOTE</th>
+								<th class="border-top-0">CANTIDAD</th>
+								<th class="border-top-0">PLANTA</th>
+								<th class="border-top-0">INICIO</th>
+								<th class="border-top-0">HRS EN ASIGNAR</th>
+								<th class="border-top-0">HRS EN LIBERAR</th>
+								<th class="border-top-0">HRS EN CERRAR</th>
 
 
-								<th class="border-top-0">Hrs en Espera</th>
-								<th class="border-top-0">Hrs en Rechazo </th>
-								<th class="border-top-0">Hrs en Calidad (Estimadas)</th>
+								<th class="border-top-0">HRS EN ESPERA</th>
+								<th class="border-top-0">HRS EN RECHAZO</th>
+								<th class="border-top-0">HRS EN CALIDAD</th>
 
 
-								<th class="border-top-0">Status</th>
-								<th class="border-top-0">Comentarios</th>
-								<th class="border-top-0">Detalles</th>
+								<th class="border-top-0">STATUS</th>
+								<th class="border-top-0">COMENTARIOS</th>
+								<th class="border-top-0">DETALLES</th>
 							</tr>
 
 						</thead>

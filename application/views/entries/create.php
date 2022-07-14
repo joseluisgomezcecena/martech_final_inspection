@@ -30,9 +30,9 @@
 			<?php if ($this->session->flashdata('created')) : ?>
 
 				<div class="alert alert-success alert-dismissible fade show" role="alert">
-					<strong class="uppercase"><bdi>Enviado a Inspeccion</bdi></strong>
-					Se ha guardado la orden y ha sido enviada a inspeccion. Haz click <a href="<?php echo  base_url() ?>">Aqui</a> para regresar
-					o cierra este mensaje para agregar otra orden.
+					<strong class="uppercase"><bdi>ENVIADO A INSPECCION</bdi></strong>
+					SE HA GUARDADO LA ORDEN Y HA SIDO ENVIADA A INSPECCION. HAZ CLICK <a href="<?php echo  base_url() ?>">AQUI</a> PARA REGRESAR
+					O CIERRA ESTE MENSAJE PARA AGREGAR OTRA ORDEN.
 					<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 
 				</div>

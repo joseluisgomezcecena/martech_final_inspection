@@ -130,7 +130,13 @@ class Reports extends CI_Controller
 
 		$data['start_date'] = $start_date;
 		$data['end_date'] = $end_date;
-		$data['reload_route'] = 'production/rejected_by_document';
+
+		if ($this->session->userdata(USER_TYPE) == PRODUCTION_USER)
+			$data['reload_route'] = 'production/rejected_by_document';
+		else
+			$data['reload_route'] = 'quality/rejected_by_document';
+
+
 		$data['success_message'] = $this->input->get('success_message');
 
 
