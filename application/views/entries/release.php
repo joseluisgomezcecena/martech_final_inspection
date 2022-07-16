@@ -168,6 +168,7 @@
 									<option value="<?= STATUS_WAITING ?>" <?php if ($entry['status'] == STATUS_WAITING) echo ' selected'; ?>>EN ESPERA</option>
 									<option value="<?= STATUS_REJECTED_BY_PRODUCT ?>" <?php if ($entry['status'] == STATUS_REJECTED_BY_PRODUCT) echo ' selected'; ?>>RECHAZADO POR PRODUCTO</option>
 									<option value="<?= STATUS_DISCREPANCY ?>" <?php if ($entry['status'] == STATUS_DISCREPANCY) echo ' selected'; ?>>DISCREPANCIA</option>
+									<option value="<?= STATUS_PACK ?>" <?php if ($entry['status'] == STATUS_PACK) echo ' selected'; ?>>PACK</option>
 									<option value="<?= STATUS_ACCEPTED ?>" <?php if ($entry['status'] == STATUS_ACCEPTED) echo ' selected'; ?>>ACEPTADO</option>
 								</select>
 								<small class="text-danger" ng-show="(validate_status && status == '') || (validate_status && status == null)">Seleccione el Resultado</small>
@@ -277,9 +278,9 @@
 
 
 							<div class=" mb-2 mt-2 col-lg-12" id="razon_rechazo" ng-show="validate_razon_rechazo">
-								<label for="" class="text-primary">RAZÓN DE RECHAZO / COMENTARIO </label>
+								<label for="" class="text-primary"> {{comments_title}}</label>
 								<textarea class="form-control" name="razon_rechazo" rows="8" ng-model="razon_rechazo" style="text-transform: uppercase;"></textarea>
-								<small class="text-danger" ng-show="(validate_razon_rechazo && razon_rechazo == '')">Indique la razon del rechazo</small>
+								<small class="text-danger" ng-show="(validate_razon_rechazo && razon_rechazo == '')">{{comments_message_error}}</small>
 							</div>
 
 						</div>
@@ -354,20 +355,23 @@
 		$scope.razon_rechazo = <?php echo json_encode($entry['razon_rechazo']); ?>;
 		$scope.validate_razon_rechazo = false;
 
+		$scope.comments_title = 'RAZÓN DE RECHAZO / COMENTARIO';
+		$scope.comments_message_error = 'Indique la razon del rechazo';
+
 		$scope.select_status = function() {
 
 			console.log('select status' + $scope.status);
 
 			if ($scope.status == null || $scope.status == '') {
-				$scope.validate_final_qty = true;
-				$scope.validate_location = true;
-				$scope.validate_wo_escaneadas = true;
-				$scope.validate_has_exp_date = true;
+				$scope.validate_final_qty = false;
+				$scope.validate_location = false;
+				$scope.validate_wo_escaneadas = false;
+				$scope.validate_has_exp_date = false;
 				//$scope.validate_fecha_exp = false;
-				$scope.validate_rev_dibujo = true;
-				$scope.validate_empaque = true;
-				$scope.validate_documentos_rev = true;
-				$scope.validate_label_zebra_rev = true;
+				$scope.validate_rev_dibujo = false;
+				$scope.validate_empaque = false;
+				$scope.validate_documentos_rev = false;
+				$scope.validate_label_zebra_rev = false;
 				$scope.validate_razon_rechazo = false;
 			} else if ($scope.status == <?= STATUS_REJECTED_BY_PRODUCT ?>) {
 				//No
@@ -380,8 +384,10 @@
 				$scope.validate_documentos_rev = true;
 				$scope.validate_label_zebra_rev = false;
 				$scope.validate_razon_rechazo = true;
-				console.log('entering here' + $scope.status);
+				//console.log('entering here' + $scope.status);
 				$scope.btn_save_title = 'Rechazar Producto';
+				$scope.comments_title = 'RAZONES DEL RECHAZO';
+				$scope.comments_message_error = 'Indique las razones por las cuáles se rechaza la orden';
 			} else if ($scope.status == <?= STATUS_DISCREPANCY ?>) {
 				//No
 				$scope.validate_final_qty = true;
@@ -395,6 +401,23 @@
 				$scope.validate_razon_rechazo = true;
 				console.log('entering here' + $scope.status);
 				$scope.btn_save_title = 'Guardar Discrepancia';
+				$scope.comments_title = 'DISCREPANCIAS';
+				$scope.comments_message_error = 'Escriba las discrepancias ';
+			} else if ($scope.status == <?= STATUS_PACK ?>) {
+				//No
+				$scope.validate_final_qty = true;
+				$scope.validate_location = true;
+				$scope.validate_wo_escaneadas = false;
+				$scope.validate_has_exp_date = false;
+				$scope.validate_rev_dibujo = false;
+				$scope.validate_empaque = false;
+				$scope.validate_documentos_rev = true;
+				$scope.validate_label_zebra_rev = false;
+				$scope.validate_razon_rechazo = true;
+
+				$scope.btn_save_title = 'Colocar en Pack';
+				$scope.comments_title = 'DISCREPANCIAS / COMENTARIOS';
+				$scope.comments_message_error = 'Escriba discrepancias o comentarios para este pack';
 			} else if ($scope.status == <?= STATUS_ACCEPTED ?>) {
 				//Si
 				$scope.validate_final_qty = true;

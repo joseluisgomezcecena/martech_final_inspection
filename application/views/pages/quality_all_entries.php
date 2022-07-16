@@ -64,7 +64,9 @@
 							<th>PARTE</th>
 							<th>LOTE</th>
 							<th>CANTIDAD</th>
-							<th>PLANTA</th>
+							<?php if ($this->session->userdata(PLANT_ID) == 0) : ?>
+								<th>PLANTA</th>
+							<?php endif; ?>
 							<th>PROGRESAO</th>
 							<th>STATUS</th>
 							<th>COMENTARIO</th>
@@ -135,10 +137,10 @@ $this->load->view('templates/datatables');
 			{
 				data: 'qty'
 			},
-			{
-				data: 'plant'
-			},
-			{
+			<?php if ($this->session->userdata(PLANT_ID) == 0) : ?> {
+					data: 'plant'
+				},
+			<?php endif; ?> {
 				data: 'progress'
 			},
 			{

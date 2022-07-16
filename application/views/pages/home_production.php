@@ -88,7 +88,11 @@
 							<th>LOTE</th>
 							<th>CANTIDAD</th>
 							<th>ASIGNADO A</th>
-							<th>PLANTA</th>
+
+							<?php if ($this->session->userdata(PLANT_ID) == 0) : ?>
+								<th>PLANTA</th>
+							<?php endif; ?>
+
 							<th>PROGRESO</th>
 							<th>STATUS</th>
 							<?php if ($user_type == QUALITY_USER) : ?>
@@ -167,10 +171,10 @@ $this->load->view('templates/datatables');
 			{
 				data: 'asignada'
 			},
-			{
-				data: 'planta'
-			},
-			{
+			<?php if ($this->session->userdata(PLANT_ID) == 0) : ?> {
+					data: 'planta'
+				},
+			<?php endif; ?> {
 				data: 'progress'
 			},
 			{

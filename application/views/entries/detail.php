@@ -7,9 +7,12 @@
 			<div class="d-md-flex">
 				<ol class="breadcrumb ms-auto">
 
-					<a target="" class="btn btn-light  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white" ng-click="action_delete()">
-						<i class="fa fa-trash" style="color:#000;" aria-hidden="true"></i>
-					</a>
+
+					<?php if ($this->session->userdata(USER_TYPE) == QUALITY_USER) : ?>
+						<a target="" class="btn btn-light  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white" ng-click="action_delete()">
+							<i class="fa fa-trash" style="color:#000;" aria-hidden="true"></i>
+						</a>
+					<?php endif; ?>
 
 					<a href="javascript:history.back()" target="" class="btn btn-light  d-none d-md-block pull-right ms-3 hidden-xs hidden-sm waves-effect waves-light text-white">
 						<i class="fa fa-arrow-left" style="color:#000;" aria-hidden="true"></i>
@@ -190,16 +193,18 @@
 									<label for="">Status</label>
 									<input type="text" class="form-control" value="<?php
 																					//$entry['status'] 0 sin asignar, 1 rechazado, 2 aceptado, 3 en espera por cambio de prioridad
-																					if ($entry['status'] == STATUS_NOT_ASSIGNED) {
-																						echo 'Sin asignar';
+																					if ($entry['status'] == STATUS_NOT_DEFINED) {
+																						echo 'SIN DEFINIR';
 																					} else if ($entry['status'] == STATUS_REJECTED_BY_PRODUCT) {
-																						echo 'Rechazado por Producto';
+																						echo 'RECHAZADO POR PRODUCTO';
 																					} else if ($entry['status'] == STATUS_DISCREPANCY || $entry['status'] == STATUS_VERIFY) {
-																						echo 'Discrepancia';
+																						echo 'DISCREPANCIA';
 																					} else if ($entry['status'] == STATUS_ACCEPTED) {
-																						echo 'Aceptado';
+																						echo 'ACEPTADO';
 																					} else if ($entry['status'] == STATUS_WAITING) {
-																						echo 'En espera por cambio de prioridad';
+																						echo 'EN ESPERA';
+																					} else if ($entry['status'] == STATUS_PACK) {
+																						echo 'EN PACK';
 																					}
 																					?>" readonly>
 								</div>

@@ -146,6 +146,8 @@ class Reports extends CI_Controller
 		$this->load->view('templates/footer');
 	}
 
+
+
 	public function all_entries()
 	{
 

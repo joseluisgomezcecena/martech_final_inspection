@@ -95,6 +95,8 @@ class Entries extends BaseController
 
 	public function rework_save()
 	{
+		$this->load->helper('time');
+
 		$this->form_validation->set_rules('part_no', 'Numero de parte', 'required');
 		$this->form_validation->set_rules('lot_no', 'Numero de lote', 'required');
 		$this->form_validation->set_rules('qty', 'Cantidad', 'required|callback_check_is_positive');
@@ -104,26 +106,25 @@ class Entries extends BaseController
 
 		if ($this->form_validation->run() === TRUE) {
 
-			//No se necesita porque se realizaria una nueva orden y esta ya no vale....
-			//actualizar los tiempos de los final_result porque se va a crear otra orden
-			/*$current_date_time = new DateTime();
-			$this->db->select('final_result, waiting_start_time, waiting_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", waiting_start_time) as waiting_elapsed_time , rejected_doc_start_time, rejected_doc_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_doc_start_time) as rejected_doc_elapsed_time, rejected_prod_start_time, rejected_prod_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_prod_start_time) as rejected_prod_elapsed_time');
+
+			$current_date_time = new DateTime();
+			$this->db->select('status, waiting_start_time, waiting_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", waiting_start_time) as waiting_elapsed_time , rejected_doc_start_time, rejected_doc_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_doc_start_time) as rejected_doc_elapsed_time, rejected_prod_start_time, rejected_prod_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_prod_start_time) as rejected_prod_elapsed_time, pack_start_time, pack_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", pack_start_time) as pack_elapsed_time');
 			$this->db->from('entry');
 			$this->db->where('id', $from);
 			$entry_row = $this->db->get()->row_array();
-			if ($entry_row['final_result'] == FINAL_RESULT_REJECTED_BY_PRODUCT) {
-				//Si esta en el estatus de waiting y se va a cambiar a otro, vamos a sumar el tiempo de waiting y colocarlo
-				$rejected_prod_hours = floatval($entry_row['rejected_prod_hours']);
-				$rejected_prod_hours = $rejected_prod_hours +  convert_time_string_to_float($entry_row['rejected_prod_elapsed_time']);
-				//$data['rejected_prod_hours'] = $rejected_prod_hours;
-				$this->db->set('rejected_prod_hours', $rejected_prod_hours);
-			}
-			*/
 
-			//'to_rework'
+			//Si esta en el estatus de waiting y se va a cambiar a otro, vamos a sumar el tiempo de waiting y colocarlo
+			$rejected_prod_hours = floatval($entry_row['rejected_prod_hours']);
+			$rejected_prod_hours = $rejected_prod_hours +  convert_time_string_to_float($entry_row['rejected_prod_elapsed_time']);
+
+
+			//$data['rejected_prod_hours'] = $rejected_prod_hours;
+			$this->db->set('rejected_prod_hours', $rejected_prod_hours);
 			$this->db->set('to_rework', 1);
 			$this->db->where('id', $from);
 			$this->db->update('entry');
+
+
 
 			$this->EntryModel->create_entry();
 
@@ -296,7 +297,11 @@ class Entries extends BaseController
 		if ($this->input->post('status') == STATUS_WAITING) {
 			$this->form_validation->set_rules('id', 'ID o Folio', 'required');
 			$this->form_validation->set_rules('status', 'Status', 'required');
-		} else if ($this->input->post('status') == STATUS_REJECTED_BY_PRODUCT || $this->input->post('status') == STATUS_DISCREPANCY) {
+		} else if (
+			$this->input->post('status') == STATUS_REJECTED_BY_PRODUCT
+			|| $this->input->post('status') == STATUS_DISCREPANCY
+			|| $this->input->post('status') == STATUS_PACK
+		) {
 
 			$this->form_validation->set_rules('id', 'ID o Folio', 'required');
 			$this->form_validation->set_rules('status', 'Status', 'required');
@@ -386,6 +391,8 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 			$message = strtoupper("El producto ha sizo rechazado y es necesario que producción formule una nueva orden");
 		} else if ($status == STATUS_WAITING) {
 			$message = strtoupper("Se colocó en espera esta orden, retomela lo mas pronto posible en cuanto tenga oportunidad");
+		} else if ($status == STATUS_PACK) {
+			$message = strtoupper("Se envio para pack del lado de producción, retomela una vez que producción haya regresado el material");
 		} else if ($status == STATUS_ACCEPTED) {
 			$message = strtoupper("Se ha liberado la orden y esta esperando para ser Cerrada");
 		}
@@ -478,7 +485,7 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		} elseif ($progress == PROGRESS_ASSIGNED) {
 			$btn_title = "RESULTADO DE INSPECCION";
 		} elseif ($progress == PROGRESS_RELEASED) {
-			if ($status == STATUS_WAITING || $status == STATUS_VERIFY) {
+			if ($status == STATUS_WAITING || $status == STATUS_VERIFY || $status == STATUS_PACK) {
 				$btn_title = "RESULTADO DE INSPECCION";
 			} else {
 				$btn_title = "RESULTADO DEL CIERRE";
@@ -499,7 +506,7 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		} elseif ($progress == PROGRESS_ASSIGNED) {
 			$link = "entries/release/{$id}";
 		} elseif ($progress == PROGRESS_RELEASED) {
-			if ($status == STATUS_WAITING || $status == STATUS_VERIFY) {
+			if ($status == STATUS_WAITING || $status == STATUS_VERIFY || $status == STATUS_PACK) {
 				$link = "entries/release/{$id}";
 			} else {
 				$link = "entries/close/{$id}";
@@ -543,8 +550,9 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		//$empQuery = "SELECT * FROM entry
 		//	WHERE  1  " . $searchQuery . " ORDER BY " . $columnName . "  " . $columnSortOrder . " LIMIT " . $row . " , " . $rowperpage;
 		$empQuery = "SELECT id, created_at, part_no, lot_no, qty, plantas.planta_nombre as plant, progress, status, final_result,
-		TIMEDIFF(NOW(), created_at) as elapsed_time, asignada, has_urgency
-		FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+		TIMEDIFF(NOW(), created_at) as elapsed_time, asignada, has_urgency, location
+		FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id 
+		WHERE  1 ";
 
 		$plant_id = $this->session->userdata(PLANT_ID);
 		if ($plant_id > 0) {
@@ -554,7 +562,7 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		$empQuery .= " AND (";
 		$empQuery .= ' progress = ' . PROGRESS_NOT_ASSIGNED;
 		$empQuery .= ' OR progress = ' . PROGRESS_ASSIGNED;
-		$empQuery .= ' OR ((progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_ACCEPTED . ') OR ( progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_WAITING . ' ) OR ( progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_VERIFY . ' ) )';
+		$empQuery .= ' OR ((progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_ACCEPTED . ') OR ( progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_WAITING . ' ) OR ( progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_PACK . ' )  OR ( progress = ' . PROGRESS_RELEASED . ' AND status = ' . STATUS_VERIFY . ' ) )';
 		$empQuery .= ' OR ((progress = ' . PROGRESS_CLOSED . ' AND final_result = ' . FINAL_RESULT_WAITING . ') OR (progress = ' . PROGRESS_CLOSED . ' AND final_result = ' . FINAL_RESULT_VERIFY . ') )';
 		$empQuery .= " )";
 
@@ -627,6 +635,8 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 				"status" => "<h4><span class='badge rounded-pill $color'>$status</span></h4>",
 				"btn_id" => $actions,
 				"has_urgency" => $urgency,
+				"location" => $row['location'],
+
 			);
 		}
 
@@ -653,7 +663,7 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		TIMEDIFF(cerrada_date, created_at) as closed_elapsed_time, 
 		waiting_hours,
 		rejected_doc_hours,
-		progress, status, final_result, discrepancia_descr, razon_rechazo  FROM entry_accepted INNER JOIN plantas ON entry_accepted.plant = plantas.planta_id WHERE  1 ";
+		progress, status, final_result, discrepancia_descr, razon_rechazo, location  FROM entry_accepted INNER JOIN plantas ON entry_accepted.plant = plantas.planta_id WHERE  1 ";
 
 		$plant_id = $this->session->userdata(PLANT_ID);
 		if ($plant_id > 0) {
@@ -710,6 +720,7 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 				"waiting_hours" => $row['waiting_hours'],
 				"rejected_doc_hours" => $row['rejected_doc_hours'],
 				"estimated" => $estimated,
+				"location" => strtoupper($row['location']),
 			);
 		}
 
@@ -752,7 +763,9 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 			} else if ($status == STATUS_WAITING) {
 				$status_str = 'EN ESPERA';
 			} else if ($status == STATUS_VERIFY) {
-				$status_str = 'INSPECCIONAR DISCREPANCIA';
+				$status_str = 'DISCREPANCIA RESUELTA';
+			} else if ($status == STATUS_PACK) {
+				$status_str = 'EN PACK';
 			}
 		} else if ($progress == PROGRESS_CLOSED) {
 			if ($final_result == FINAL_RESULT_CLOSED) {
@@ -764,7 +777,7 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 			} else if ($final_result == FINAL_RESULT_WAITING) {
 				$status_str = 'EN ESPERA';
 			} else if ($final_result == FINAL_RESULT_VERIFY) {
-				$status_str = 'INSPECCIONAR DISCREPANCIA';
+				$status_str = 'DISCREPANCIA RESUELTA';
 			}
 		}
 
@@ -789,7 +802,9 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 			} else if ($status == STATUS_WAITING) {
 				$color =  "bg-warning";
 			} else if ($status == STATUS_VERIFY) {
-				$color =  "bg-danger";
+				$color =  "bg-secondary";
+			} else if ($status == STATUS_PACK) {
+				$color =  "bg-warning";
 			}
 		} else if ($progress == PROGRESS_CLOSED) {
 			if ($final_result == FINAL_RESULT_CLOSED) {
@@ -801,7 +816,7 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 			} else if ($final_result == FINAL_RESULT_WAITING) {
 				$color =  "bg-warning";
 			} else if ($final_result == FINAL_RESULT_VERIFY) {
-				$color =  "bg-danger";
+				$color =  "bg-secondary";
 			}
 		}
 
@@ -823,7 +838,7 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		$end_date_route = $this->input->get('end_date');
 		$reload_route = $this->input->get('reload_route');
 
-		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, location  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
 
 		$plant_id = $this->session->userdata(PLANT_ID);
 		if ($plant_id > 0) {
@@ -870,7 +885,8 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 				"progress" => strtoupper("$text"),
 				"razon_rechazo" => strtoupper($row['razon_rechazo']),
 				"entry_id" => '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">DETALLE</a></td>',
-				"action" => $action
+				"action" => $action,
+				"location" => strtoupper($row['location']),
 			);
 		}
 
@@ -898,7 +914,7 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		$end_date_route = $this->input->get('end_date');
 		$reload_route = $this->input->get('reload_route');
 
-		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, status  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, status, location  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
 
 		$plant_id = $this->session->userdata(PLANT_ID);
 		if ($plant_id > 0) {
@@ -938,7 +954,8 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 				"progress" => strtoupper("$text"),
 				"razon_rechazo" => strtoupper($row['razon_rechazo']),
 				"entry_id" => '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">DETALLE</a></td>',
-				"action" => $action
+				"action" => $action,
+				"location" => strtoupper($row['location']),
 			);
 		}
 
@@ -964,7 +981,7 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		$end_date_route = $this->input->get('end_date');
 		$reload_route = $this->input->get('reload_route');
 
-		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, status  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, status, location FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
 
 		$plant_id = $this->session->userdata(PLANT_ID);
 		if ($plant_id > 0) {
@@ -1004,7 +1021,8 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 				"progress" => strtoupper("$text"),
 				"razon_rechazo" => strtoupper($row['razon_rechazo']),
 				"entry_id" => '<td><a href="' . base_url() . 'reports/detail/' . $row['id'] . '" class="btn btn-primary">DETALLE</a></td>',
-				"action" => $action
+				"action" => $action,
+				"qty" => strtoupper($row['location']),
 			);
 		}
 
@@ -1030,7 +1048,7 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		$end_date_route = $this->input->get('end_date');
 		$reload_route = $this->input->get('reload_route');
 
-		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, status, 0 as accepted  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
+		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, status, 0 as accepted, location  FROM entry INNER JOIN plantas ON entry.plant = plantas.planta_id WHERE  1 ";
 		$plant_id = $this->session->userdata(PLANT_ID);
 		if ($plant_id > 0) {
 			$empQuery .= " AND plant = " . $plant_id;
@@ -1042,7 +1060,7 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 
 		$empQuery .= " UNION ";
 
-		$empQuery .= "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, status, 1 as accepted FROM entry_accepted INNER JOIN plantas ON entry_accepted.plant = plantas.planta_id WHERE  1 ";
+		$empQuery .= "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, progress, IF(progress = 2, razon_rechazo , discrepancia_descr) as razon_rechazo, to_rework, final_result, status, 1 as accepted, location FROM entry_accepted INNER JOIN plantas ON entry_accepted.plant = plantas.planta_id WHERE  1 ";
 		$plant_id = $this->session->userdata(PLANT_ID);
 		if ($plant_id > 0) {
 			$empQuery .= " AND plant = " . $plant_id;
@@ -1095,7 +1113,8 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 				"razon_rechazo" => strtoupper($row['razon_rechazo']),
 				"entry_id" => $detail,
 				"status" => "<h4><span class='badge rounded-pill $color'>$status</span></h4>",
-				"action" => $action
+				"action" => $action,
+				"location" => strtoupper($row['location']),
 			);
 		}
 

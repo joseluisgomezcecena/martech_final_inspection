@@ -162,6 +162,7 @@ class EntryModel extends CI_Model
 		$data = array(
 			'progress' => $progress,
 			'asignada' => $this->input->post('asignada'),
+			'status' => STATUS_ASSIGNED,
 			'asignada_date' => $assign_date,
 		);
 
@@ -216,25 +217,30 @@ class EntryModel extends CI_Model
 
 		/* CODIGO PARA GRABAR LOS TIEMPOS*/
 		//TIMEDIFF('2014-02-17 12:10:08', '2014-02-16 12:10:08')
-		$this->db->select('status, waiting_start_time, waiting_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", waiting_start_time) as waiting_elapsed_time , rejected_doc_start_time, rejected_doc_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_doc_start_time) as rejected_doc_elapsed_time, rejected_prod_start_time, rejected_prod_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_prod_start_time) as rejected_prod_elapsed_time');
+		$this->db->select('status, waiting_start_time, waiting_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", waiting_start_time) as waiting_elapsed_time , rejected_doc_start_time, rejected_doc_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_doc_start_time) as rejected_doc_elapsed_time, rejected_prod_start_time, rejected_prod_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", rejected_prod_start_time) as rejected_prod_elapsed_time, pack_start_time, pack_hours, TIMEDIFF("' . $current_date_time->format(DATETIME_FORMAT) . '", pack_start_time) as pack_elapsed_time');
 		$this->db->from('entry');
 		$this->db->where('id', $id);
 		$entry_row = $this->db->get()->row_array();
 
 		//Si se va a colocar en el estado de waiting
-		if ($entry_row['status'] == STATUS_NOT_ASSIGNED && $status_to_set == STATUS_WAITING) {
+		if ($entry_row['status'] != STATUS_WAITING && $status_to_set == STATUS_WAITING) {
 			//Save the waiting_start_time
 			$data['waiting_start_time'] = $current_date_time->format(DATETIME_FORMAT);
 		}
 
-		if ($entry_row['status'] == STATUS_NOT_ASSIGNED && $status_to_set == STATUS_REJECTED_BY_PRODUCT) {
+		if ($entry_row['status'] != STATUS_REJECTED_BY_PRODUCT && $status_to_set == STATUS_REJECTED_BY_PRODUCT) {
 			//Save the waiting_rejected_time
 			$data['rejected_prod_start_time'] = $current_date_time->format(DATETIME_FORMAT);
 		}
 
-		if ($entry_row['status'] == STATUS_NOT_ASSIGNED && $status_to_set == STATUS_DISCREPANCY) {
+		if ($entry_row['status'] != STATUS_DISCREPANCY && $status_to_set == STATUS_DISCREPANCY) {
 			//Save the waiting_rejected_time
 			$data['rejected_doc_start_time'] = $current_date_time->format(DATETIME_FORMAT);
+		}
+
+		if ($entry_row['status'] != STATUS_PACK && $status_to_set == STATUS_PACK) {
+			//Save the pack time
+			$data['pack_start_time'] = $current_date_time->format(DATETIME_FORMAT);
 		}
 
 
@@ -257,6 +263,13 @@ class EntryModel extends CI_Model
 			$rejected_doc_hours = floatval($entry_row['rejected_doc_hours']);
 			$rejected_doc_hours = $rejected_doc_hours +  convert_time_string_to_float($entry_row['rejected_doc_elapsed_time']);
 			$data['rejected_doc_hours'] = $rejected_doc_hours;
+		}
+
+		if ($entry_row['status'] == STATUS_PACK && $status_to_set != STATUS_PACK) {
+			//Si esta en el estatus de waiting y se va a cambiar a otro, vamos a sumar el tiempo de waiting y colocarlo
+			$pack_hours = floatval($entry_row['pack_hours']);
+			$pack_hours = $pack_hours +  convert_time_string_to_float($entry_row['pack_elapsed_time']);
+			$data['pack_hours'] = $pack_hours;
 		}
 
 		return $this->db->update('entry', $data, array("id" => $id));
@@ -300,17 +313,17 @@ class EntryModel extends CI_Model
 		$entry_row = $this->db->get()->row_array();
 
 		//Si se va a colocar en el estado de waiting
-		if ($entry_row['final_result'] == FINAL_RESULT_NOT_DEFINED && $status_to_set == FINAL_RESULT_WAITING) {
+		if ($entry_row['final_result'] != FINAL_RESULT_WAITING && $status_to_set == FINAL_RESULT_WAITING) {
 			//Save the waiting_start_time
 			$data['waiting_start_time'] = $current_date_time->format(DATETIME_FORMAT);
 		}
 
-		if ($entry_row['final_result'] == FINAL_RESULT_NOT_DEFINED && $status_to_set == FINAL_RESULT_REJECTED_BY_PRODUCT) {
+		if ($entry_row['final_result'] != FINAL_RESULT_REJECTED_BY_PRODUCT && $status_to_set == FINAL_RESULT_REJECTED_BY_PRODUCT) {
 			//Save the waiting_rejected_time
 			$data['rejected_prod_start_time'] = $current_date_time->format(DATETIME_FORMAT);
 		}
 
-		if ($entry_row['final_result'] == FINAL_RESULT_NOT_DEFINED && $status_to_set == FINAL_RESULT_DISCREPANCY) {
+		if ($entry_row['final_result'] != FINAL_RESULT_DISCREPANCY && $status_to_set == FINAL_RESULT_DISCREPANCY) {
 			//Save the waiting_rejected_time
 			$data['rejected_doc_start_time'] = $current_date_time->format(DATETIME_FORMAT);
 		}
@@ -338,6 +351,7 @@ class EntryModel extends CI_Model
 		}
 
 		$this->db->update('entry', $data, array("id" => $id));
+
 
 		if ($final_result == FINAL_RESULT_CLOSED) {
 

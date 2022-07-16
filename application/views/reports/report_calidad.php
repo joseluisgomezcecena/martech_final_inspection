@@ -53,7 +53,9 @@
 								<th class="border-top-0">PARTE</th>
 								<th class="border-top-0">LOTE</th>
 								<th class="border-top-0">CANTIDAD</th>
-								<th class="border-top-0">PLANTA</th>
+								<?php if ($this->session->userdata(PLANT_ID) == 0) : ?>
+									<th class="border-top-0">PLANTA</th>
+								<?php endif; ?>
 								<th class="border-top-0">INICIO</th>
 								<th class="border-top-0">HRS EN ASIGNAR</th>
 								<th class="border-top-0">HRS EN LIBERAR</th>
@@ -131,10 +133,10 @@ $this->load->view('templates/datatables');
 			{
 				data: 'qty'
 			},
-			{
-				data: 'plant'
-			},
-			{
+			<?php if ($this->session->userdata(PLANT_ID) == 0) : ?> {
+					data: 'plant'
+				},
+			<?php endif; ?> {
 				data: 'created_at'
 			},
 			{
