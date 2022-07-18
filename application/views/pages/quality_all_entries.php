@@ -67,7 +67,7 @@
 							<?php if ($this->session->userdata(PLANT_ID) == 0) : ?>
 								<th>PLANTA</th>
 							<?php endif; ?>
-							<th>PROGRESAO</th>
+							<th>PROGRESO</th>
 							<th>STATUS</th>
 							<th>COMENTARIO</th>
 

@@ -658,11 +658,14 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 		$end_date = $this->input->get('end_date');
 		if ($end_date != '') $end_date .= ' 23:59:59';
 
-		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, TIMEDIFF(asignada_date, created_at) as assigned_elapsed_time,
+		$empQuery = "SELECT id, progress, part_no, lot_no, qty, plantas.planta_nombre as plant, created_at, 
+		TIMEDIFF(asignada_date, created_at) as assigned_elapsed_time,
 		TIMEDIFF(liberada_date, created_at) as released_elapsed_time,
 		TIMEDIFF(cerrada_date, created_at) as closed_elapsed_time, 
 		waiting_hours,
 		rejected_doc_hours,
+		rejected_prod_hours,
+		pack_hours,
 		progress, status, final_result, discrepancia_descr, razon_rechazo, location  FROM entry_accepted INNER JOIN plantas ON entry_accepted.plant = plantas.planta_id WHERE  1 ";
 
 		$plant_id = $this->session->userdata(PLANT_ID);
@@ -702,7 +705,11 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 				$comments = $row['discrepancia_descr'];
 			}
 
-			$estimated =  round(convert_time_string_to_float($row['closed_elapsed_time']) - floatval($row['waiting_hours']) - floatval($row['rejected_doc_hours']), 2);
+			$rest = convert_time_string_to_float($row['closed_elapsed_time'])
+				- floatval($row['waiting_hours'])
+				- floatval($row['rejected_doc_hours'])
+				- floatval($row['pack_hours']);
+			$estimated =  round($rest, 2);
 
 			$data[] = array(
 				"id" => $row['id'],
@@ -718,7 +725,9 @@ defined('STATUS_WAITING')      or define('STATUS_WAITING', 3);
 				"status" => "<h4><span class='badge rounded-pill $color'>$status</span></h4>",
 				"comments" => $comments,
 				"waiting_hours" => $row['waiting_hours'],
+				"pack_hours" => $row['pack_hours'],
 				"rejected_doc_hours" => $row['rejected_doc_hours'],
+				"rejected_prod_hours" => $row['rejected_prod_hours'],
 				"estimated" => $estimated,
 				"location" => strtoupper($row['location']),
 			);

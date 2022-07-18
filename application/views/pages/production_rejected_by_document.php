@@ -68,7 +68,7 @@
 								<th>PLANTA</th>
 							<?php endif; ?>
 
-							<th>PROGRESAO</th>
+							<th>PROGRESO</th>
 							<th>COMENTARIO</th>
 							<th>ACCIÓN</th>
 						</thead>

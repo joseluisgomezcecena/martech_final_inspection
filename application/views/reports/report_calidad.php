@@ -63,7 +63,9 @@
 
 
 								<th class="border-top-0">HRS EN ESPERA</th>
-								<th class="border-top-0">HRS EN RECHAZO</th>
+								<th class="border-top-0">HRS EN PACK</th>
+								<th class="border-top-0">HRS EN DISCREPANCIA</th>
+
 								<th class="border-top-0">HRS EN CALIDAD</th>
 
 
@@ -150,6 +152,9 @@ $this->load->view('templates/datatables');
 			},
 			{
 				data: 'waiting_hours'
+			},
+			{
+				data: 'pack_hours'
 			},
 			{
 				data: 'rejected_doc_hours'
